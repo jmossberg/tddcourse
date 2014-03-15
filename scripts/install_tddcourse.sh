@@ -11,10 +11,14 @@ sudo apt-get install --quiet --assume-yes g++
 
 echo Download Google Test/Google Mock
 echo ================================
-mkdir -p $HOME/google
-wget --directory-prefix=$HOME/google -q https://googlemock.googlecode.com/files/gmock-1.7.0.zip
-unzip $HOME/google/gmock-1.7.0.zip -d $HOME/google
-rm -f $HOME/google/gmock-1.7.0.zip
+if [! -f $HOME/google ]; then
+  mkdir -p $HOME/google
+  wget --directory-prefix=$HOME/google -q https://googlemock.googlecode.com/files/gmock-1.7.0.zip
+  unzip $HOME/google/gmock-1.7.0.zip -d $HOME/google
+  rm -f $HOME/google/gmock-1.7.0.zip
+else
+  echo Google Mock already downloaded.
+fi
 
 #echo Install Apache2
 
