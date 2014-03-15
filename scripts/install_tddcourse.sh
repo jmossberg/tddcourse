@@ -20,9 +20,14 @@ else
   echo Google Mock already downloaded.
 fi
 
-#echo Install Apache2
-
-sudo 
-#echo Install Jenkins
 #echo Install Wordpress
+echo Install Wordpress
+echo =================
+sudo apt-get install --quit --assume-yes wordpress
+sudo ln -s /usr/share/wordpress /var/www/wordpress
+sudo apt-get install mysql-server
+sudo gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
+sudo bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
+
+#echo Install Jenkins
 
