@@ -23,9 +23,10 @@ fi
 #echo Install Wordpress
 echo Install Wordpress
 echo =================
-sudo apt-get install --quit --assume-yes wordpress
+sudo apt-get install --quiet --assume-yes wordpress
 sudo ln -s /usr/share/wordpress /var/www/wordpress
-sudo apt-get install mysql-server
+sudo apt-get install --quit mysql-server
+#MySql root password: tdd1
 sudo gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
 sudo bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
 
