@@ -1,7 +1,7 @@
 #!/bin/bash
 echo Installing TDD Course by jacob.c.mossberg@gmail.com
-echo Install Eclipse
-echo ===============
+echo Install Eclipse CDT
+echo ===================
 sudo apt-get install --quiet --assume-yes eclipse-cdt
 
 echo Install gcc
@@ -11,9 +11,8 @@ sudo apt-get install --quiet --assume-yes g++
 
 echo Download Google Test/Google Mock
 echo ================================
-mkdir ~/google
-wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip
-cd ~/google
+mkdir -p ~/google
+wget --directory-prefix=~/google -q https://googlemock.googlecode.com/files/gmock-1.7.0.zip
 unzip ~/google/gmock-1.7.0.zip -d ~/google
 rm -f ~/google/gmock-1.7.0.zip
 
