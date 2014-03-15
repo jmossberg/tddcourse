@@ -25,10 +25,12 @@ echo Install Wordpress
 echo =================
 sudo apt-get install --quiet --assume-yes wordpress
 sudo ln -s /usr/share/wordpress /var/www/wordpress
-sudo apt-get install --quit mysql-server
+sudo apt-get install --quiet --assume-yes mysql-server
 #MySql root password: tdd1
 sudo gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
 sudo bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
+#Goto: http://localhost/wordpress/wp-admin/install.php
+#Login: tdd1 Password: tdd1 E-mail: jacob.c.mossberg@gmail.com
 
 #echo Install Jenkins
 
