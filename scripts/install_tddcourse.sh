@@ -65,9 +65,9 @@ fi
 sudo service jenkins restart
 sudo a2enmod proxy
 sudo a2enmod proxy_html
+sudo a2enmod proxy_http
 sudo a2enmod xml2enc
 sudo a2dissite 000-default
 sudo service apache2 restart
 sudo a2ensite 000-default
 sudo service apache2 restart
-
