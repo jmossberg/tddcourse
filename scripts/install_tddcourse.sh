@@ -57,4 +57,5 @@ else
 fi
 sudo a2enmod proxy
 sudo a2enmod proxy_html
+sudo a2enmod xml2enc
 sudo service apache2 restart
