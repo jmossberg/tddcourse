@@ -26,6 +26,7 @@
     #Jenkins
 
     ProxyRequests Off
+    AllowEncodedSlashes NoDecode
     <Proxy *>
         Order deny,allow
         Allow from all
