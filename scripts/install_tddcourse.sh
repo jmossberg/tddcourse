@@ -60,7 +60,7 @@ JENKINS_CONF_FILE=/etc/default/jenkins
 if (grep -q "prefix=/jenkins" $JENKINS_CONF_FILE); then
   echo JENKINS: Jenkins configuration file already contains prefix to /jenkins
 else
-  sudo echo 'JENKINS_ARGS="--prefix=/jenkins"' >> $JENKINS_CONF_FILE
+  echo 'JENKINS_ARGS="--prefix=/jenkins"' | sudo tee -a $JENKINS_CONF_FILE > /dev/null
 fi
 sudo service jenkins restart
 sudo a2enmod proxy
