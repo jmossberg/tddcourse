@@ -1,0 +1,1346 @@
+Welcome to this course in Test Driven Development. You will develop a command line tool, wordsRep, to replace words in text files. We will develop the application using test driven development methods through a series of exercises.
+
+TODO: I must make sure all project paths are corrects
+
+== Introduction to Test Driven Development ==
+
+Test Driven Development (TDD) is a software development technique where we grow the design by writing unit tests before writing the actual software. We work in an iterative way. This means that we will:
+
+<ol>
+<li>Write a ''small'' test
+<li>Make sure it fails
+<li>Make it pass
+<li>Clean up the code, what we call to refactor
+</ol>
+
+We can grow the software inside-out (Classic TDD) or outside-in (London TDD):
+<ul>
+<li>We start with the core algorithms and work our way out to the public interface of our application when we do '''inside-out''' (Classic TDD).
+<li>We start with the public interface and work our way in to the core algorithms when we do '''outside-in''' (London TDD). 
+</ul>
+
+London TDD will require us to make extensive use of test doubles. Test dobules are stand ins for the real objects. Since the core objects do not yet exist when we start with the public interface we must fake them.
+
+<uml>
+
+note left of ClassA #aqua
+    We do outside-in if we
+        start with ClassA 
+end note
+
+-> ClassA
+|||
+ClassA -> ClassB
+|||
+ClassB -> ClassC
+|||
+ClassB <- ClassC
+|||
+ClassB -> ClassD
+|||
+ClassB <- ClassD
+|||
+ClassA <- ClassB
+|||
+<- ClassA
+
+note right of ClassD #aqua
+    We do inside-out if we
+        start with ClassD 
+end note
+
+</uml>
+
+The diagram below shows how to design our software to make use of test doubles. The client class depends on an interface expressed using an abstract class. The interface can be implemented by a real class or by a test double. The ClientClass will be satisfied as long as the abstract interface is fulfilled.
+
+<uml>
+interface AbstractInterface
+
+AbstractInterface : method1()
+AbstractInterface : method2()
+
+TestDoubleClass : method1()
+TestDoubleClass : method2()
+
+RealClass : method1()
+RealClass : method2()
+
+ClientClass --> AbstractInterface : use
+AbstractInterface <|.. TestDoubleClass : implements
+AbstractInterface <|.. RealClass : implements
+</uml>
+
+We must design the ClientClass so that we can provide a pointer to either the test double or the real class. We call this dependency injection.
+
+There are different types of test doubles. Gerard Meszaros defines them as follows in his book ''xUnit Test Patterns'':
+
+{| class="wikitable" 
+!Test Double
+!Description
+|- 
+|Dummy
+|Empty Objects<br>
+Used to satisfy parameter lists
+|-
+|Stub
+|Hardcoded responses to function calls
+|-
+|Spy
+|Similar to stub but also records incoming function calls
+|-
+|Mock
+|Pre-programmed with expected function calls. Throws exception otherwise.
+|-
+|Fake
+|Real implementations but with some shortcut
+|}
+
+== Introduction to Google Test ==
+
+Google Test can be used to write unit tests. Google Test is written in C++. Google Mock is an addon to Google Test which automates the process of creating mock objects somewhat.
+
+Below is an example of a test written for Google Test/Google Mock, ''PersonTest.cpp'':
+
+[[File:GoogleTestStructure.png|750px]]
+
+We must also create a ''main.cpp'' that runs the Google Test/Google Mock:
+
+<pre>
+#include "gmock/gmock.h"
+
+int main(int argc, char* argv[]) {
+  ::testing::InitGoogleMock(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+</pre>
+
+== The Word Replace tool - wordsRep ==
+
+We will develop a command line tool called ''wordsrep'' in this course. The ''wordsrep'' tool searches each line in a text file for a specific word and replaces with another word. The output is written to a new file. Space is the delimiter separating words from one another.
+
+It should accept the following arguments:
+
+{| class="wikitable"
+!Argument
+!Description
+|-
+|oldWord
+|old word to be replaced
+|-
+|newWord
+|new word to replace every occurrence of old word with
+|-
+|inputFile
+|file to read text from
+|-
+|outputFile
+|file to write output to
+|}
+
+'''Example 1'''
+
+<pre>
+wordsrep --oldWord car --newWord house --inputFile a.txt --outputFile b.txt
+</pre>
+
+
+<div style="background-color: #ddf5eb; border-style: solid;">
+'''a.txt'''
+
+''car'' house street
+
+space blue cow
+</div>
+
+
+'''b.txt'''
+
+''house'' house street
+
+space blue cow
+
+'''Example 2'''
+
+<pre>
+wordsrep --oldWord car --newWord house --inputFile a.txt --outputFile b.txt
+</pre>
+
+
+'''a.txt'''
+
+''car'' car2 street
+
+
+'''b.txt'''
+
+''house'' car2 street
+
+== Create a new C++ project in Eclipse CDT and connect to Git repository ==
+
+TODO: Add comment to continue doing git commits
+
+We will create a C++ project in Eclipse CDT to develop our ''wordsrep'' application.
+
+* Start Eclipse CDT
+
+* Select workspace "/home/tdd1/workspace_<your name>" (example: "/home/tdd1/workspace_jacobmossberg")
+
+* Close the Welcome screen
+
+* Select "File - New - Other..."
+
+* Select "C/C++ - C++ Project"
+
+* Enter Project Name: ''WordsrepApp<your name>'' (example: WordsrepAppJacob)
+
+* Select Project Type ''Executable - Empty Project'' and toolchain ''Linux GCC''
+
+[[File:Screenshoot_eclipse_cdt_new_cpp_project.png|600px]]
+
+* Click "Finish"
+
+* Now let's connect the project to a Git repository by right clicking on it and selecting "Team - Share Project..."
+
+[[File:screenshot_team_share_project.png]]
+
+* Select Git and click Next
+
+* Enter parent directory: /home/tdd1/wordsrep_git
+
+* Enter name: wordsrep_git
+
+* Click Finish
+
+* Click Finish again
+
+== Import Google test and Google Mock to Eclipse project ==
+
+Now we will import Google test and Google mock into our Eclipse project and build them with a minimalistic main file.
+
+<ol>
+<li>Right click on the ''WordsrepApp'' project in Project Explorer and select New - Folder
+<li>Enter folder name ''external'' and click Finish
+<li>Open a shell by clicking on Start menu - Accessories - LXTerminal
+<li>
+<pre>Copy the google test and mock files into the project by running:
+/home/tdd1/google/gmock-1.7.0/scripts/fuse_gmock_files.py \
+/home/tdd1/wordsrep_git/wordsrep_git/WordsrepAppJacob/external
+</pre>
+<li>Go back to Eclipse and right click on the project and choose "Refresh"
+<li>Your ''external'' folder should now contain the files ''gmock-gtest-all.cc'', ''gmock.h'' (in sub-folder ''gmock'') and ''gtest.h'' (in sub-folder ''gtest'').<br>
+[[File:Screenshoot_eclipse_external_folder.png]]
+<li>Right click on the project and choose "Team - Add to Index"
+<li>Right click on the project and choose "Team - Commit..."
+<li>Enter message "Added Google Mock" and click "Commit"
+<li>We have now added the Google Mock files to the git repository
+<li>We must tell ''gmock-gtest-all.cc'' where to find gmock/gmock.h and gtest/gtest.h. Right click on the ''external'' folder and select Properties.
+<li>Select C/C++ Build - Settings
+<li>Select GCC C++ Compiler - Includes in tab Tool Settings
+<li>Click on Add... in Include paths (-I)
+<li>Click on Workspace...
+<li>Select ''external'' folder in WordsrepApp and click OK multiple times to close all windows
+<li>Create a new folder ''test'' by right clicking on WordsrepApp<your name> and selecting New - Folder
+<li>Right click on the ''test'' folder and select New - Source File
+<li>Enter name ''main.cpp'' and click on Finish
+<li>Add the following code to ''main.cpp'' and save:
+<pre>
+#include "gmock/gmock.h"
+
+int main(int argc, char* argv[]) {
+    ::testing::InitGoogleMock(&argc, argv);
+    return RUN_ALL_TESTS();
+}
+</pre>
+
+<li>We must tell main.cpp where to find gmock.h. Right click on ''test'' folder and select Properties.
+<li>Select C/C++ Build - Settings
+<li>Select GCC C++ Compiler - Includes in tab Tool Settings
+<li>Click on Add... in Include paths (-I)
+<li>Click on Workspace...
+<li>Select ''external'' folder in WordsrepApp and click OK multiple times to close all windows
+<li>Google Test/Google Mock make us of '''pthread''' so we must include this in the build. Right click on WordrepApp<your name> and select Properties.
+<li>Select C/C++ Build - Settings
+<li>Select GCC C++ Linker - Libraries
+<li>Click on Add... in Libraries
+<li>Enter ''pthread'' and click OK twice
+<li>Select Project - Build Project
+<li>Click on Run<br>
+[[File:Screenshoot_eclipse_run_project.png]]
+<li>The console output now shows that we have run all test cases. Currently 0.<br>
+[[File:Screenshoot_eclipse_run_output_console.png]]
+</ol>
+
+== Add dummy test ==
+
+<ol>
+<li>We will add a dummy test to show the basic structure of a test.
+<ol>
+<li>Right click on the test folder and select "New - Source File"
+<li>Enter source file name "WordsrepClassTest.cpp" and click "Finish"
+</ol>
+
+<li>Each test class has to include Google Test and Google Mock.
+<ol>
+<li>Add the following at the top of "WordsrepClassTest.cpp"
+<pre>
+#include "gmock/gmock.h"
+</pre>
+</ol>
+
+<li>Now we define an empty test class. It must inherit from the Test class in Google Test.
+<ol>
+<li> Add the following:
+<pre>
+class WordsrepClassTest : public ::testing::Test {
+
+};
+
+</pre>
+</ol>
+
+<li>Now we add the code for the dummy test.
+
+<pre>
+TEST_F(WordsrepClassTest, APassingTest) {
+   ASSERT_TRUE(true);
+}
+</pre>
+
+
+<li>"WordsrepClassTest.cpp" shall now look like this:
+
+<pre>
+#include "gmock/gmock.h"
+
+class WordsrepClassTest : public ::testing::Test {
+
+};
+
+TEST_F(WordsrepClassTest, APassingTest) {
+   ASSERT_TRUE(true);
+}
+</pre>
+<br>
+[[File:dummy_test.png]]
+<li>Save
+<li>Select Project - Build Project
+<li>Click on Run
+<li>The console output shall now show our first test passing:<br>
+[[File:screenshoot_eclipse_run_output_console_3.png]]
+<li>Right click on the project and choose "Team - Add to Index"
+<li>Right click on the project and choose "Team - Commit..."
+<li>Enter message "Added dummy test in WordsrepClassTest" and click "Commit"
+</ol>
+
+== A test list ==
+
+We can compose an initial list of the tests we want to write based on what we know about ''wordsrep''.
+
+<ul>
+<li>retrieve the value of an argument switch
+<li>split a line of text into words
+<li>concatenate words into line of text
+<li>replace all matching words with replacement word
+</ul>
+
+We don't spend too much time on thinking about this list. The purpose is to get us going.
+
+== Retrieve the value of an argument switch ==
+
+WordsRep is a command line tool which means all arguments will supplied through the main function:
+
+<pre>
+int main(int argc, char* argv[]) {
+</pre>
+
+* argc - "argument counter"
+* argv - "argument vector"
+
+argc and argv will assume values according to the table below if we call wordsrep like this:
+
+<pre>
+wordsrep --oldWord car
+</pre>
+
+{|class="wikitable"
+|argc
+|3
+|-
+|argv[0]
+|wordsrep
+|-
+|argv[1]
+|<nowiki>--</nowiki>oldWord
+|-
+|argv[2]
+|car
+|}
+
+TODO: Fix formatting of pre tag to make it stand out more
+
+Let's test drive an ArgumentParserClass which will let us parse command line arguments. We write a test to verify that we can retrieve the value of argument switches.
+
+<ol>
+<li>Create a new file, ArgumentParserClassTest.cpp, in the test folder.
+<li>Add the following to the new file:
+<pre>
+#include "gmock/gmock.h"
+#include "ArgumentParserClass.h"
+
+class ArgumentParserClassTest : public ::testing::Test {
+
+};
+
+TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+
+    //Setup
+    ArgumentParserClass argumentParserClass;
+
+}
+</pre>
+</ol>
+
+The test is not finished but we can stop writing here and try to build. The build is failing since we have not implemented ArgumentParserClass. So let's implement an empty ArgumentParserClass.
+
+<ol>
+<li>Add a ''src'' folder in the WordsrepApp<your name> project by right clicking on the project in the Project Explorer and selecting New - Folder
+<li>Create a new file, ArgumentParserClass.h, in the src folder.
+<li>Add the following to the new file:
+<pre>
+#ifndef ARGUMENTPARSERCLASS_H_
+#define ARGUMENTPARSERCLASS_H_
+
+#include <string>
+
+class ArgumentParserClass {
+
+};
+
+
+#endif /* ARGUMENTPARSERCLASS_H_ */
+</pre>
+<li>Now we have to add a reference to the ''src'' folder when compiling the files in the ''test folder:
+<ol>
+<li>Right click on the ''test'' folder and select Properties
+<li>Select C/C++ Build - Settings
+<li>Goto Tool Seeting - GCC C++ Compiler - Includes
+<li>Click on Add.. in Include paths
+<li>Click on Workspace...
+<li>Select the ''src'' folder and click OK multiple times to close all windows
+</ol>
+<li>Build the project again. Now it should work.
+</ol>
+
+You can adjust your coding "speed" based on your on experience and the difficulty of the problem at hand. It is not necessary to always halt the writing of the test like this, but I wanted to show that you can go very slow when you are on unfamiliar territory.
+
+Let's finish the test:
+
+<pre>
+TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+
+  //Setup
+  int argc = 3;
+  const char * argv[] = {"wordsrep", "--oldWord", "car"};
+  ArgumentParserClass argumentParserClass;
+
+  //Exercise
+  std::string argumentSwitchValue = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
+
+  //Verify
+  ASSERT_EQ("car", argumentSwitchValue);
+}
+</pre>
+
+So what we do here is to setup a scenario where we have 3 arguments (the name of the program, in this case ''wordsrep'', is the first argument). The second argument is a switch, marked with "--". We want the ''getSwitchValue'' method to return the value after the switch, in this case ''car''.
+
+Build and run the tests to make sure the test fail.
+
+Now we implement ''getSwitchValue''.
+
+<ol>
+<li>Edit ArgumentParserClass.h to look like:
+<pre>
+class ArgumentParserClass {
+
+public:
+   std::string getSwitchValue(int argc, const char * argv[], std::string switchName);
+};
+</pre>
+<li>Add a new file ArgumentParserClass.cpp in src folder.
+<li>Add the following:
+<pre>
+#include "ArgumentParserClass.h"
+
+std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+{
+  return "car";
+}
+</pre>
+</ol>
+
+Build and run test to make sure the test pass. But the response of getSwitchValue is hardcoded. Let's extend the test to force some logic into the implementation:
+
+<pre>
+TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+
+  //Setup
+  int argc = 3;
+  const char * argv1[] = {"wordsrep", "--oldWord", "car"};
+  const char * argv2[] = {"wordsrep", "--oldWord", "space"};
+  ArgumentParserClass argumentParserClass;
+
+  //Exercise
+  std::string argumentSwitchValue1 = argumentParserClass.getSwitchValue(argc, argv1, "--oldWord");
+  std::string argumentSwitchValue2 = argumentParserClass.getSwitchValue(argc, argv2, "--oldWord");
+
+  //Verify
+  ASSERT_EQ("car", argumentSwitchValue1);
+  ASSERT_EQ("space", argumentSwitchValue2);
+}
+</pre>
+
+Make sure the test fails. You should get this in the Console output:
+<pre>
+[ RUN      ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved
+../test/ArgumentParserClassTest.cpp:21: Failure
+Value of: argumentSwitchValue2
+  Actual: "car"
+Expected: "space"
+[  FAILED  ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)
+</pre>
+
+Now we put some logic into ''getSwitchValue'':
+
+<pre>
+#include "ArgumentParserClass.h"
+
+std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+{
+  int i;
+
+  for(i = 0; i < argc; i++)
+  {
+    if(0 == switchName.compare(argv[i]))
+    {
+      return argv[i + 1];
+    }
+  }
+
+  return "";
+}
+</pre>
+
+Build and check that the test pass.
+
+== Split a line of text into words ==
+
+We have implemented the first test on the test list.
+
+<ul>
+<li><strike>retrieve the value of an argument switch</strike>
+<li>split a line of text into words
+<li>concatenate words into line of text
+<li>replace all matching words with replacement word
+</ul>
+
+Now we want to test drive how to split a line of text into words. Space is the delimeter used by wordsrep. So everything between two spaces is a word.
+
+We have four words in the following example line:
+
+<pre>
+car house fire moon_sun
+</pre>
+
+<ul>
+<li>car
+<li>house
+<li>fire
+<li>moon_sun
+</ul>
+
+Let's implement a ''LineToWordsClass'' to help us split a line of text into words. The plan is to loop through all characters in the line and extract a word each time we encounter a space.
+
+We start with a test.
+
+<pre>
+TEST_F(LineToWordsClassTest, CanSplitLineWithTwoWords)
+{
+  //Setup
+  LineToWordsClass lineToWordsClass;
+
+  std::vector<std::string> words;
+
+  //Exercise
+  words = lineToWordsClass.splitLine("street sky");
+
+  //Verify
+  ASSERT_EQ("street", words[0]);
+  ASSERT_EQ("sky", words[1]);
+}
+</pre>
+
+TODO: Explain what ''vector'' is
+
+Build to make sure it fails. Now let's implement ''splitLine''.
+
+<ol>
+<li>Add file LineToWordsClass.h in the ''src'' folder
+<li>Add the following code:
+<pre>
+#ifndef LINETOWORDSCLASS_H_
+#define LINETOWORDSCLASS_H_
+
+#include <vector>
+#include <string>
+
+class LineToWordsClass {
+public:
+    std::vector<std::string> splitLine(std::string textLine);
+};
+
+
+#endif /* LINETOWORDSCLASS_H_ */
+</pre>
+<li>Add file LineToWordsClass.cpp in the ''src'' folder
+<li>Add the following code
+<pre>
+#include "LineToWordsClass.h"
+
+std::vector<std::string> LineToWordsClass::splitLine(std::string textLine) {
+
+  std::vector<std::string> words;
+  std::string word("");
+  unsigned int i;
+
+  for(i = 0; i < textLine.size(); i++)
+  {
+    if(textLine[i] == ' ')
+    {
+      words.push_back(word);
+      word = "";
+     }
+     else
+     {
+       word.push_back(textLine[i]);
+     }
+   }
+
+   if(word.size() > 0)
+   {
+     words.push_back(word);
+   }
+
+   return words;
+}
+</pre>
+</ol>
+
+Build and run the test to make sure it passes.
+
+TODO: Can we make some refactoring here.
+
+== Concatenate words into line of text ==
+
+We have implemented two tests on the test list.
+
+<ul>
+<li><strike>retrieve the value of an argument switch</strike>
+<li><strike>split a line of text into words</strike>
+<li>concatenate words into line of text
+<li>replace all matching words with replacement word
+</ul>
+
+Now we want to write a test to test drive how to concatenate words into a line of text. We create a new class ''WordsToLineClass''.
+
+We start with a test.
+
+<pre>
+#include "gmock/gmock.h"
+#include "WordsToLineClass.h"
+
+class WordsToLineClassTest : public ::testing::Test {
+
+};
+
+TEST_F(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
+{
+  //Setup
+  WordsToLineClass wordsToLineClass;
+
+  std::vector<std::string> words;
+  words.push_back("table");
+  words.push_back("rocket");
+  words.push_back("moon");
+
+  std::string line;
+
+  //Exercise
+  line = wordsToLineClass.concatenateWords(words);
+
+  //Verify
+  ASSERT_EQ("table rocket moon", line);
+}
+</pre>
+
+<ul>
+<li>Build to make sure it fails.
+<li>Add new file ''WordsToLineClass.h'' in the ''src'' folder and add declaration of class ''WordsToLineClass''. Remember to include <string> and <vector>.
+<li>Implement the ''concatenateWords'' method in the corresponding .cpp class.
+</ul>
+
+<pre>
+#include "WordsToLineClass.h"
+
+std::string WordsToLineClass::concatenateWords(std::vector<std::string> words)
+{
+  std::vector<std::string>::iterator it;
+  std::string line("");
+
+  for(it = words.begin(); it != words.end(); it++)
+  {
+    line.append(*it);
+    line.append(" ");
+  }
+
+  if(line.size() > 0)
+  {
+    line.resize(line.size() - 1);
+  }
+
+  return line;
+}
+</pre>
+
+Build and run the test to make sure it passes:
+
+<pre>
+[----------] 1 test from WordsToLineClassTest
+[ RUN      ] WordsToLineClassTest.ConcatenateThreeWordsIntoLine
+[       OK ] WordsToLineClassTest.ConcatenateThreeWordsIntoLine (0 ms)
+[----------] 1 test from WordsToLineClassTest (0 ms total)
+</pre>
+
+== Replace all matching words with replacement word ==
+
+We have implemented three tests on the test list.
+
+<ul>
+<li><strike>retrieve the value of an argument switch</strike>
+<li><strike>split a line of text into words</strike>
+<li><strike>concatenate words into line of text</strike>
+<li>replace all matching words with replacement word
+</ul>
+
+Now we want to write a test to test drive how replace all matching words with replacement word. You can remove ''APassingTest'' from ''WordsrepClassTest.cpp'' and add the folling:
+
+<pre>
+#include "gmock/gmock.h"
+#include "WordsrepClass.h"
+
+class WordsrepClassTest : public ::testing::Test {
+
+};
+
+TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
+{
+  //Setup
+  WordsrepClass wordsrepClass;
+
+  std::vector<std::string> words;
+  words.push_back("table");
+  words.push_back("rocket");
+  words.push_back("moon");
+
+  std::string oldWord("table");
+  std::string newWord("sun");
+
+  std::vector<std::string> newWords;
+
+  //Exercise
+  newWords = wordsrepClass.replaceMatchingWords(oldWord, newWord, words);
+
+  //Verify
+  ASSERT_EQ("sun",    newWords[0]);
+  ASSERT_EQ("rocket", newWords[1]);
+  ASSERT_EQ("moon",   newWords[2]);
+}
+</pre>
+
+<ul>
+<li>Build and run to make sure the test fails.
+<li>Add new file ''WordsrepClass.h'' and add declaration of ''WordsrepClass''
+<li>Implement the new method ''replaceMatchingWords'' in corresponding .cpp file.
+</ul>
+
+<pre>
+#include "WordsrepClass.h"
+
+std::vector<std::string> WordsrepClass::replaceMatchingWords(
+  std::string oldWord, std::string newWord,
+  std::vector<std::string> words) {
+
+  std::vector<std::string>::iterator it;
+  std::vector<std::string> newWords;
+
+  for(it = words.begin(); it != words.end(); it++)
+  {
+    if((*it) == oldWord)
+    {
+      newWords.push_back(newWord);
+    }
+    else
+    {
+      newWords.push_back(*it);
+    }
+  }
+
+  return newWords;
+}
+</pre>
+
+Build and run test to make sure it passes:
+
+<pre>
+[----------] 1 test from WordsrepClassTest
+[ RUN      ] WordsrepClassTest.ReplaceMatchingWordsWithNewWord
+[       OK ] WordsrepClassTest.ReplaceMatchingWordsWithNewWord (0 ms)
+[----------] 1 test from WordsrepClassTest (0 ms total)
+</pre>
+
+== Use mock objects to abstract the file system dependency ==
+
+Ok, so we have implemented all the tests on our initial test list:
+
+<ul>
+<li><strike>retrieve the value of an argument switch</strike>
+<li><strike>split a line of text into words</strike>
+<li><strike>concatenate words into line of text</strike>
+<li><strike>replace all matching words with replacement word</strike>
+</ul>
+
+But we are not done. ''wordsrepApp'' will have to read and write lines from and to text files. However this dependency towards a file system is typically something we want to abstract in our unit tests. We can do this using mock objects. What we have to do first is to define abstract interfaces through which our ''wordsrepApp'' can interact with the file system. We will let mock objects implement the abstract interfaces while running our unit tests.
+
+<uml>
+interface AbstractFileReaderInterface
+interface AbstractFileWriterInterface
+
+AbstractFileReaderInterface : openFile(string fileName)
+AbstractFileReaderInterface : closeFile()
+AbstractFileReaderInterface : string readLine()
+AbstractFileReaderInterface : bool endOfData()
+
+
+AbstractFileReaderInterface <|-- FileReaderMock : implements
+AbstractFileReaderInterface <|-- FileReader : implements
+
+AbstractFileWriterInterface : openFile(string fileName)
+AbstractFileWriterInterface : closeFile()
+AbstractFileWriterInterface : writeLine(string line)
+
+AbstractFileWriterInterface <|-- FileWriterMock : implements
+AbstractFileWriterInterface <|-- FileWriter : implements
+</uml>
+
+Now we define the AbstractFileReaderInterface and AbstractFileWriterInterface in Eclipse.
+
+TODO: Explain how we define abstract classes using = 0
+
+<ul>
+<li>Add a new folder ''interface'' in the WordsrepApp project
+<li>Add a new file ''AbstractFileReaderInterface.h'' in the ''interface'' folder
+<li>Add the following code:
+<pre>
+#ifndef ABSTRACTFILEREADERINTERFACE_H_
+#define ABSTRACTFILEREADERINTERFACE_H_
+
+#include <string>
+
+class AbstractFileReaderInterface {
+public:
+  virtual ~AbstractFileReaderInterface() {}
+  virtual int openFile(std::string fileName) = 0;
+  virtual int closeFile() = 0;
+  virtual std::string readLine() = 0;
+  virtual bool endOfData() = 0;
+};
+
+#endif /* ABSTRACTFILEREADERINTERFACE_H_ */
+</pre>
+<li>Add a new file ''AbstractFileWriterInterface.h'' in the ''interface'' folder
+<li>Add the following code:
+<pre>
+#ifndef ABSTRACTFILEWRITERINTERFACE_H_
+#define ABSTRACTFILEWRITERINTERFACE_H_
+
+#include <string>
+
+class AbstractFileWriterInterface {
+public:
+  virtual ~AbstractFileWriterInterface() {}
+  virtual int openFile(std::string fileName) = 0;
+  virtual int closeFile() = 0;
+  virtual void writeLine(std::string newLine) = 0;
+  virtual void setEndOfData() = 0;
+};
+
+
+#endif /* ABSTRACTFILEWRITERINTERFACE_H_ */
+</pre>
+</ul>
+
+TODO: Explain syntax of Google Mock when defining mock objects
+
+Next step is to create mock objects using Google Mock. We start with the ''FileReaderMock''.
+
+<ul>
+<li>Add a new folder ''mock'' in the WordsrepApp project
+<li>Add a new file ''FileReaderMock.h''
+<li>Add the following code:
+<pre>
+#ifndef FILEREADERMOCK_H_
+#define FILEREADERMOCK_H_
+
+#include "gmock/gmock.h"
+#include "AbstractFileReaderInterface.h"
+
+class FileReaderMock : public AbstractFileReaderInterface {
+public:
+  MOCK_METHOD1(openFile, int(std::string fileName));
+  MOCK_METHOD0(closeFile, int());
+  MOCK_METHOD0(readLine, std::string());
+  MOCK_METHOD0(endOfData, bool());
+};
+
+#endif /* FILEREADERMOCK_H_ */
+</pre>
+</ul>
+
+Now we create the ''FileWriterMock''.
+
+<ul>
+<li>Add a new file ''FileWriterMock.h''
+<li>Add the following code:
+<pre>
+#ifndef FILEWRITERMOCK_H_
+#define FILEWRITERMOCK_H_
+
+#include "gmock/gmock.h"
+#include "AbstractFileWriterInterface.h"
+
+class FileWriterMock : public AbstractFileWriterInterface {
+public:
+  MOCK_METHOD1(openFile, int(std::string fileName));
+  MOCK_METHOD0(closeFile, int());
+  MOCK_METHOD1(writeLine, void(std::string replacedWord));
+  MOCK_METHOD0(setEndOfData, void());
+};
+
+#endif /* FILEWRITERMOCK_H_ */
+</pre>
+</ul>
+
+Now we can write a test which makes use of the mock objects to verify that the ''WordsrepClass'' interacts with the file interfaces correctly.
+
+The sequence diagram below shows how we want the ''WordsrepClass'' to interact with the file interfaces.
+
+
+<uml>
+
+participant FileReaderMock
+participant WordsrepClass
+participant FileWriterMock
+
+WordsrepClass -> FileReaderMock : openFile()
+WordsrepClass -> FileWriterMock : openFile()
+
+loop while endofData == false
+  WordsrepClass -> FileReaderMock : readLine()
+  WordsrepClass -> FileWriterMock : writeLine()
+  WordsrepClass -> FileReaderMock : endOfData()
+end
+
+WordsrepClass -> FileWriterMock : closeFile()
+WordsrepClass -> FileReaderMock : closeFile()
+</uml>
+
+TODO: Explain syntax of Google Mock when setting expectations
+
+<ul>
+<li>Add the following to the beginning of ''WordsrepClassTest.cpp''
+<pre>
+#include "FileReaderMock.h"
+#include "FileWriterMock.h"
+
+using ::testing::Exactly;
+using ::testing::Return;
+using ::testing::InSequence;
+</pre>
+<li>Add the following test to ''WordsrepClassTest.cpp''
+<pre>
+TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
+{
+  //Setup
+  FileReaderMock fileReaderMock;
+  FileWriterMock fileWriterMock;
+  WordsrepClass wordsrepClass;
+
+  //Set expectations on mock objects
+  EXPECT_CALL(fileReaderMock, openFile("a.txt"))
+      .Times(Exactly(1))
+      .WillOnce(Return(0));
+
+  EXPECT_CALL(fileWriterMock, openFile("b.txt"))
+      .Times(Exactly(1))
+      .WillOnce(Return(0));
+
+  {
+    InSequence s;
+
+    EXPECT_CALL(fileReaderMock, endOfData())
+      .Times(Exactly(1))
+      .WillOnce(Return(false));
+
+    //Line 1
+    EXPECT_CALL(fileReaderMock, readLine())
+      .Times(Exactly(1))
+      .WillOnce(Return("car house street"));
+
+    EXPECT_CALL(fileWriterMock, writeLine("house house street"))
+      .Times(Exactly(1));
+
+    EXPECT_CALL(fileReaderMock, endOfData())
+      .Times(Exactly(1))
+      .WillOnce(Return(false));
+
+    //Line 2
+    EXPECT_CALL(fileReaderMock, readLine())
+      .Times(Exactly(1))
+      .WillOnce(Return("space blue cow"));
+
+    EXPECT_CALL(fileWriterMock, writeLine("space blue cow"))
+      .Times(Exactly(1));
+
+    EXPECT_CALL(fileReaderMock, endOfData())
+      .Times(Exactly(1))
+      .WillOnce(Return(true));
+  }
+
+  EXPECT_CALL(fileReaderMock, closeFile())
+      .Times(Exactly(1))
+      .WillOnce(Return(0));
+
+  EXPECT_CALL(fileWriterMock, closeFile())
+      .Times(Exactly(1))
+      .WillOnce(Return(0));
+
+  int argc = 9;
+  const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
+
+  //Exercise & Verify
+  wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock);
+}
+</pre>
+<li>We must make the interfaces and mock objects available when building
+<li>Edit Properties for the ''mock'' folder and add ''interface'' folder to the Include paths for GCC C++ Compiler
+<li>Now edit Properties for the ''test'' folder and add ''mock'' and ''interface'' folders to Include paths
+</ul>
+
+Build and run to make sure it fails.
+
+Now we add the ''processInputFile'' method to the ''WordsrepClass''.
+
+<ul>
+<li>Add the following includes to ''WordsrepClass.h'':
+<pre>
+#include "AbstractFileReaderInterface.h"
+#include "AbstractFileWriterInterface.h"
+</pre>
+<li>Now add the prototype for the new method:
+<pre>
+void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
+</pre>
+<li>Add the folowing includes in ''WordsrepClass.cpp'':
+<pre>
+#include "ArgumentParserClass.h"
+#include "LineToWordsClass.h"
+#include "WordsToLineClass.h"
+</pre>
+<li>The implementation of ''processInputFile'' looks like this:
+<pre>
+void WordsrepClass::processInputFile(int argc, const char* argv[],
+     AbstractFileReaderInterface* fileReader_p,
+     AbstractFileWriterInterface* fileWriter_p) {
+
+  ArgumentParserClass argumentParserClass;
+  WordsToLineClass wordsToLineClass;
+  LineToWordsClass lineToWordsClass;
+
+  std::string oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
+  std::string newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
+  std::string inputFile = argumentParserClass.getSwitchValue(argc, argv, "--inputFile");
+  std::string outputFile = argumentParserClass.getSwitchValue(argc, argv, "--outputFile");
+
+  fileReader_p->openFile(inputFile);
+  fileWriter_p->openFile(outputFile);
+
+  while(false == fileReader_p->endOfData())
+  {
+    std::string tempLine = fileReader_p->readLine();
+
+    std::vector<std::string> words = lineToWordsClass.splitLine(tempLine);
+    std::vector<std::string> newWords = this->replaceMatchingWords(oldWord, newWord, words);
+    tempLine = wordsToLineClass.concatenateWords(newWords);
+
+    fileWriter_p->writeLine(tempLine);
+  }
+
+  fileWriter_p->closeFile();
+  fileReader_p->closeFile();
+
+}
+</pre>
+<li>Edit the properties of the ''src'' folder and add the ''interface'' folder to the Include paths
+<li>Build and run to make sure the ''InteractsCorrectlyWithFileInterfaces'' test passes
+</ul>
+
+== Implement the real file line reader and writer ==
+
+Ok, we have implemented all our tests needed to test drive the basic functionality of the WordsrepApp. However we also want to test the actual command line tool. We must create a second main.cpp file to use when building the command line tool and not the unit tests. But we must start with implementing the FileReaderClass and FileWriterClass to interact with the actual file system.
+
+We don't unit test this part of the code. But by moving all the "glue" code between the WordsrepApp core functionality and the actual file system we are allowed to test as much as possible of the code.
+
+
+<ol>
+<li>Create a new file ''FileReaderClass.h'' in the ''src'' folder
+<li>Add the following code:
+<pre>
+#ifndef FILEREADERCLASS_H_
+#define FILEREADERCLASS_H_
+
+#include "AbstractFileReaderInterface.h"
+#include <iostream>
+#include <fstream>
+
+class FileReaderClass : public AbstractFileReaderInterface {
+private:
+  std::ifstream myFile;
+
+public:
+  int openFile(std::string fileName);
+  int closeFile();
+  std::string readLine();
+  bool endOfData();
+
+};
+
+#endif /* FILEREADERCLASS_H_ */
+</pre>
+<li>Create a new file ''FileReaderClass.cpp'' in the ''src'' folder
+<li>Add the following code:
+<pre>
+#include "FileReaderClass.h"
+
+int FileReaderClass::openFile(std::string fileName) {
+  const char * fileNameChar_p = fileName.c_str();
+  this->myFile.open(fileNameChar_p, std::fstream::in);
+  return 0;
+}
+
+std::string FileReaderClass::readLine() {
+  const int MAXLENGTH = 500;
+  char rad[MAXLENGTH+1];
+  this->myFile.getline(rad, MAXLENGTH);
+  return std::string(rad);
+}
+
+bool FileReaderClass::endOfData() {
+  return this->myFile.eof();
+}
+
+int FileReaderClass::closeFile()
+{
+  this->myFile.close();
+  return 0;
+}
+</pre>
+<li>Create a new file ''FileWriterClass.h'' in the ''src'' folder
+<li>Add the following code:
+<pre>
+#ifndef FILEWRITERCLASS_H_
+#define FILEWRITERCLASS_H_
+
+#include "AbstractFileWriterInterface.h"
+#include <iostream>
+#include <fstream>
+
+class FileWriterClass : public AbstractFileWriterInterface {
+private:
+  std::ofstream myFile;
+
+  int closeFile();
+
+public:
+  int openFile(std::string fileName);
+  void writeLine(std::string line);
+  void setEndOfData();
+
+};
+
+#endif /* FILEWRITERCLASS_H_ */
+</pre>
+<li>Create a new file ''FileWriterClass.cpp'' in the ''src'' folder
+<li>Add the following code:
+<pre>
+#include "FileWriterClass.h"
+
+int FileWriterClass::openFile(std::string fileName) {
+  const char * fileNameChar_p = fileName.c_str();
+  this->myFile.open(fileNameChar_p);
+  return 0;
+}
+
+int FileWriterClass::closeFile() {
+  this->myFile.close();
+  return 0;
+}
+
+void FileWriterClass::writeLine(std::string line) {
+  this->myFile << line << '\n';
+}
+
+void FileWriterClass::setEndOfData() {
+  this->closeFile();
+}
+</pre>
+</ol>
+
+== Compile command line application ==
+
+We must add a new ''main.cpp'' to run the ''WordsrepApp'' from the command line. We must also configure the Eclipse project to build either with the ''main.cpp'' used with Google Tests or the ''main.cpp'' to use for the actual command line application.
+
+<ol>
+<li>Add a new file ''main.cpp'' in the ''src'' folder
+<li>Add the following code
+<pre>
+#include "WordsrepClass.h"
+#include "FileReaderClass.h"
+#include "FileWriterClass.h"
+
+int main(int argc, const char * argv[])
+{
+  FileReaderClass fileReaderClass;
+  FileWriterClass fileWriterClass;
+  WordsrepClass wordsrepClass;
+
+  wordsrepClass.processInputFile(argc, argv, &fileReaderClass, &fileWriterClass);
+
+  return 0;
+}
+</pre>
+<li>Right click on the new ''main.cpp'' file and select Propterties
+<li>Click on C/C++ Build
+<li>Make sure Configuration is set to ''Debug''
+<li>Set box ''Exclude resource from build''
+<li>Click Apply and then Ok
+</ol>
+
+We have created the new ''main.cpp'' file but excluded it from build when we are running Google Tests. You can try this by ensuring that you can still build the project and run the tests.
+
+Now we switch to the release build configuration and build the command line tool.
+
+<ol>
+<li>Select Project - Build Configurations - Set Active - Release
+<li>Right-click on the ''test'' folder and activate ''Exclude resource from build'' under C/C++ Build
+<li>Click Apply and then Ok
+<li>Right-click on the ''mock'' folder and activate ''Exclude resource from build'' under C/C++ Build
+<li>Click Apply and then Ok
+<li>Right-click on the ''external'' folder and activate ''Exclude resource from build'' under C/C++ Build
+<li>Click Apply and then Ok
+<li>Edit Properties of the ''src'' folder and add the ''interface'' folder to the Include paths
+<li>Build the project
+</ol>
+
+Now we want test our command line utlity!
+
+<ol>
+<li>click on Start menu - Accessories - LXTerminal
+<li>Change folder to your WordsrepApp git repository
+<li>Go into the ''Release'' folder
+<li>You should have the file ''WordsrepApp<your name>'' in the ''Release'' folder
+<li>Create a text file ''a.txt'' containing the following lines:
+<pre>
+house car space
+cycle table chair
+</pre>
+<li>Execute the WordsrepApp:
+<pre>
+./WordsrepApp<your name> --oldWord car --newWord black --inputFile a.txt --outputFile b.txt
+</pre>
+<li>Check the output by executing:
+<pre>
+cat b.txt
+</pre>
+<li>You should get:
+<pre>
+house black space
+cycle table chair
+</pre>
+</ol>
+
+== Connect Google Tests to a Continuous Integration Server ==
+
+Finally we will connect our tests to a continuous integration server, in this case Jenkins.
+
+<ol>
+<li>Go to <code>localhost/jenkins</code> in the webbrowser
+<li>Click on New Job
+<li>Enter job name <code>WordsrepAppTests</code>
+<br>
+[[File:Screenshot_jenkins_job_name.png|300px]]
+<li>Select ''Build a free-style software project'' and click OK
+<li>Select ''Git'' in section ''Source Code Management''
+<li>Enter ''Repository URL'': /home/tdd1/wordsrep_git/wordsrep_git/.git
+<li>Click on ''Add build step'' in section ''Build'' and select ''Execute shell''
+<li>Paste the following the Command box:
+<pre>
+eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -data . -import WordsrepAppJacob -cleanBuild WordsrepAppJacob/Debug
+./WordsrepAppJacob/Debug/WordsrepAppJacob --gtest_output="xml:wordsrepapp_unittest.xml"
+</pre>
+<li>Click on ''Add post-build action'' in section ''Post-build Actions'' and select ''Publish JUnit test result report''
+<li>Enter the following in box ''Test report XMLs'': wordsrepapp_unittest.xml
+<li>Click on Save
+<li>Click on ''Build now''
+<br>
+[[File:Screenshot_jenkins_build_now.png]]
+<li>The build history should show the first job as blue after some time, indicating that the build went fine and all tests passed:
+<br>
+[[File:Screenshot_jenkins_build_history.png]]
+<li>Click on the job in the Build History
+<li>Click on ''Test result''
+<li>Click on ''(root)''
+<li>You should now get a list of all test classes with corresponding test results
+<br>
+[[File:Screenshot_jenkins_test_classes.png]]
+<li>Click on ''WordsrepClassTest'' to get the results of each test in that test class
+<br>
+[[File:Screenshot_jenkins_test_results.png]]
+</ol>
+
+The Jenkins job we have created is now setup to run when manually triggered. It is also possible to trigger the job automatically.
+
+== How to debug ==
+
+TODO: Explain how to step debug with Eclipse CDT
+
+== Next steps ==
+
+TODO: Refine the next steps
+
+If you reached this far you can continue test driving on you own to enhance the WordsrepApp. You can for example add the following:
+
+<ul>
+<li>Test drive handling of error scenarios
+<li>Test drive change word delimiter
+<li>Improve line to word class
+</ul>
+
