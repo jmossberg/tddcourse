@@ -54,5 +54,7 @@ else
   sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default_original.conf
   sudo rm -f /etc/apache2/sites-availabe/000-default.conf
   sudo cp $TDDCOURSE_REPO/apache2/default /etc/apache2/sites-available/000-default.conf
-  sudo service apache2 reload
 fi
+sudo a2enmod proxy
+sudo a2enmod proxy_html
+sudo service apache2 restart
