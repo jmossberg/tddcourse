@@ -55,6 +55,14 @@ else
   sudo rm -f /etc/apache2/sites-availabe/000-default.conf
   sudo cp $TDDCOURSE_REPO/apache2/default /etc/apache2/sites-available/000-default.conf
 fi
+
+JENKINS_CONF_FILE=/etc/default/jenkins
+if (grep -q "prefix=/jenkins" $JENKINS_CONF_FILE); then
+  echo JENKINS: Jenkins configuration file already contains prefix to /jenkins
+else
+  echo 'JENKINS_ARGS="--prefix=/jenkins"' >> $JENKINS_CONF_FILE
+fi
+sudo service jenkins restart
 sudo a2enmod proxy
 sudo a2enmod proxy_html
 sudo a2enmod xml2enc
