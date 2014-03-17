@@ -71,3 +71,14 @@ sudo a2dissite 000-default
 sudo service apache2 restart
 sudo a2ensite 000-default
 sudo service apache2 restart
+
+echo Setup WordsrepAppReference project workspace for Eclipse CDT
+echo ============================================================
+REFERENCE_PROJECT=$HOME/eclipse_cdt_workspaces/reference
+if [! -f $REFERENCE_PROJECT ]; then
+  mkdir -p $REFERENCE_PROJECT 
+  eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -data $REFERENCE_PROJECT -importAll $TDDCOURSE_REPO/reference
+else
+  echo Eclipse CDT reference project already setup.
+fi
+
