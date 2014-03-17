@@ -1,0 +1,30 @@
+<uml>
+
+note left of ClassA #aqua
+    We do outside-in if we
+        start with ClassA 
+end note
+
+-> ClassA
+|||
+ClassA -> ClassB
+|||
+ClassB -> ClassC
+|||
+ClassB <- ClassC
+|||
+ClassB -> ClassD
+|||
+ClassB <- ClassD
+|||
+ClassA <- ClassB
+|||
+<- ClassA
+
+note right of ClassD #aqua
+    We do inside-out if we
+        start with ClassD 
+end note
+
+</uml>
+

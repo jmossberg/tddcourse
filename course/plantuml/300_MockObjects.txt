@@ -1,0 +1,21 @@
+<uml>
+interface AbstractFileReaderInterface
+interface AbstractFileWriterInterface
+
+AbstractFileReaderInterface : openFile(string fileName)
+AbstractFileReaderInterface : closeFile()
+AbstractFileReaderInterface : string readLine()
+AbstractFileReaderInterface : bool endOfData()
+
+
+AbstractFileReaderInterface <|-- FileReaderMock : implements
+AbstractFileReaderInterface <|-- FileReader : implements
+
+AbstractFileWriterInterface : openFile(string fileName)
+AbstractFileWriterInterface : closeFile()
+AbstractFileWriterInterface : writeLine(string line)
+
+AbstractFileWriterInterface <|-- FileWriterMock : implements
+AbstractFileWriterInterface <|-- FileWriter : implements
+</uml>
+

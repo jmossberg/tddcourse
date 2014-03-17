@@ -1,0 +1,19 @@
+<uml>
+
+participant FileReaderMock
+participant WordsrepClass
+participant FileWriterMock
+
+WordsrepClass -> FileReaderMock : openFile()
+WordsrepClass -> FileWriterMock : openFile()
+
+loop while endofData == false
+  WordsrepClass -> FileReaderMock : readLine()
+  WordsrepClass -> FileWriterMock : writeLine()
+  WordsrepClass -> FileReaderMock : endOfData()
+end
+
+WordsrepClass -> FileWriterMock : closeFile()
+WordsrepClass -> FileReaderMock : closeFile()
+</uml>
+

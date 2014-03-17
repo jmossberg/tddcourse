@@ -1,0 +1,17 @@
+<uml>
+interface AbstractInterface
+
+AbstractInterface : method1()
+AbstractInterface : method2()
+
+TestDoubleClass : method1()
+TestDoubleClass : method2()
+
+RealClass : method1()
+RealClass : method2()
+
+ClientClass --> AbstractInterface : use
+AbstractInterface <|.. TestDoubleClass : implements
+AbstractInterface <|.. RealClass : implements
+</uml>
+

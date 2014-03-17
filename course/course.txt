@@ -2,7 +2,7 @@ Welcome to this course in Test Driven Development. You will develop a command li
 
 TODO: I must make sure all project paths are corrects
 
-== Introduction to Test Driven Development ==
+<h2>Introduction to Test Driven Development</h2>
 
 Test Driven Development (TDD) is a software development technique where we grow the design by writing unit tests before writing the actual software. We work in an iterative way. This means that we will:
 
@@ -21,54 +21,11 @@ We can grow the software inside-out (Classic TDD) or outside-in (London TDD):
 
 London TDD will require us to make extensive use of test doubles. Test dobules are stand ins for the real objects. Since the core objects do not yet exist when we start with the public interface we must fake them.
 
-<uml>
-
-note left of ClassA #aqua
-    We do outside-in if we
-        start with ClassA 
-end note
-
--> ClassA
-|||
-ClassA -> ClassB
-|||
-ClassB -> ClassC
-|||
-ClassB <- ClassC
-|||
-ClassB -> ClassD
-|||
-ClassB <- ClassD
-|||
-ClassA <- ClassB
-|||
-<- ClassA
-
-note right of ClassD #aqua
-    We do inside-out if we
-        start with ClassD 
-end note
-
-</uml>
+TODO: Insert sequence diagram 100_InsideOutVsOutsideIn
 
 The diagram below shows how to design our software to make use of test doubles. The client class depends on an interface expressed using an abstract class. The interface can be implemented by a real class or by a test double. The ClientClass will be satisfied as long as the abstract interface is fulfilled.
 
-<uml>
-interface AbstractInterface
-
-AbstractInterface : method1()
-AbstractInterface : method2()
-
-TestDoubleClass : method1()
-TestDoubleClass : method2()
-
-RealClass : method1()
-RealClass : method2()
-
-ClientClass --> AbstractInterface : use
-AbstractInterface <|.. TestDoubleClass : implements
-AbstractInterface <|.. RealClass : implements
-</uml>
+TODO: Insert sequence diagram 200_TestDoubles
 
 We must design the ClientClass so that we can provide a pointer to either the test double or the real class. We call this dependency injection.
 
@@ -95,7 +52,7 @@ Used to satisfy parameter lists
 |Real implementations but with some shortcut
 |}
 
-== Introduction to Google Test ==
+<h2>Introduction to Google Test</h2>
 
 Google Test can be used to write unit tests. Google Test is written in C++. Google Mock is an addon to Google Test which automates the process of creating mock objects somewhat.
 
@@ -114,7 +71,7 @@ int main(int argc, char* argv[]) {
 }
 </pre>
 
-== The Word Replace tool - wordsRep ==
+<h2>The Word Replace tool - wordsRep</h2>
 
 We will develop a command line tool called ''wordsrep'' in this course. The ''wordsrep'' tool searches each line in a text file for a specific word and replaces with another word. The output is written to a new file. Space is the delimiter separating words from one another.
 
@@ -175,7 +132,7 @@ wordsrep --oldWord car --newWord house --inputFile a.txt --outputFile b.txt
 
 ''house'' car2 street
 
-== Create a new C++ project in Eclipse CDT and connect to Git repository ==
+<h2>Create a new C++ project in Eclipse CDT and connect to Git repository</h2>
 
 TODO: Add comment to continue doing git commits
 
@@ -213,7 +170,7 @@ We will create a C++ project in Eclipse CDT to develop our ''wordsrep'' applicat
 
 * Click Finish again
 
-== Import Google test and Google Mock to Eclipse project ==
+<h2>Import Google test and Google Mock to Eclipse project</h2>
 
 Now we will import Google test and Google mock into our Eclipse project and build them with a minimalistic main file.
 
@@ -270,7 +227,7 @@ int main(int argc, char* argv[]) {
 [[File:Screenshoot_eclipse_run_output_console.png]]
 </ol>
 
-== Add dummy test ==
+<h2>Add dummy test</h2>
 
 <ol>
 <li>We will add a dummy test to show the basic structure of a test.
@@ -332,7 +289,7 @@ TEST_F(WordsrepClassTest, APassingTest) {
 <li>Enter message "Added dummy test in WordsrepClassTest" and click "Commit"
 </ol>
 
-== A test list ==
+<h2>A test list</h2>
 
 We can compose an initial list of the tests we want to write based on what we know about ''wordsrep''.
 
@@ -345,7 +302,7 @@ We can compose an initial list of the tests we want to write based on what we kn
 
 We don't spend too much time on thinking about this list. The purpose is to get us going.
 
-== Retrieve the value of an argument switch ==
+<h2>Retrieve the value of an argument switch</h2>
 
 WordsRep is a command line tool which means all arguments will supplied through the main function:
 
@@ -532,7 +489,7 @@ std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], s
 
 Build and check that the test pass.
 
-== Split a line of text into words ==
+<h2>Split a line of text into words</h2>
 
 We have implemented the first test on the test list.
 
@@ -639,7 +596,7 @@ Build and run the test to make sure it passes.
 
 TODO: Can we make some refactoring here.
 
-== Concatenate words into line of text ==
+<h2>Concatenate words into line of text</h2>
 
 We have implemented two tests on the test list.
 
@@ -720,7 +677,7 @@ Build and run the test to make sure it passes:
 [----------] 1 test from WordsToLineClassTest (0 ms total)
 </pre>
 
-== Replace all matching words with replacement word ==
+<h2>Replace all matching words with replacement word</h2>
 
 We have implemented three tests on the test list.
 
@@ -807,7 +764,7 @@ Build and run test to make sure it passes:
 [----------] 1 test from WordsrepClassTest (0 ms total)
 </pre>
 
-== Use mock objects to abstract the file system dependency ==
+<h2>Use mock objects to abstract the file system dependency</h2>
 
 Ok, so we have implemented all the tests on our initial test list:
 
@@ -820,26 +777,7 @@ Ok, so we have implemented all the tests on our initial test list:
 
 But we are not done. ''wordsrepApp'' will have to read and write lines from and to text files. However this dependency towards a file system is typically something we want to abstract in our unit tests. We can do this using mock objects. What we have to do first is to define abstract interfaces through which our ''wordsrepApp'' can interact with the file system. We will let mock objects implement the abstract interfaces while running our unit tests.
 
-<uml>
-interface AbstractFileReaderInterface
-interface AbstractFileWriterInterface
-
-AbstractFileReaderInterface : openFile(string fileName)
-AbstractFileReaderInterface : closeFile()
-AbstractFileReaderInterface : string readLine()
-AbstractFileReaderInterface : bool endOfData()
-
-
-AbstractFileReaderInterface <|-- FileReaderMock : implements
-AbstractFileReaderInterface <|-- FileReader : implements
-
-AbstractFileWriterInterface : openFile(string fileName)
-AbstractFileWriterInterface : closeFile()
-AbstractFileWriterInterface : writeLine(string line)
-
-AbstractFileWriterInterface <|-- FileWriterMock : implements
-AbstractFileWriterInterface <|-- FileWriter : implements
-</uml>
+TODO: Insert class diagram 300_MockObjects
 
 Now we define the AbstractFileReaderInterface and AbstractFileWriterInterface in Eclipse.
 
@@ -943,25 +881,7 @@ Now we can write a test which makes use of the mock objects to verify that the '
 
 The sequence diagram below shows how we want the ''WordsrepClass'' to interact with the file interfaces.
 
-
-<uml>
-
-participant FileReaderMock
-participant WordsrepClass
-participant FileWriterMock
-
-WordsrepClass -> FileReaderMock : openFile()
-WordsrepClass -> FileWriterMock : openFile()
-
-loop while endofData == false
-  WordsrepClass -> FileReaderMock : readLine()
-  WordsrepClass -> FileWriterMock : writeLine()
-  WordsrepClass -> FileReaderMock : endOfData()
-end
-
-WordsrepClass -> FileWriterMock : closeFile()
-WordsrepClass -> FileReaderMock : closeFile()
-</uml>
+TODO: Insert sequence diagram 400_WordsrepClassFileInterfaceInteractions
 
 TODO: Explain syntax of Google Mock when setting expectations
 
@@ -1103,7 +1023,7 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
 <li>Build and run to make sure the ''InteractsCorrectlyWithFileInterfaces'' test passes
 </ul>
 
-== Implement the real file line reader and writer ==
+<h2>Implement the real file line reader and writer</h2>
 
 Ok, we have implemented all our tests needed to test drive the basic functionality of the WordsrepApp. However we also want to test the actual command line tool. We must create a second main.cpp file to use when building the command line tool and not the unit tests. But we must start with implementing the FileReaderClass and FileWriterClass to interact with the actual file system.
 
@@ -1214,7 +1134,7 @@ void FileWriterClass::setEndOfData() {
 </pre>
 </ol>
 
-== Compile command line application ==
+<h2>Compile command line application</h2>
 
 We must add a new ''main.cpp'' to run the ''WordsrepApp'' from the command line. We must also configure the Eclipse project to build either with the ''main.cpp'' used with Google Tests or the ''main.cpp'' to use for the actual command line application.
 
@@ -1287,7 +1207,7 @@ cycle table chair
 </pre>
 </ol>
 
-== Connect Google Tests to a Continuous Integration Server ==
+<h2>Connect Google Tests to a Continuous Integration Server</h2>
 
 Finally we will connect our tests to a continuous integration server, in this case Jenkins.
 
@@ -1328,11 +1248,11 @@ eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild
 
 The Jenkins job we have created is now setup to run when manually triggered. It is also possible to trigger the job automatically.
 
-== How to debug ==
+<h2>How to debug</h2>
 
 TODO: Explain how to step debug with Eclipse CDT
 
-== Next steps ==
+<h2>Next steps</h2>
 
 TODO: Refine the next steps
 
