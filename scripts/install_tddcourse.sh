@@ -14,7 +14,7 @@ sudo apt-get install --quiet --assume-yes g++
 
 echo Download Google Test/Google Mock
 echo ================================
-if [! -f $HOME/google ]; then
+if [ ! -d $HOME/google ]; then
   mkdir -p $HOME/google
   wget --directory-prefix=$HOME/google -q https://googlemock.googlecode.com/files/gmock-1.7.0.zip
   unzip $HOME/google/gmock-1.7.0.zip -d $HOME/google
@@ -26,14 +26,14 @@ fi
 echo Install Wordpress
 echo =================
 sudo apt-get install --quiet --assume-yes wordpress
-if [! -f /var/www/wordpress ]; then
+if [ ! -e /var/www/wordpress ]; then
   sudo ln -s /usr/share/wordpress /var/www/wordpress
 else
   echo WORDPRESS: Symbolic link to /var/www/wordpress already present
 fi
 sudo apt-get install --quiet --assume-yes mysql-server
 #[MANUAL STEP] MySql root password: tdd1
-if [! -f /usr/share/doc/wordpress/examples/setup-mysql ]; then
+if [ ! -f /usr/share/doc/wordpress/examples/setup-mysql ]; then
   sudo gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
   sudo bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
 else
@@ -75,7 +75,7 @@ sudo service apache2 restart
 echo Setup WordsrepAppReference project workspace for Eclipse CDT
 echo ============================================================
 REFERENCE_PROJECT=$HOME/eclipse_cdt_workspaces/reference
-if [! -f $REFERENCE_PROJECT ]; then
+if [ ! -d $REFERENCE_PROJECT ]; then
   mkdir -p $REFERENCE_PROJECT 
   eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -data $REFERENCE_PROJECT -importAll $TDDCOURSE_REPO/reference
 else
