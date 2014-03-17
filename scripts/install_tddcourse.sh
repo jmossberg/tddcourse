@@ -74,10 +74,12 @@ sudo service apache2 restart
 
 echo Setup WordsrepAppReference project workspace for Eclipse CDT
 echo ============================================================
-REFERENCE_PROJECT=$HOME/eclipse_cdt_workspaces/reference
-if [ ! -d $REFERENCE_PROJECT ]; then
-  mkdir -p $REFERENCE_PROJECT 
-  eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -data $REFERENCE_PROJECT -importAll $TDDCOURSE_REPO/reference
+LOCAL_REFERENCE_PROJECT_LOCATION=$HOME/eclipse_cdt_workspaces/reference/
+REPO_REFERENCE_PROJECT=$TDDCOURSE_REPO/reference/WordsrepAppReference
+if [ ! -d $LOCAL_REFERENCE_PROJECT_LOCATION ]; then
+  mkdir -p $LOCAL_REFERENCE_PROJECT_LOCATION
+  cp -r $REPO_REFERENCE_PROJECT $LOCAL_REFERENCE_PROJECT_LOCATION
+  eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -data $LOCAL_REFERENCE_PROJECT_LOCATION -importAll $LOCAL_REFERENCE_PROJECT_LOCATION
 else
   echo Eclipse CDT reference project already setup.
 fi
