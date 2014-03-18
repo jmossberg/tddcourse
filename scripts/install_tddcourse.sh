@@ -42,6 +42,9 @@ fi
 #[MANUAL STEP] Goto: http://localhost/wordpress/wp-admin/install.php
 #[MANUAL STEP] Login: tdd1 Password: tdd1 E-mail: jacob.c.mossberg@gmail.com
 
+echo Setup FTP access to Wordpress site
+sudo apt-get install vsftpd
+
 echo Install Jenkins
 echo ===============
 sudo apt-get install --quiet --assume-yes jenkins
