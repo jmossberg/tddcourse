@@ -1,4 +1,4 @@
-<uml>
+@startuml
 
 participant FileReaderMock
 participant WordsrepClass
@@ -15,5 +15,5 @@ end
 
 WordsrepClass -> FileWriterMock : closeFile()
 WordsrepClass -> FileReaderMock : closeFile()
-</uml>
+@enduml
 

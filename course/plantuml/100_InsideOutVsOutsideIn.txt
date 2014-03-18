@@ -1,4 +1,4 @@
-<uml>
+@startuml
 
 note left of ClassA #aqua
     We do outside-in if we
@@ -26,5 +26,5 @@ note right of ClassD #aqua
         start with ClassD 
 end note
 
-</uml>
+@enduml
 

@@ -1,4 +1,4 @@
-<uml>
+@startuml
 interface AbstractInterface
 
 AbstractInterface : method1()
@@ -13,5 +13,5 @@ RealClass : method2()
 ClientClass --> AbstractInterface : use
 AbstractInterface <|.. TestDoubleClass : implements
 AbstractInterface <|.. RealClass : implements
-</uml>
+@enduml
 

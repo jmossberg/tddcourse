@@ -1,4 +1,4 @@
-<uml>
+@startuml
 interface AbstractFileReaderInterface
 interface AbstractFileWriterInterface
 
@@ -17,5 +17,5 @@ AbstractFileWriterInterface : writeLine(string line)
 
 AbstractFileWriterInterface <|-- FileWriterMock : implements
 AbstractFileWriterInterface <|-- FileWriter : implements
-</uml>
+@enduml
 
