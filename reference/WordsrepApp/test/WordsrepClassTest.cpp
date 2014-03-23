@@ -12,7 +12,7 @@ class WordsrepClassTest : public ::testing::Test {
 };
 
 TEST_F(WordsrepClassTest, APassingTest) {
-  ASSERT_TRUE(false);
+  ASSERT_TRUE(true);
 }
 
 TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
