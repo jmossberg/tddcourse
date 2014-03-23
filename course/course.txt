@@ -113,7 +113,8 @@ Now we will import Google test and Google mock into our Eclipse project and buil
 /home/tdd1/git/WordsrepAppGit/WordsrepApp/external</pre>
 </li>
 	<li>Go back to Eclipse and right click on the project and choose "Refresh"</li>
-	<li>Your <em>external</em> folder should now contain the files <em>gmock-gtest-all.cc</em>, <em>gmock.h</em> (in sub-folder <em>gmock</em>) and <em>gtest.h</em> (in sub-folder <em>gtest</em>).<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_external_folder.png" /></center></li>
+	<li>Your <em>external</em> folder should now contain the files <em>gmock-gtest-all.cc</em>, <em>gmock.h</em> (in sub-folder <em>gmock</em>) and <em>gtest.h</em> (in sub-folder <em>gtest</em>).
+<img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_external_folder.png" /></li>
 	<li>Right click on the project and choose "Team - Add to Index"</li>
 	<li>Right click on the project and choose "Team - Commit..."</li>
 	<li>Enter message "Added Google Mock" and click "Commit"</li>
@@ -148,7 +149,8 @@ int main(int argc, char* argv[]) {
 	<li>Enter ''pthread'' and click OK twice</li>
 	<li>Click on WordsrepApp in Project Explorer to make sure it is selected</li>
 	<li>Select Project - Build Project</li>
-	<li>Click on Run<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_run_project.png" /></center></li>
+	<li>Click on Run
+<img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_run_project.png" /></li>
 	<li>The console output now shows that we have run all test cases. Currently 0.
 <center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_run_output_console.png" /></center></li>
 </ol>
@@ -1379,15 +1381,19 @@ WordsRepApp_TestResults.xml
 </ol>
 The Jenkins job we have created is now setup to run when manually triggered. It is also possible to setup the job to be triggered automatically.
 
-<h3>How to debug</h3>
-TODO: Explain how to step debug with Eclipse CDT
-
 <h3>Next steps</h3>
-TODO: Refine the next steps
 
 If you reached this far you can continue test driving on you own to enhance the WordsrepApp. You can for example add the following:
 <ul>
 	<li>Test drive handling of error scenarios</li>
-	<li>Test drive change word delimiter</li>
-	<li>Improve line to word class</li>
+	<li>Test drive change of word delimiter</li>
 </ul>
+
+<h3>About this course</h3>
+
+This course was created with <em>passion</em> and some degree of <em>innovation</em>. I now <em>trust</em> you to give me feedback so that it can be continuously improved. ;)
+
+jacob.mossberg@cybercom.com
+twitter.com/jcmossberg
+
+<a href="http://localhost/wordpress/wp-content/uploads/jacobmossberg.jpg"><img class="alignnone size-medium wp-image-21" src="http://localhost/wordpress/wp-content/uploads/jacobmossberg.jpg" width="150" /></a>
