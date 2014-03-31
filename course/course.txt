@@ -18,6 +18,8 @@ London TDD will require us to make extensive use of test doubles. Test dobules a
 
 <a href="http://localhost/wordpress/wp-content/uploads/100_InsideOutVsOutsideIn.png"><img class="alignnone size-medium wp-image-21" alt="100_InsideOutVsOutsideIn" src="http://localhost/wordpress/wp-content/uploads/100_InsideOutVsOutsideIn.png" /></a>
 
+We will use inside-out (Classic TDD) when developing the WordsRep application.
+
 The diagram below shows how to design our software to make use of test doubles. The client class depends on an interface expressed using an abstract class. The interface can be implemented by a real class or by a test double. The ClientClass will be satisfied as long as the abstract interface is fulfilled.
 
 <center><a href="http://localhost/wordpress/wp-content/uploads/200_TestDoubles.png"><img class="alignnone size-medium wp-image-21" alt="200_TestDoubles.png" src="http://localhost/wordpress/wp-content/uploads/200_TestDoubles.png" /></a></center>We must design the ClientClass so that we can provide a pointer to either the test double or the real class. We call this dependency injection.
@@ -403,6 +405,7 @@ TEST_F(LineToWordsClassTest, CanSplitLineWithTwoWords)
   words = lineToWordsClass.splitLine("street sky");
 
   //Verify
+  ASSERT_EQ(2, words.size());
   ASSERT_EQ("street", words[0]);
   ASSERT_EQ("sky", words[1]);
 }</pre>
@@ -649,12 +652,12 @@ WordsToLineClass.h
 #ifndef WORDSTOLINECLASS_H_
 #define WORDSTOLINECLASS_H_
 
-#include <string>
-#include <vector>
+#include &lt;string>
+#include &lt;vector>
 
 class WordsToLineClass {
 public:
-  std::string concatenateWords(std::vector<std::string> words);
+  std::string concatenateWords(std::vector&lt;std::string> words);
 
 private:
   std::string addWordToLine(std::string line, std::string word);
@@ -669,9 +672,9 @@ WordsToLineClass.cpp
 <pre>
 #include "WordsToLineClass.h"
 
-std::string WordsToLineClass::concatenateWords(std::vector<std::string> words)
+std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string> words)
 {
-  std::vector<std::string>::iterator it;
+  std::vector&lt;std::string>::iterator it;
   std::string line("");
 
   for(it = words.begin(); it != words.end(); it++)
