@@ -1,0 +1,9 @@
+TDD Mosssberg Change Log
+
+Version 1.01
+============
+- Add ASSERT_EQ(2, words.size()); to test CanSplitLineWithTwoWords in LineToWordsClassTest. Some people experience that this test hangs sometimes. Maybe this addition will fix this. On the other hand when the try again it seems to work also without this addition. I made the addition both in course material and in reference project.
+- Missing <string> and <vector> in refactored versions of WordsToLineClass.h and WordsToLineClass.cpp
+- Made method closeFile() in FileWriterClass.h private instead of public, as it should be according to the abstract interface.
+- Updated localhost/wordpress to show Version 1.01
+- Set Eclipse CDT default workspace to /home/tdd1/workspace
