@@ -1,5 +1,10 @@
 TDD Mosssberg Change Log
 
+Version 1.02
+============
+- Change git user.name and git user.email to tdd1 instead of my personal e-mail
+- Remove version information from localhost/wordpress so I do not have to update this for every change
+
 Version 1.01
 ============
 - Add ASSERT_EQ(2, words.size()); to test CanSplitLineWithTwoWords in LineToWordsClassTest. Some people experience that this test hangs sometimes. Maybe this addition will fix this. On the other hand when the try again it seems to work also without this addition. I made the addition both in course material and in reference project.
