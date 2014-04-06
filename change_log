@@ -1,5 +1,12 @@
 TDD Mosssberg Change Log
 
+Version 1.03
+============
+- Changed system settings so no notification about software updates are shown to the user
+- Set active build configuration of reference project to Debug
+- Add misstake in implementation of method getSwichValue in class ArgumentParserClass so that the student has to fix this herself
+- Add misstake in implementation of method splitLine in class LineToWordsClass so that the course participant has to fix this herself
+
 Version 1.02
 ============
 - Change git user.name and git user.email to tdd1 instead of my personal e-mail

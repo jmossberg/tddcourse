@@ -356,13 +356,57 @@ std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], s
   {
     if(0 == switchName.compare(argv[i]))
     {
-      return argv[i + 1];
+      return argv[i];
     }
   }
 
   return "";
 }</pre>
-Build and check that the test pass.
+
+Build and run the test.
+
+Hmm, the test still fails with the following output.
+
+<pre>
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from ArgumentParserClassTest
+[ RUN      ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved
+../test/ArgumentParserClassTest.cpp:21: Failure
+Value of: argumentSwitchValue1
+  Actual: "--oldWord"
+Expected: "car"
+[  FAILED  ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)
+[----------] 1 test from ArgumentParserClassTest (0 ms total)
+</pre>
+
+The <em>getSwitchValue</em> returned the value <em>--oldWord</em>, but the test expects <em>car</em> to be returned.
+
+Can you spot the error in the code?
+
+The code below has been corrected.
+
+<pre>
+#include "ArgumentParserClass.h"
+
+std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+{
+int i;
+
+  for(i = 0; i &lt; argc; i++)
+  {
+    if(0 == switchName.compare(argv[i]))
+    {
+      return argv[i + 1];
+    }
+  }
+
+  return "";
+}
+</pre>
+
+Build and run the test again. Now it should pass.
+
 <h3>Split a line of text into words</h3>
 We have implemented the first test on the test list.
 <ul>
@@ -459,6 +503,52 @@ std::vector&lt;std::string&gt; LineToWordsClass::splitLine(std::string textLine)
     }
   }
 
+  return words;
+}</pre>
+<li>Build and run the test.</li>
+</ol>
+
+Hmm, the test fails with the following output:
+
+<pre>
+[ RUN      ] LineToWordsClassTest.CanSplitLineWithTwoWords
+../test/LineToWordsClassTest.cpp:19: Failure
+Value of: words.size()
+  Actual: 1
+Expected: 2
+[  FAILED  ] LineToWordsClassTest.CanSplitLineWithTwoWords (0 ms)
+</pre>
+
+The test expects <em>splitLine</em> to return two words but it gets only one. We have forgotten something in our code.
+
+What do we need to do more in <em>splitLine</em>?
+
+The code below has been corrected.
+
+<pre>#include "LineToWordsClass.h"
+
+std::vector&lt;std::string&gt; LineToWordsClass::splitLine(std::string textLine) {
+
+  std::vector&lt;std::string&gt; words;
+  std::string word("");
+  unsigned int i;
+
+  //Add characters from the line onto a word until a space
+  //is found. Add the word to the vector of words. Start adding
+  //characters to a new word.
+  for(i = 0; i &lt; textLine.size(); i++)
+  {
+    if(textLine[i] == ' ')
+    {
+      words.push_back(word);
+      word = "";
+    }
+    else
+    {
+      word.push_back(textLine[i]);
+    }
+  }
+
   if(word.size() &gt; 0)
   {
     words.push_back(word);
@@ -466,11 +556,12 @@ std::vector&lt;std::string&gt; LineToWordsClass::splitLine(std::string textLine)
 
   return words;
 }</pre>
-</li>
-	<li>Build and run the test to make sure it passes.</li>
-</ol>
 
-We can now refactor <em>splitLine</em> in steps while running the <em>CanSplitLineWithTwoWords</em> test continiously to make sure we don't break it. One possible outcome is shown below.
+We did not add the word after the last space to the vector. We added a new if statement after the for loop to fix this.
+
+Build and run the test again. Now it should pass.
+
+We can refactor <em>splitLine</em> in steps while running the <em>CanSplitLineWithTwoWords</em> test continiously to make sure we don't break it. One possible outcome is shown below.
 
 LineToWordsClass.h
 
