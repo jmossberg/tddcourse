@@ -43,6 +43,14 @@ void LineToWordsClass::resetInternalListOfWords() {
 	newWord = "";
 }
 
+LineToWordsClass::LineToWordsClass(char newWordDelimiter) {
+	this->wordDelimiter = newWordDelimiter;
+}
+
+LineToWordsClass::LineToWordsClass() {
+	this->wordDelimiter = ' ';
+}
+
 void LineToWordsClass::addLastWordOnLine() {
 	addWord();
 }
