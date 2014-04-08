@@ -21,6 +21,14 @@ std::string WordsToLineClass::addWordToLine(std::string line, std::string word) 
   return line;
 }
 
+WordsToLineClass::WordsToLineClass() {
+	wordDelimiter = ' ';
+}
+
+WordsToLineClass::WordsToLineClass(char newWordDelimiter) {
+	wordDelimiter = newWordDelimiter;
+}
+
 std::string WordsToLineClass::removeLastSpaceFromLine(std::string line) {
   if(line.size() > 0)
   {
