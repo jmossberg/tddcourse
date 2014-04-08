@@ -56,3 +56,10 @@ AbstractFileWriterInterface* fileWriter_p) {
   fileReader_p->closeFile();
 
 }
+
+void WordsrepClass::processInputFile(int argc, const char* argv[],
+		AbstractFileReaderInterface* fileReader_p,
+		AbstractFileWriterInterface* fileWriter_p,
+		AbstractLineToWordsInterface* lineToWords_p,
+		AbstractWordsToLineInterface* wordsToLine_p) {
+}
