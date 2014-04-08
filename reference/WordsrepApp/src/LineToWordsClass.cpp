@@ -7,7 +7,7 @@ std::vector<std::string> LineToWordsClass::splitLine(std::string textLine) {
   std::string::iterator currentCharacter;
   for(currentCharacter = textLine.begin(); currentCharacter != textLine.end(); currentCharacter++)
   {
-    if(isNotSpace(*currentCharacter))
+    if(isNotDelimiter(*currentCharacter))
     {
       addCharacterToWord(*currentCharacter);
     }
@@ -20,10 +20,6 @@ std::vector<std::string> LineToWordsClass::splitLine(std::string textLine) {
   addLastWordOnLine();
 
   return words;
-}
-
-bool LineToWordsClass::isNotSpace(char character) {
-	return  ' ' != character;
 }
 
 void LineToWordsClass::addWord() {
@@ -49,6 +45,10 @@ LineToWordsClass::LineToWordsClass(char newWordDelimiter) {
 
 LineToWordsClass::LineToWordsClass() {
 	this->wordDelimiter = ' ';
+}
+
+bool LineToWordsClass::isNotDelimiter(char character) {
+	return this->wordDelimiter != character;
 }
 
 void LineToWordsClass::addLastWordOnLine() {
