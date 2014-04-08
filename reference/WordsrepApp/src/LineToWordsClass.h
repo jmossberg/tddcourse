@@ -6,9 +6,9 @@
 
 class LineToWordsClass {
 public:
-  LineToWordsClass(char newWordDelimiter);
   LineToWordsClass();
   std::vector<std::string> splitLine(std::string textLine);
+  void setWordDelimiter(char newWordDelimiter);
 
 private:
   bool isNotDelimiter(char character);

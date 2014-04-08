@@ -39,16 +39,16 @@ void LineToWordsClass::resetInternalListOfWords() {
 	newWord = "";
 }
 
-LineToWordsClass::LineToWordsClass(char newWordDelimiter) {
-	this->wordDelimiter = newWordDelimiter;
-}
-
 LineToWordsClass::LineToWordsClass() {
 	this->wordDelimiter = ' ';
 }
 
 bool LineToWordsClass::isNotDelimiter(char character) {
 	return this->wordDelimiter != character;
+}
+
+void LineToWordsClass::setWordDelimiter(char newWordDelimiter) {
+	this->wordDelimiter = newWordDelimiter;
 }
 
 void LineToWordsClass::addLastWordOnLine() {

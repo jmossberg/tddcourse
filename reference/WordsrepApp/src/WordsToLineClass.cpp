@@ -25,7 +25,7 @@ WordsToLineClass::WordsToLineClass() {
 	wordDelimiter = ' ';
 }
 
-WordsToLineClass::WordsToLineClass(char newWordDelimiter) {
+void WordsToLineClass::setWordDelimiter(char newWordDelimiter) {
 	wordDelimiter = newWordDelimiter;
 }
 

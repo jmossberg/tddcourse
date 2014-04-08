@@ -28,7 +28,7 @@ TEST_F(WordsToLineClassTest, ConcatenateWordsUsingDynamicWordDelimiter)
 {
 	  //Setup
 	  char wordDelimiter = ';';
-	  WordsToLineClass wordsToLineClass(wordDelimiter);
+	  WordsToLineClass wordsToLineClass;
 
 	  std::vector<std::string> words;
 	  words.push_back("table");
@@ -38,6 +38,7 @@ TEST_F(WordsToLineClassTest, ConcatenateWordsUsingDynamicWordDelimiter)
 	  std::string line;
 
 	  //Exercise
+	  wordsToLineClass.setWordDelimiter(wordDelimiter);
 	  line = wordsToLineClass.concatenateWords(words);
 
 	  //Verify

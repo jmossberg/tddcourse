@@ -7,8 +7,8 @@
 class WordsToLineClass {
 public:
   WordsToLineClass();
-  WordsToLineClass(char newWordDelimiter);
   std::string concatenateWords(std::vector<std::string> words);
+  void setWordDelimiter(char newWordDelimiter);
 
 private:
   std::string addWordToLine(std::string line, std::string word);

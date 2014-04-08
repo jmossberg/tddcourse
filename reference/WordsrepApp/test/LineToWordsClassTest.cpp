@@ -25,10 +25,11 @@ TEST_F(LineToWordsClassTest, CanSplitLineUsingDynamicWordDelimiter)
 {
 	//Setup
 	char wordDelimiter = '#';
-	LineToWordsClass lineToWordsClass(wordDelimiter);
+	LineToWordsClass lineToWordsClass;
 	std::vector<std::string> words;
 
 	//Exercise
+	lineToWordsClass.setWordDelimiter(wordDelimiter);
 	words = lineToWordsClass.splitLine("blue#red#green");
 
 	//Verify
