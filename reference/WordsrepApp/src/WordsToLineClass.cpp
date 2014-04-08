@@ -10,14 +10,14 @@ std::string WordsToLineClass::concatenateWords(std::vector<std::string> words)
     line = addWordToLine(line, *it);
   }
 
-  line = removeLastSpaceFromLine(line);
+  line = removeLastDelimiterFromLine(line);
 
   return line;
 }
 
 std::string WordsToLineClass::addWordToLine(std::string line, std::string word) {
   line.append(word);
-  line.append(" ");
+  line.push_back(wordDelimiter);
   return line;
 }
 
@@ -29,7 +29,7 @@ WordsToLineClass::WordsToLineClass(char newWordDelimiter) {
 	wordDelimiter = newWordDelimiter;
 }
 
-std::string WordsToLineClass::removeLastSpaceFromLine(std::string line) {
+std::string WordsToLineClass::removeLastDelimiterFromLine(std::string line) {
   if(line.size() > 0)
   {
     line.resize(line.size() - 1);

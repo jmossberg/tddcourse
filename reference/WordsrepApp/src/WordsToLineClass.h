@@ -12,7 +12,7 @@ public:
 
 private:
   std::string addWordToLine(std::string line, std::string word);
-  std::string removeLastSpaceFromLine(std::string line);
+  std::string removeLastDelimiterFromLine(std::string line);
 
   char wordDelimiter;
 };
