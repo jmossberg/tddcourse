@@ -1,10 +1,11 @@
 #ifndef WORDSTOLINECLASS_H_
 #define WORDSTOLINECLASS_H_
 
+#include "AbstractWordsToLineInterface.h"
 #include <string>
 #include <vector>
 
-class WordsToLineClass {
+class WordsToLineClass : public AbstractWordsToLineInterface {
 public:
   WordsToLineClass();
   std::string concatenateWords(std::vector<std::string> words);

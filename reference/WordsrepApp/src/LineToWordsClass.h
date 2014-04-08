@@ -1,10 +1,11 @@
 #ifndef LINETOWORDSCLASS_H_
 #define LINETOWORDSCLASS_H_
 
+#include "AbstractLineToWordsInterface.h"
 #include <string>
 #include <vector>
 
-class LineToWordsClass {
+class LineToWordsClass : public AbstractLineToWordsInterface {
 public:
   LineToWordsClass();
   std::vector<std::string> splitLine(std::string textLine);
