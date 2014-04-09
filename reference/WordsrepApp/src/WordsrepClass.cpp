@@ -32,12 +32,19 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
 		AbstractWordsToLineInterface* wordsToLine_p) {
 
   ArgumentParserClass argumentParserClass;
-  LineToWordsClass lineToWordsClass;
 
   std::string oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
   std::string newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
   std::string inputFile = argumentParserClass.getSwitchValue(argc, argv, "--inputFile");
   std::string outputFile = argumentParserClass.getSwitchValue(argc, argv, "--outputFile");
+  std::string wordDelimiter = argumentParserClass.getSwitchValue(argc, argv, "--wordDelimiter");
+
+  if(wordDelimiter.size() > 0)
+  {
+	  char wordDelimiterChar = wordDelimiter[0];
+	  lineToWords_p->setWordDelimiter(wordDelimiterChar);
+	  wordsToLine_p->setWordDelimiter(wordDelimiterChar);
+  }
 
   fileReader_p->openFile(inputFile);
   fileWriter_p->openFile(outputFile);
