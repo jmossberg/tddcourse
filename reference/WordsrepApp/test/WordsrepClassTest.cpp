@@ -1,7 +1,13 @@
 #include "gmock/gmock.h"
+
 #include "WordsrepClass.h"
+#include "WordsToLineClass.h"
+#include "LineToWordsClass.h"
+
 #include "FileReaderMock.h"
 #include "FileWriterMock.h"
+#include "LineToWordsMock.h"
+#include "WordsToLineMock.h"
 
 using ::testing::Exactly;
 using ::testing::Return;
@@ -44,6 +50,8 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
   //Setup
   FileReaderMock fileReaderMock;
   FileWriterMock fileWriterMock;
+  LineToWordsClass lineToWordsClass;
+  WordsToLineClass wordsToLineClass;
   WordsrepClass wordsrepClass;
 
   //Set expectations on mock objects
@@ -99,5 +107,28 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
   const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
 
   //Exercise & Verify
-  wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock);
+  wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock, &lineToWordsClass, &wordsToLineClass);
 }
+
+//TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
+//{
+//	//Setup
+//	LineToWordsMock lineToWordsMock;
+//	WordsToLineMock wordsToLineMock;
+//	FileReaderMock fileReaderMock;
+//	FileWriterMock fileWriterMock;
+//	WordsrepClass wordsrepClass;
+//
+//	//Set expectations on mock objects
+//	EXPECT_CALL(lineToWordsMock, setWordDelimiter(';'))
+//	.Times(Exactly(1));
+//
+//	EXPECT_CALL(wordsToLineMock, setWordDelimiter(';'))
+//	.Times(Exactly(1));
+//
+//	int argc = 9;
+//	const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt", "--wordDelimiter", "';'"};
+//
+//	//Exercise & Verify
+//	wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock, &lineToWordsMock, &wordsToLineMock);
+//}

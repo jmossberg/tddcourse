@@ -26,11 +26,12 @@ std::vector<std::string> words) {
 }
 
 void WordsrepClass::processInputFile(int argc, const char* argv[],
-AbstractFileReaderInterface* fileReader_p,
-AbstractFileWriterInterface* fileWriter_p) {
+		AbstractFileReaderInterface* fileReader_p,
+		AbstractFileWriterInterface* fileWriter_p,
+		AbstractLineToWordsInterface* lineToWords_p,
+		AbstractWordsToLineInterface* wordsToLine_p) {
 
   ArgumentParserClass argumentParserClass;
-  WordsToLineClass wordsToLineClass;
   LineToWordsClass lineToWordsClass;
 
   std::string oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
@@ -45,9 +46,9 @@ AbstractFileWriterInterface* fileWriter_p) {
   {
     std::string tempLine = fileReader_p->readLine();
 
-    std::vector<std::string> words = lineToWordsClass.splitLine(tempLine);
+    std::vector<std::string> words = lineToWords_p->splitLine(tempLine);
     std::vector<std::string> newWords = this->replaceMatchingWords(oldWord, newWord, words);
-    tempLine = wordsToLineClass.concatenateWords(newWords);
+    tempLine = wordsToLine_p->concatenateWords(newWords);
 
     fileWriter_p->writeLine(tempLine);
   }
@@ -55,11 +56,4 @@ AbstractFileWriterInterface* fileWriter_p) {
   fileWriter_p->closeFile();
   fileReader_p->closeFile();
 
-}
-
-void WordsrepClass::processInputFile(int argc, const char* argv[],
-		AbstractFileReaderInterface* fileReader_p,
-		AbstractFileWriterInterface* fileWriter_p,
-		AbstractLineToWordsInterface* lineToWords_p,
-		AbstractWordsToLineInterface* wordsToLine_p) {
 }

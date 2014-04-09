@@ -20,13 +20,9 @@ public:
   std::vector<std::string> replaceMatchingWords(
 	std::string oldWord, std::string newWord,
 	std::vector<std::string> words);
-  void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
   void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p,
 		                                              AbstractLineToWordsInterface * lineToWords_p, AbstractWordsToLineInterface * wordsToLine_p);
 
-private:
-  AbstractLineToWordsInterface * myLineToWords_p;
-  AbstractWordsToLineInterface * myWordsToLine_p;
 };
 
 
