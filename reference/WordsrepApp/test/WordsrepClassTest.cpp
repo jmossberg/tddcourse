@@ -6,8 +6,6 @@
 
 #include "FileReaderMock.h"
 #include "FileWriterMock.h"
-#include "LineToWordsMock.h"
-#include "WordsToLineMock.h"
 
 using ::testing::Exactly;
 using ::testing::Return;
@@ -107,25 +105,19 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
   const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
 
   //Exercise & Verify
-  wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock, &lineToWordsClass, &wordsToLineClass);
+  wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock);
 }
 
 TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
 {
 	//Setup
-	LineToWordsMock lineToWordsMock;
-	WordsToLineMock wordsToLineMock;
+	LineToWordsClass lineToWordsClass;
+	WordsToLineClass wordsToLineClass;
 	FileReaderMock fileReaderMock;
 	FileWriterMock fileWriterMock;
 	WordsrepClass wordsrepClass;
 
 	//Set expectations on mock objects
-	EXPECT_CALL(lineToWordsMock, setWordDelimiter(';'))
-	.Times(Exactly(1));
-
-	EXPECT_CALL(wordsToLineMock, setWordDelimiter(';'))
-	.Times(Exactly(1));
-
 	EXPECT_CALL(fileReaderMock, openFile("a.txt"))
 	.Times(Exactly(1))
 	.WillOnce(Return(0));
@@ -144,9 +136,9 @@ TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
 	//Line 1
 	EXPECT_CALL(fileReaderMock, readLine())
 	.Times(Exactly(1))
-	.WillOnce(Return("car house street"));
+	.WillOnce(Return("car;house;street"));
 
-	EXPECT_CALL(fileWriterMock, writeLine("house house street"))
+	EXPECT_CALL(fileWriterMock, writeLine("house;house;street"))
 	.Times(Exactly(1));
 
 	EXPECT_CALL(fileReaderMock, endOfData())
@@ -156,9 +148,9 @@ TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
 	//Line 2
 	EXPECT_CALL(fileReaderMock, readLine())
 	.Times(Exactly(1))
-	.WillOnce(Return("space blue cow"));
+	.WillOnce(Return("space;blue;cow"));
 
-	EXPECT_CALL(fileWriterMock, writeLine("space blue cow"))
+	EXPECT_CALL(fileWriterMock, writeLine("space;blue;cow"))
 	.Times(Exactly(1));
 
 	EXPECT_CALL(fileReaderMock, endOfData())
@@ -179,5 +171,5 @@ TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
 	const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt", "--wordDelimiter", ";"};
 
 	//Exercise & Verify
-	wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock, &lineToWordsMock, &wordsToLineMock);
+	wordsrepClass.processInputFile(argc, argv, &fileReaderMock, &fileWriterMock);
 }

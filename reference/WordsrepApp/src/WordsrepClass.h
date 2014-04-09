@@ -10,8 +10,7 @@
 
 #include "AbstractFileReaderInterface.h"
 #include "AbstractFileWriterInterface.h"
-#include "AbstractLineToWordsInterface.h"
-#include "AbstractWordsToLineInterface.h"
+
 #include <string>
 #include <vector>
 
@@ -20,8 +19,7 @@ public:
   std::vector<std::string> replaceMatchingWords(
 	std::string oldWord, std::string newWord,
 	std::vector<std::string> words);
-  void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p,
-		                                              AbstractLineToWordsInterface * lineToWords_p, AbstractWordsToLineInterface * wordsToLine_p);
+  void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
 
 };
 

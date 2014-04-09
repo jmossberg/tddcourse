@@ -27,11 +27,11 @@ std::vector<std::string> words) {
 
 void WordsrepClass::processInputFile(int argc, const char* argv[],
 		AbstractFileReaderInterface* fileReader_p,
-		AbstractFileWriterInterface* fileWriter_p,
-		AbstractLineToWordsInterface* lineToWords_p,
-		AbstractWordsToLineInterface* wordsToLine_p) {
+		AbstractFileWriterInterface* fileWriter_p) {
 
   ArgumentParserClass argumentParserClass;
+  LineToWordsClass lineToWordsClass;
+  WordsToLineClass wordsToLineClass;
 
   std::string oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
   std::string newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
@@ -42,8 +42,8 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
   if(wordDelimiter.size() > 0)
   {
 	  char wordDelimiterChar = wordDelimiter[0];
-	  lineToWords_p->setWordDelimiter(wordDelimiterChar);
-	  wordsToLine_p->setWordDelimiter(wordDelimiterChar);
+	  lineToWordsClass.setWordDelimiter(wordDelimiterChar);
+	  wordsToLineClass.setWordDelimiter(wordDelimiterChar);
   }
 
   fileReader_p->openFile(inputFile);
@@ -53,9 +53,9 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
   {
     std::string tempLine = fileReader_p->readLine();
 
-    std::vector<std::string> words = lineToWords_p->splitLine(tempLine);
+    std::vector<std::string> words = lineToWordsClass.splitLine(tempLine);
     std::vector<std::string> newWords = this->replaceMatchingWords(oldWord, newWord, words);
-    tempLine = wordsToLine_p->concatenateWords(newWords);
+    tempLine = wordsToLineClass.concatenateWords(newWords);
 
     fileWriter_p->writeLine(tempLine);
   }
