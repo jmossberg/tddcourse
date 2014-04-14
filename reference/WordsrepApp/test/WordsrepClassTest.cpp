@@ -117,7 +117,7 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
   myWordsrepClass.processInputFile(argc, argv, &myFileReaderMock, &myFileWriterMock);
 }
 
-TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
+TEST_F(WordsrepClassTest, CanUseNonSpaceWordDelimiter)
 {
 	//Set expectations on mock objects
 	std::string line1In("car;house;street");
