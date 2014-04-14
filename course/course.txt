@@ -1475,13 +1475,45 @@ WordsRepApp_TestResults.xml
 </ol>
 The Jenkins job we have created is now setup to run when manually triggered. It is also possible to setup the job to be triggered automatically.
 
-<h3>Next steps</h3>
+<h3>Test drive dynamic word delimiter</h3>
 
-If you reached this far you can continue test driving on you own to enhance the WordsrepApp. You can for example add the following:
-<ul>
-	<li>Test drive handling of error scenarios</li>
-	<li>Test drive change of word delimiter</li>
-</ul>
+You have fulfilled all the original requirements on the <strong>wordsrep</strong> application. However now we have a new requirement coming in. The customers want to specify what delimiter to use between words. The delimiter can no longer be hardcoded to space. It should now be possible to run wordsrep with the new argument <em>--wordDelimiter</em>.
+
+[table id=4 /]
+
+<strong>Example</strong>
+To set the delimiter to # we run wordsrep like this:
+<pre>wordsrep --oldWord car --newWord house --inputFile a.txt --outputFile b.txt --wordDelimiter \#</pre>
+The backslash is needed to tell the Bash to not interpret # as the start of a comment.
+
+a.txt
+<pre>
+car#horse#tree
+</pre>
+
+b.txt
+<pre>
+house#horse#tree
+</pre>
+
+You must implement the following tests to add support for setting the wordDelimiter:
+[table id=5 /]
+
+<h4>LineToWordsClass</h4>
+
+The <em>LineToWordsClass</em> must implement a new method <code>setWordDelimiter</code>. It should be possible to set a word delimiter of one character using the new method. The new test <em>CanSplitLineUsingDynamicWordDelimiter</em> shall verify that a new delimiter can be set and also used to split up a line into words.
+
+<h4>WordsToLineClass</h4>
+
+The <em>WordsToLineClass</em> must also implement a new method <code>setWordDelimiter</code> with similar purpose as in <em>LineToWordsClass</em>. The new test <em>ConcatenateWordsUsingDynamicWordDelimiter</em> shall verify that a new delimiter can be set and also used to concatenate words into a line.
+
+<h4>WordsrepClass</h4>
+
+The <em>processInputFile</em> method in <em>WordsrepClass</em> must now check whether the <em>wordDelimiter</em> argument has been specified at the command line. It must then pass the new word delimiter onto the other classes via the <code>setWordDelimiter</code> methods. The new test <em>CanUseNonSpaceWordDelimiter</em> shall verify that we can now make use of the new argument <em>wordDelimiter</em>.
+
+Remember that you can check the reference project if you get stuck while test driving the new functionality:
+<pre>/home/tdd1/workspace_reference</pre>
+The <em>WordsrepClassTest</em> has been cleaned up in the reference project and makes use of the fixture class to avoid duplication when settting mock expecations.
 
 <h3>About this course</h3>
 
