@@ -1,5 +1,10 @@
 TDD Mosssberg Change Log
 
+Version 1.04
+============
+- Added section in the course about test driving dynamic word delimiter. The participant shall write the tests on herself. The reference project has been updated with the new tests if the participant get stuck.
+- Added Mailer plugin to Jenkins since this mitigates the Mailer$UserProperty error I got before
+
 Version 1.03
 ============
 - Changed system settings so no notification about software updates are shown to the user
