@@ -1499,21 +1499,21 @@ house#horse#tree
 You must implement the following tests to add support for setting the wordDelimiter:
 [table id=5 /]
 
-<h4>LineToWordsClass</h4>
+<strong>LineToWordsClass</strong>
 
 The <em>LineToWordsClass</em> must implement a new method <code>setWordDelimiter</code>. It should be possible to set a word delimiter of one character using the new method. The new test <em>CanSplitLineUsingDynamicWordDelimiter</em> shall verify that a new delimiter can be set and also used to split up a line into words.
 
-<h4>WordsToLineClass</h4>
+<strong>WordsToLineClass</strong>
 
 The <em>WordsToLineClass</em> must also implement a new method <code>setWordDelimiter</code> with similar purpose as in <em>LineToWordsClass</em>. The new test <em>ConcatenateWordsUsingDynamicWordDelimiter</em> shall verify that a new delimiter can be set and also used to concatenate words into a line.
 
-<h4>WordsrepClass</h4>
+<strong>WordsrepClass</strong>
 
 The <em>processInputFile</em> method in <em>WordsrepClass</em> must now check whether the <em>wordDelimiter</em> argument has been specified at the command line. It must then pass the new word delimiter onto the other classes via the <code>setWordDelimiter</code> methods. The new test <em>CanUseNonSpaceWordDelimiter</em> shall verify that we can now make use of the new argument <em>wordDelimiter</em>.
 
 Remember that you can check the reference project if you get stuck while test driving the new functionality:
 <pre>/home/tdd1/workspace_reference</pre>
-The <em>WordsrepClassTest</em> has been cleaned up in the reference project and makes use of the fixture class to avoid duplication when settting mock expecations.
+The <em>WordsrepClassTest</em> has been cleaned up in the reference project and makes use of the fixture class to avoid duplication when settting mock expectations.
 
 <h3>About this course</h3>
 
