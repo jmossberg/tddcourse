@@ -15,8 +15,6 @@ class WordsrepClassTest : public ::testing::Test {
 public:
 	  FileReaderMock myFileReaderMock;
 	  FileWriterMock myFileWriterMock;
-	  LineToWordsClass myLineToWordsClass;
-	  WordsToLineClass myWordsToLineClass;
 	  WordsrepClass myWordsrepClass;
 
 	  void setMockExpectations(std::string line1In, std::string line1Out, std::string line2In, std::string line2Out);
@@ -105,7 +103,12 @@ TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
 TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
 {
   //Set expectations on mock objects
-  setMockExpectations("car house street","house house street","space blue cow","space blue cow");
+  std::string line1In("car house street");
+  std::string line1Out("house house street");
+  std::string line2In("space blue cow");
+  std::string line2Out("space blue cow");
+
+  setMockExpectations(line1In, line1Out, line2In, line2Out);
 
   int argc = 9;
   const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
@@ -117,7 +120,12 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
 TEST_F(WordsrepClassTest, PassesOnWordDelimiterArgument)
 {
 	//Set expectations on mock objects
-	setMockExpectations("car;house;street","house;house;street","space;blue;cow","space;blue;cow");
+	std::string line1In("car;house;street");
+	std::string line1Out("house;house;street");
+	std::string line2In("space;blue;cow");
+	std::string line2Out("space;blue;cow");
+
+	setMockExpectations(line1In, line1Out, line2In, line2Out);
 
 	int argc = 11;
 	const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt", "--wordDelimiter", ";"};
