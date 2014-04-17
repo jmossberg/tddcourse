@@ -9,6 +9,9 @@ WordsrepClass -> FileWriterMock : openFile()
 
 loop while endofData == false
   WordsrepClass -> FileReaderMock : readLine()
+  alt isNotFirstLine
+    WordsrepClass -> FileWriterMock : lineFeed()
+  end
   WordsrepClass -> FileWriterMock : writeLine()
   WordsrepClass -> FileReaderMock : endOfData()
 end

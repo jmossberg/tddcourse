@@ -920,12 +920,13 @@ We define one abstract interface, <em>AbstractFileReaderInterface</em>, for read
 <li>endOfData - returns true if we have reached end of file
 </ul>
 
-We define one abstract interface, <em>AbstractFileWriterInterface</em>, for writing to files. It stipulates that three methods should be implemented:
+We define one abstract interface, <em>AbstractFileWriterInterface</em>, for writing to files. It stipulates that four methods should be implemented:
 
 <ul>
 <li>openFile
 <li>closeFile
-<li>writeLine
+<li>writeLine - inserts a string into the file but does not make a line feed
+<li>lineFeed - inserts line feed into file
 </ul>
 
 The figure belows shows the abstract interfaces and how they can be implemented by mock ojects or the by the <em>real</em> classes.
@@ -969,7 +970,7 @@ public:
 #ifndef ABSTRACTFILEWRITERINTERFACE_H_
 #define ABSTRACTFILEWRITERINTERFACE_H_
 
-#include &lt;string>
+#include <string>
 
 class AbstractFileWriterInterface {
 public:
@@ -977,10 +978,13 @@ public:
   virtual int openFile(std::string fileName) = 0;
   virtual int closeFile() = 0;
   virtual void writeLine(std::string newLine) = 0;
+  virtual void lineFeed() = 0;
   virtual void setEndOfData() = 0;
 };
 
-#endif /* ABSTRACTFILEWRITERINTERFACE_H_ */</pre>
+#endif /* ABSTRACTFILEWRITERINTERFACE_H_ */
+
+</pre>
 </li>
 </ul>
 
@@ -1032,10 +1036,12 @@ public:
   MOCK_METHOD1(openFile, int(std::string fileName));
   MOCK_METHOD0(closeFile, int());
   MOCK_METHOD1(writeLine, void(std::string newLine));
+  MOCK_METHOD0(lineFeed, void());
   MOCK_METHOD0(setEndOfData, void());
 };
 
-#endif /* FILEWRITERMOCK_H_ */</pre>
+#endif /* FILEWRITERMOCK_H_ */
+</pre>
 </li>
 </ul>
 
@@ -1123,6 +1129,9 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
     .Times(Exactly(1))
     .WillOnce(Return("space blue cow"));
 
+    EXPECT_CALL(myFileWriterMock, lineFeed())
+    .Times(Exactly(1));
+
     EXPECT_CALL(fileWriterMock, writeLine("space blue cow"))
     .Times(Exactly(1));
 
@@ -1194,6 +1203,7 @@ AbstractFileWriterInterface* fileWriter_p) {
   fileReader_p-&gt;openFile(inputFile);
   fileWriter_p-&gt;openFile(outputFile);
 
+  isFirstLine = true;
   while(false == fileReader_p-&gt;endOfData())
   {
     std::string tempLine = fileReader_p-&gt;readLine();
@@ -1202,12 +1212,39 @@ AbstractFileWriterInterface* fileWriter_p) {
     std::vector&lt;std::string> newWords = this-&gt;replaceMatchingWords(oldWord, newWord, words);
     tempLine = wordsToLineClass.concatenateWords(newWords);
 
+    insertLineFeed(fileWriter_p);
     fileWriter_p-&gt;writeLine(tempLine);
   }
 
   fileWriter_p-&gt;closeFile();
   fileReader_p-&gt;closeFile();
 
+}
+</pre>
+</li>
+<li> We must also implement the helper method <em>insertLineFeed</em>. We add it to the class definition in <em>WordsrepClass.h</em> first:
+<pre>
+class WordsrepClass {
+public:
+  std::vector<std::string> replaceMatchingWords(
+	std::string oldWord, std::string newWord,
+	std::vector<std::string> words);
+  void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
+
+<strong>private:</strong>
+  <strong>void insertLineFeed(AbstractFileWriterInterface* fileWriter_p);</strong>
+  <strong>bool isFirstLine;</strong>
+
+};
+</pre>
+</li>
+<li>The method implementation in <em>WordsrepClass.cpp</em> looks like this:
+<pre>
+void WordsrepClass::insertLineFeed(AbstractFileWriterInterface* fileWriter_p) {
+  if(!isFirstLine) {
+    fileWriter_p->lineFeed();
+  }
+  isFirstLine  = false;
 }
 </pre>
 </li>
@@ -1316,16 +1353,17 @@ class FileWriterClass : public AbstractFileWriterInterface {
 private:
   std::ofstream myFile;
 
-  int closeFile();
-
 public:
   int openFile(std::string fileName);
+  int closeFile();
   void writeLine(std::string line);
+  void lineFeed();
   void setEndOfData();
 
 };
 
-#endif /* FILEWRITERCLASS_H_ */</pre>
+#endif /* FILEWRITERCLASS_H_ */
+</pre>
 </li>
 	<li>Create a new file <em>FileWriterClass.cpp</em> in the <em>src</em> folder</li>
 	<li>Add the following code:
@@ -1344,8 +1382,13 @@ int FileWriterClass::closeFile() {
 }
 
 void FileWriterClass::writeLine(std::string line) {
-  this-&gt;myFile &lt;&lt; line &lt;&lt; '\n';
+  this-&gt;myFile &lt;&lt; line;
 }
+
+void FileWriterClass::lineFeed() {
+  this-&gt;myFile &lt;&lt; '\n';
+}
+
 
 void FileWriterClass::setEndOfData() {
   this-&gt;closeFile();
@@ -1432,7 +1475,7 @@ cycle table chair
 <h3>Connect Google Tests to a Continuous Integration Server</h3>
 Finally we will connect our tests to a continuous integration server, in this case Jenkins.
 
-There is a reference project, <a href="http://localhost/jenkins/job/WordsrepAppReferenceTests/" title="WordsrepAppReferenceTests" target="_blank">WordsrepAppReferenceTests</a>, setup in Jenkins which you can look at it you run into problems when performing the steps below.
+There is a reference project, <a href="http://localhost/jenkins/job/WordsrepAppReferenceTests/" title="WordsrepAppReferenceTests" target="_blank">WordsrepAppReferenceTests</a>, setup in Jenkins which you can look at it if you run into problems when performing the steps below.
 
 <ol>
 	<li>Make sure you have commited all your files to git</li>
@@ -1459,7 +1502,7 @@ eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild
 WordsRepApp_TestResults.xml
 </pre>
 </li>
-        <li>Click on Apply (I got an error in Jenkins if I clicked on Save directly)
+        <li>Click on Apply
 	<li>Click on Save</li>
 	<li>Click on <em>Build now</em>
 <center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_jenkins_build_now.png" /></center></li>

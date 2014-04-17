@@ -49,7 +49,7 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
   fileReader_p->openFile(inputFile);
   fileWriter_p->openFile(outputFile);
 
-  lineWithoutLineFeed = false;
+  isFirstLine = true;
   while(false == fileReader_p->endOfData())
   {
     std::string tempLine = fileReader_p->readLine();
@@ -68,8 +68,8 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
 }
 
 void WordsrepClass::insertLineFeed(AbstractFileWriterInterface* fileWriter_p) {
-	if(lineWithoutLineFeed) {
+	if(!isFirstLine) {
 		fileWriter_p->lineFeed();
 	}
-	lineWithoutLineFeed  = true;
+	isFirstLine  = false;
 }

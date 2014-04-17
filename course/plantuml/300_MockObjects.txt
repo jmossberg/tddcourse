@@ -14,6 +14,7 @@ AbstractFileReaderInterface <|-- FileReader : implements
 AbstractFileWriterInterface : openFile(string fileName)
 AbstractFileWriterInterface : closeFile()
 AbstractFileWriterInterface : writeLine(string line)
+AbstractFileWriterInterface : lineFeed()
 
 AbstractFileWriterInterface <|-- FileWriterMock : implements
 AbstractFileWriterInterface <|-- FileWriter : implements

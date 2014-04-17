@@ -16,7 +16,6 @@
 
 class WordsrepClass {
 public:
-	WordsrepClass() : lineWithoutLineFeed(false) {};
   std::vector<std::string> replaceMatchingWords(
 	std::string oldWord, std::string newWord,
 	std::vector<std::string> words);
@@ -24,10 +23,8 @@ public:
 
 private:
   void insertLineFeed(AbstractFileWriterInterface* fileWriter_p);
-  bool lineWithoutLineFeed;
+  bool isFirstLine;
 
 };
-
-
 
 #endif /* WORDSREPCLASS_H_ */
