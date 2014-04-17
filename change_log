@@ -1,5 +1,9 @@
 TDD Mosssberg Change Log
 
+Version 1.05
+============
+- Added a new method lineFeed to the AbstractFileWriterInterface. Updated tests in WordsrepClassTest which uses the FileWriterMock to reflect this. Also updated the mock. The purpose of this change was to fix a bug in the command line version of wordsrep. The bug was that an extra line was added to the end of the new file created by wordsrep. The line feed used to be included in the writeLine method. I have now put line feed in a separate method. By doing this I can make sure that WordsrepClass uses the lineFeed method correctly by adding expectations to the mock class. I have updated the course material accordingly.
+
 Version 1.04
 ============
 - Added section in the course about test driving dynamic word delimiter. The participant shall write the tests on herself. The reference project has been updated with the new tests if the participant get stuck.
