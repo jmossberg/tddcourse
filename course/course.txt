@@ -970,7 +970,7 @@ public:
 #ifndef ABSTRACTFILEWRITERINTERFACE_H_
 #define ABSTRACTFILEWRITERINTERFACE_H_
 
-#include <string>
+#include &lt;string&gt;
 
 class AbstractFileWriterInterface {
 public:
@@ -1226,9 +1226,9 @@ AbstractFileWriterInterface* fileWriter_p) {
 <pre>
 class WordsrepClass {
 public:
-  std::vector<std::string> replaceMatchingWords(
+  std::vector<lt;std::string>gt; replaceMatchingWords(
 	std::string oldWord, std::string newWord,
-	std::vector<std::string> words);
+	std::vector<lt;std::string>gt; words);
   void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
 
 <strong>private:</strong>
@@ -1242,7 +1242,7 @@ public:
 <pre>
 void WordsrepClass::insertLineFeed(AbstractFileWriterInterface* fileWriter_p) {
   if(!isFirstLine) {
-    fileWriter_p->lineFeed();
+    fileWriter_p-&gt;lineFeed();
   }
   isFirstLine  = false;
 }
