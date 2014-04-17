@@ -49,6 +49,7 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
   fileReader_p->openFile(inputFile);
   fileWriter_p->openFile(outputFile);
 
+  lineWithoutLineFeed = false;
   while(false == fileReader_p->endOfData())
   {
     std::string tempLine = fileReader_p->readLine();
@@ -57,10 +58,18 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
     std::vector<std::string> newWords = this->replaceMatchingWords(oldWord, newWord, words);
     tempLine = wordsToLineClass.concatenateWords(newWords);
 
+    insertLineFeed(fileWriter_p);
     fileWriter_p->writeLine(tempLine);
   }
 
   fileWriter_p->closeFile();
   fileReader_p->closeFile();
 
+}
+
+void WordsrepClass::insertLineFeed(AbstractFileWriterInterface* fileWriter_p) {
+	if(lineWithoutLineFeed) {
+		fileWriter_p->lineFeed();
+	}
+	lineWithoutLineFeed  = true;
 }

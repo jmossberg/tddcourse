@@ -12,7 +12,11 @@ int FileWriterClass::closeFile() {
 }
 
 void FileWriterClass::writeLine(std::string line) {
-  this->myFile << line << '\n';
+  this->myFile << line;
+}
+
+void FileWriterClass::lineFeed() {
+	this->myFile << '\n';
 }
 
 void FileWriterClass::setEndOfData() {

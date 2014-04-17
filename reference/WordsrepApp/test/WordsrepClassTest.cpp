@@ -55,6 +55,9 @@ void WordsrepClassTest::setMockExpectations(std::string line1In, std::string lin
 	.Times(Exactly(1))
 	.WillOnce(Return(line2In));
 
+	EXPECT_CALL(myFileWriterMock, lineFeed())
+	.Times(Exactly(1));
+
 	EXPECT_CALL(myFileWriterMock, writeLine(line2Out))
 	.Times(Exactly(1));
 

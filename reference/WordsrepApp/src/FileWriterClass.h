@@ -13,6 +13,7 @@ public:
   int openFile(std::string fileName);
   int closeFile();
   void writeLine(std::string line);
+  void lineFeed();
   void setEndOfData();
 
 };
