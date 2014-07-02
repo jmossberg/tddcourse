@@ -33,11 +33,11 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
   LineToWordsClass lineToWordsClass;
   WordsToLineClass wordsToLineClass;
 
-  std::string oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
-  std::string newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
-  std::string inputFile = argumentParserClass.getSwitchValue(argc, argv, "--inputFile");
-  std::string outputFile = argumentParserClass.getSwitchValue(argc, argv, "--outputFile");
-  std::string wordDelimiter = argumentParserClass.getSwitchValue(argc, argv, "--wordDelimiter");
+  auto oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
+  auto newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
+  auto inputFile = argumentParserClass.getSwitchValue(argc, argv, "--inputFile");
+  auto outputFile = argumentParserClass.getSwitchValue(argc, argv, "--outputFile");
+  auto wordDelimiter = argumentParserClass.getSwitchValue(argc, argv, "--wordDelimiter");
 
   if(wordDelimiter.size() > 0)
   {
@@ -52,10 +52,10 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
   isFirstLine = true;
   while(false == fileReader_p->endOfData())
   {
-    std::string tempLine = fileReader_p->readLine();
+    auto tempLine = fileReader_p->readLine();
 
-    std::vector<std::string> words = lineToWordsClass.splitLine(tempLine);
-    std::vector<std::string> newWords = this->replaceMatchingWords(oldWord, newWord, words);
+    auto words = lineToWordsClass.splitLine(tempLine);
+    auto newWords = this->replaceMatchingWords(oldWord, newWord, words);
     tempLine = wordsToLineClass.concatenateWords(newWords);
 
     insertLineFeed(fileWriter_p);

@@ -1,7 +1,7 @@
 #include "FileReaderClass.h"
 
 int FileReaderClass::openFile(std::string fileName) {
-  const char * fileNameChar_p = fileName.c_str();
+  auto fileNameChar_p = fileName.c_str();
   this->myFile.open(fileNameChar_p, std::fstream::in);
   return 0;
 }

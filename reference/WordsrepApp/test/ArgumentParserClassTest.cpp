@@ -14,8 +14,8 @@ TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
   ArgumentParserClass argumentParserClass;
 
   //Exercise
-  std::string argumentSwitchValue1 =   argumentParserClass.getSwitchValue(argc, argv1, "--oldWord");
-  std::string argumentSwitchValue2 = argumentParserClass.getSwitchValue(argc, argv2, "--oldWord");
+  auto argumentSwitchValue1 = argumentParserClass.getSwitchValue(argc, argv1, "--oldWord");
+  auto argumentSwitchValue2 = argumentParserClass.getSwitchValue(argc, argv2, "--oldWord");
 
   //Verify
   ASSERT_EQ("car", argumentSwitchValue1);

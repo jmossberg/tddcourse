@@ -1,7 +1,7 @@
 #include "FileWriterClass.h"
 
 int FileWriterClass::openFile(std::string fileName) {
-  const char * fileNameChar_p = fileName.c_str();
+  auto fileNameChar_p = fileName.c_str();
   this->myFile.open(fileNameChar_p);
   return 0;
 }
