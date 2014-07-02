@@ -9,15 +9,15 @@ std::vector<std::string>& words) {
 
   std::vector<std::string> newWords;
 
-  for(auto it = words.begin(); it != words.end(); it++)
+  for(auto& word: words)
   {
-    if((*it) == oldWord)
+    if(word == oldWord)
     {
       newWords.push_back(newWord);
     }
     else
     {
-      newWords.push_back(*it);
+      newWords.push_back(word);
     }
   }
 

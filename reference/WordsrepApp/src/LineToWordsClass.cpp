@@ -4,11 +4,11 @@ std::vector<std::string> LineToWordsClass::splitLine(const std::string& textLine
 
   resetInternalListOfWords();
 
-  for(auto currentCharacter = textLine.begin(); currentCharacter != textLine.end(); currentCharacter++)
+  for(const char& currentCharacter : textLine)
   {
-    if(isNotDelimiter(*currentCharacter))
+    if(isNotDelimiter(currentCharacter))
     {
-      addCharacterToWord(*currentCharacter);
+      addCharacterToWord(currentCharacter);
     }
     else
     {

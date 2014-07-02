@@ -4,9 +4,9 @@ std::string WordsToLineClass::concatenateWords(std::vector<std::string>& words)
 {
   std::string line("");
 
-  for(auto it = words.begin(); it != words.end(); it++)
+  for(auto& word: words)
   {
-    line = addWordToLine(line, *it);
+    line = addWordToLine(line, word);
   }
 
   line = removeLastDelimiterFromLine(line);
