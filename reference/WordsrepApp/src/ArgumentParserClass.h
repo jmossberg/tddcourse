@@ -7,7 +7,7 @@
 class ArgumentParserClass {
 
 public:
-  std::string getSwitchValue(int argc, const char * argv[], std::string switchName);
+  std::string getSwitchValue(const int& argc, const char* argv[], const std::string& switchName);
 };
 
 #endif /* ARGUMENTPARSERCLASS_H_ */

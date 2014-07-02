@@ -4,13 +4,12 @@
 #include "WordsToLineClass.h"
 
 std::vector<std::string> WordsrepClass::replaceMatchingWords(
-std::string oldWord, std::string newWord,
-std::vector<std::string> words) {
+std::string& oldWord, std::string& newWord,
+std::vector<std::string>& words) {
 
-  std::vector<std::string>::iterator it;
   std::vector<std::string> newWords;
 
-  for(it = words.begin(); it != words.end(); it++)
+  for(auto it = words.begin(); it != words.end(); it++)
   {
     if((*it) == oldWord)
     {
@@ -25,9 +24,9 @@ std::vector<std::string> words) {
   return newWords;
 }
 
-void WordsrepClass::processInputFile(int argc, const char* argv[],
-		AbstractFileReaderInterface* fileReader_p,
-		AbstractFileWriterInterface* fileWriter_p) {
+void WordsrepClass::processInputFile(int& argc, const char* argv[],
+		AbstractFileReaderInterface& fileReader,
+		AbstractFileWriterInterface& fileWriter) {
 
   ArgumentParserClass argumentParserClass;
   LineToWordsClass lineToWordsClass;
@@ -46,30 +45,30 @@ void WordsrepClass::processInputFile(int argc, const char* argv[],
 	  wordsToLineClass.setWordDelimiter(wordDelimiterChar);
   }
 
-  fileReader_p->openFile(inputFile);
-  fileWriter_p->openFile(outputFile);
+  fileReader.openFile(inputFile);
+  fileWriter.openFile(outputFile);
 
   isFirstLine = true;
-  while(false == fileReader_p->endOfData())
+  while(false == fileReader.endOfData())
   {
-    auto tempLine = fileReader_p->readLine();
+    auto tempLine = fileReader.readLine();
 
     auto words = lineToWordsClass.splitLine(tempLine);
     auto newWords = this->replaceMatchingWords(oldWord, newWord, words);
     tempLine = wordsToLineClass.concatenateWords(newWords);
 
-    insertLineFeed(fileWriter_p);
-    fileWriter_p->writeLine(tempLine);
+    insertLineFeed(fileWriter);
+    fileWriter.writeLine(tempLine);
   }
 
-  fileWriter_p->closeFile();
-  fileReader_p->closeFile();
+  fileWriter.closeFile();
+  fileReader.closeFile();
 
 }
 
-void WordsrepClass::insertLineFeed(AbstractFileWriterInterface* fileWriter_p) {
+void WordsrepClass::insertLineFeed(AbstractFileWriterInterface& fileWriter) {
 	if(!isFirstLine) {
-		fileWriter_p->lineFeed();
+		fileWriter.lineFeed();
 	}
 	isFirstLine  = false;
 }

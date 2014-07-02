@@ -6,7 +6,7 @@
 
 class FileReaderMock : public AbstractFileReaderInterface {
 public:
-  MOCK_METHOD1(openFile, int(std::string fileName));
+  MOCK_METHOD1(openFile, int(const std::string& fileName));
   MOCK_METHOD0(closeFile, int());
   MOCK_METHOD0(readLine, std::string());
   MOCK_METHOD0(endOfData, bool());

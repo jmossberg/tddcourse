@@ -10,7 +10,7 @@ private:
 std::ifstream myFile;
 
 public:
-  int openFile(std::string fileName);
+  int openFile(const std::string& fileName);
   int closeFile();
   std::string readLine();
   bool endOfData();

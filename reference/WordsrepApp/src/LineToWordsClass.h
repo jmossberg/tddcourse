@@ -7,13 +7,13 @@
 class LineToWordsClass {
 public:
   LineToWordsClass();
-  std::vector<std::string> splitLine(std::string textLine);
-  void setWordDelimiter(char newWordDelimiter);
+  std::vector<std::string> splitLine(const std::string& textLine);
+  void setWordDelimiter(const char& newWordDelimiter);
 
 private:
-  bool isNotDelimiter(char character);
+  bool isNotDelimiter(const char& character);
   void addWord();
-  void addCharacterToWord(char character);
+  void addCharacterToWord(const char& character);
   void resetInternalListOfWords();
   void addLastWordOnLine();
 

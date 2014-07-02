@@ -17,12 +17,12 @@
 class WordsrepClass {
 public:
   std::vector<std::string> replaceMatchingWords(
-	std::string oldWord, std::string newWord,
-	std::vector<std::string> words);
-  void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
+	std::string& oldWord, std::string& newWord,
+	std::vector<std::string>& words);
+  void processInputFile(int& argc, const char* argv[], AbstractFileReaderInterface& fileReader, AbstractFileWriterInterface& fileWriter);
 
 private:
-  void insertLineFeed(AbstractFileWriterInterface* fileWriter_p);
+  void insertLineFeed(AbstractFileWriterInterface& fileWriter);
   bool isFirstLine;
 
 };

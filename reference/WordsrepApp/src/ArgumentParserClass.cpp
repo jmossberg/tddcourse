@@ -1,6 +1,6 @@
 #include "ArgumentParserClass.h"
 
-std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* argv[], const std::string& switchName)
 {
   int i;
 

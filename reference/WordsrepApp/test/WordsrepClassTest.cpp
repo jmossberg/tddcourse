@@ -117,7 +117,7 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
   const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
 
   //Exercise & Verify
-  myWordsrepClass.processInputFile(argc, argv, &myFileReaderMock, &myFileWriterMock);
+  myWordsrepClass.processInputFile(argc, argv, myFileReaderMock, myFileWriterMock);
 }
 
 TEST_F(WordsrepClassTest, CanUseNonSpaceWordDelimiter)
@@ -134,5 +134,5 @@ TEST_F(WordsrepClassTest, CanUseNonSpaceWordDelimiter)
 	const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt", "--wordDelimiter", ";"};
 
 	//Exercise & Verify
-	myWordsrepClass.processInputFile(argc, argv, &myFileReaderMock, &myFileWriterMock);
+	myWordsrepClass.processInputFile(argc, argv, myFileReaderMock, myFileWriterMock);
 }

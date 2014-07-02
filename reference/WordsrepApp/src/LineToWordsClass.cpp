@@ -1,11 +1,10 @@
 #include "LineToWordsClass.h"
 
-std::vector<std::string> LineToWordsClass::splitLine(std::string textLine) {
+std::vector<std::string> LineToWordsClass::splitLine(const std::string& textLine) {
 
   resetInternalListOfWords();
 
-  std::string::iterator currentCharacter;
-  for(currentCharacter = textLine.begin(); currentCharacter != textLine.end(); currentCharacter++)
+  for(auto currentCharacter = textLine.begin(); currentCharacter != textLine.end(); currentCharacter++)
   {
     if(isNotDelimiter(*currentCharacter))
     {
@@ -30,7 +29,7 @@ void LineToWordsClass::addWord() {
     newWord = "";
 }
 
-void LineToWordsClass::addCharacterToWord(char character) {
+void LineToWordsClass::addCharacterToWord(const char& character) {
     newWord.push_back(character);
 }
 
@@ -43,11 +42,11 @@ LineToWordsClass::LineToWordsClass() {
 	this->wordDelimiter = ' ';
 }
 
-bool LineToWordsClass::isNotDelimiter(char character) {
+bool LineToWordsClass::isNotDelimiter(const char& character) {
 	return this->wordDelimiter != character;
 }
 
-void LineToWordsClass::setWordDelimiter(char newWordDelimiter) {
+void LineToWordsClass::setWordDelimiter(const char& newWordDelimiter) {
 	this->wordDelimiter = newWordDelimiter;
 }
 

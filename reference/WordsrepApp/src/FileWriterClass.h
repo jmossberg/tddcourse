@@ -10,9 +10,9 @@ private:
   std::ofstream myFile;
 
 public:
-  int openFile(std::string fileName);
+  int openFile(const std::string& fileName);
   int closeFile();
-  void writeLine(std::string line);
+  void writeLine(const std::string& line);
   void lineFeed();
   void setEndOfData();
 
