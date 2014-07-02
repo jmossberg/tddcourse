@@ -4,17 +4,17 @@ Welcome to this course in Test Driven Development. We will develop a command lin
 <h3>Introduction to Test Driven Development</h3>
 Test Driven Development (TDD) is a software development technique where we grow the design by writing unit tests before writing the actual software. We work in an iterative way. This means that we will:
 <ol>
-	<li>Write a ''small'' test</li>
+	<li>Write a small test</li>
 	<li>Make sure it fails</li>
 	<li>Make it pass</li>
 	<li>Refactor (which means to clean up the code)</li>
 </ol>
-We can grow the software inside-out (Classic TDD) or oyouutside-in (London TDD):
+We can grow the software inside-out (Classic TDD) or outside-in (London TDD):
 <ul>
 	<li>We start with the core algorithms and work our way out to the public interface of our application when we do <strong>inside-out</strong>(Classic TDD).</li>
 	<li>We start with the public interface and work our way in to the core algorithms when we do <strong>outside-in</strong>(London TDD).</li>
 </ul>
-London TDD will require us to make extensive use of test doubles. Test dobules are stand ins for the real objects. Since the core objects do not yet exist when we start with the public interface we must fake them.
+London TDD will require us to make extensive use of test doubles. Test doubles are stand ins for the real objects. Since the core objects do not yet exist when we start with the public interface we must fake them.
 
 <a href="http://localhost/wordpress/wp-content/uploads/100_InsideOutVsOutsideIn.png"><img class="alignnone size-medium wp-image-21" alt="100_InsideOutVsOutsideIn" src="http://localhost/wordpress/wp-content/uploads/100_InsideOutVsOutsideIn.png" /></a>
 
