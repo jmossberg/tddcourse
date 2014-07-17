@@ -1,37 +1,5 @@
 #include "LineToWordsClass.h"
-
-std::vector<std::string> LineToWordsClass::splitLine(const std::string& textLine) {
-
-  resetInternalListOfWords();
-
-  for(const char& currentCharacter : textLine)
-  {
-    if(isNotDelimiter(currentCharacter))
-    {
-      addCharacterToWord(currentCharacter);
-    }
-    else
-    {
-      addWord();
-    }
-  }
-
-  addLastWordOnLine();
-
-  return words;
-}
-
-void LineToWordsClass::addWord() {
-	if(newWord.size() > 0)
-	{
-	  words.push_back(newWord);
-	}
-    newWord = "";
-}
-
-void LineToWordsClass::addCharacterToWord(const char& character) {
-    newWord.push_back(character);
-}
+#include <sstream>
 
 void LineToWordsClass::resetInternalListOfWords() {
 	words.resize(0);
@@ -42,14 +10,28 @@ LineToWordsClass::LineToWordsClass() {
 	this->wordDelimiter = ' ';
 }
 
-bool LineToWordsClass::isNotDelimiter(const char& character) {
-	return this->wordDelimiter != character;
-}
-
 void LineToWordsClass::setWordDelimiter(const char& newWordDelimiter) {
 	this->wordDelimiter = newWordDelimiter;
 }
 
-void LineToWordsClass::addLastWordOnLine() {
-	addWord();
+std::vector<std::string> LineToWordsClass::splitLine(
+		const std::string& textLine) {
+
+	const int MAX_WORD_LENGTH { 20 };
+	char tempbuff[50];
+
+	resetInternalListOfWords();
+
+	std::stringstream ss;
+
+	//Copy string to stringstream
+	ss << textLine;
+
+	//Loop through stringstream looking for delimiter character
+	while(ss.getline(tempbuff, MAX_WORD_LENGTH, wordDelimiter))
+	{
+		words.push_back(tempbuff);
+	}
+
+	return words;
 }

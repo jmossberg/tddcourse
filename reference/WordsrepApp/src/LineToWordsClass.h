@@ -11,11 +11,7 @@ public:
   void setWordDelimiter(const char& newWordDelimiter);
 
 private:
-  bool isNotDelimiter(const char& character);
-  void addWord();
-  void addCharacterToWord(const char& character);
   void resetInternalListOfWords();
-  void addLastWordOnLine();
 
   std::vector<std::string> words;
   std::string newWord;
