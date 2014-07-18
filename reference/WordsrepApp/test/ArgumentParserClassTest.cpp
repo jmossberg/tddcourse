@@ -8,7 +8,7 @@ class ArgumentParserClassTest : public ::testing::Test {
 TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
-  int argc = 3;
+  int argc { 3 };
   const char * argv1[] = {"wordsrep", "--oldWord", "car"};
   const char * argv2[] = {"wordsrep", "--oldWord", "space"};
   ArgumentParserClass argumentParserClass;
