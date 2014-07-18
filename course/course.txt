@@ -32,7 +32,7 @@ Google Test can be used to write unit tests. Google Test is written in C++. Goog
 
 Below is an example of a test written for Google Test/Google Mock.
 
-<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/GoogleTestStructure.png" /></center>We verify that the method <em>getNameLength()</em> returns the correct length of the name that has been stored in the class Person. The test is part of test fixture class <em>PersonTest</em>. A fixture class can be used to initialize objects needed by several tests in belonging to the same fixture class.
+<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/GoogleTestStructure.png" /></center>We verify that the method <em>getNameLength()</em> returns the correct length of the name that has been stored in the class Person. The test is part of test fixture class <em>PersonTest</em>. A fixture class can be used to initialize objects needed by several tests belonging to the same fixture class.
 
 We use a four phase pattern when writing the test:
 <ul>
@@ -93,8 +93,8 @@ We will create a C++ project in Eclipse CDT to develop our WordsRep application.
 <ol>
 	<li>Select Yes if asked to open the C/C++ perspective</li>
 	<li>Click "Finish"</li>
-	<li>Now let's connect the project to a Git repository by right clicking on it and selecting "Team - Share Project..."</li>
-	<li><center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_team_share_project.png" /></center></li>
+	<li>Now let's connect the project to a Git repository by right clicking on it and selecting "Team - Share Project...<br>
+<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_team_share_project.png" /></center></li>
 	<li>Select Git and click Next</li>
 	<li>Click on Create...</li>
 	<li>Enter parent directory:
@@ -217,7 +217,7 @@ We can compose an initial list of the tests we want to write based on what we kn
 </ul>
 We don't spend too much time on thinking about this list. The purpose is to get us going.
 <h3>Retrieve the value of an argument switch</h3>
-WordsRep is a command line tool which means all arguments will supplied through the main function:
+WordsRep is a command line tool which means all arguments will be supplied through the main function:
 <pre>int main(int argc, char* argv[]) {</pre>
 <ul>
 	<li><code>argc</code> - argument counter</li>
@@ -264,7 +264,7 @@ class ArgumentParserClass {
 <ol>
 	<li>Right click on the <em>test</em> folder and select Properties</li>
 	<li>Select C/C++ Build - Settings</li>
-	<li>Goto Tool Seeting - GCC C++ Compiler - Includes</li>
+	<li>Goto Tool Settings - GCC C++ Compiler - Includes</li>
 	<li>Click on Add.. in Include paths</li>
 	<li>Click on Workspace...</li>
 	<li>Select the <em>src</em> folder and click OK multiple times to close all windows</li>
@@ -278,7 +278,7 @@ Let's finish the test:
 <pre>TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
-  int argc = 3;
+  int argc { 3 };
   const char * argv[] = {"wordsrep", "--oldWord", "car"};
   ArgumentParserClass argumentParserClass;
 
@@ -294,20 +294,27 @@ Build. It should fail because of the missing <em>getSwitchValue</em> method.
 
 Now we implement it.
 <ol>
-	<li>Add the following to ArgumentParserClass.h:
-<pre>#include &lt;string&gt;
+	<li>Edit ArgumentParserClass.h to look like this:
+<pre>
+#ifndef ARGUMENTPARSERCLASS_H_
+#define ARGUMENTPARSERCLASS_H_
+
+#include &lt;string&gt;
 
 class ArgumentParserClass {
 
 public:
-  std::string getSwitchValue(int argc, const char * argv[], std::string switchName);
-};</pre>
+  std::string getSwitchValue(const int& argc, const char* argv[], const std::string& switchName);
+};
+
+#endif /* ARGUMENTPARSERCLASS_H_ */
+</pre>
 </li>
 	<li>Add a new file ArgumentParserClass.cpp in src folder.</li>
 	<li>Add the following:
 <pre>#include "ArgumentParserClass.h"
 
-std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* argv[], const std::string& switchName)
 {
   return "car";
 }</pre>
@@ -324,7 +331,7 @@ But the response of getSwitchValue is hardcoded. Let's extend the test to force 
 <pre>TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
-  int argc = 3;
+  int argc { 3 };
   const char * argv1[] = {"wordsrep", "--oldWord", "car"};
   const char * argv2[] = {"wordsrep", "--oldWord", "space"};
   ArgumentParserClass argumentParserClass;
@@ -346,9 +353,10 @@ Expected: "space"
 [  FAILED  ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)</pre>
 So the test expected <em>space</em> to be returned but got <em>car</em>.
 Now we put some logic into ''getSwitchValue'':
-<pre>#include "ArgumentParserClass.h"
+<pre>
+#include "ArgumentParserClass.h"
 
-std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* argv[], const std::string& switchName)
 {
   int i;
 
@@ -361,7 +369,8 @@ std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], s
   }
 
   return "";
-}</pre>
+}
+</pre>
 
 Build and run the test.
 
@@ -389,7 +398,7 @@ The code below has been corrected.
 <pre>
 #include "ArgumentParserClass.h"
 
-std::string ArgumentParserClass::getSwitchValue(int argc, const char * argv[], std::string switchName)
+std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* argv[], const std::string& switchName)
 {
 int i;
 
