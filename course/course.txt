@@ -434,15 +434,17 @@ We have four words in the following example line:
 	<li>fire</li>
 	<li>moon_sun</li>
 </ul>
-Let's implement a <em>LineToWordsClass</em> to help us split a line of text into words. The plan is to loop through all characters in the line and extract a word each time we encounter a space.
+Let's implement a <em>LineToWordsClass</em> to help us split a line of text into words.
 
 We start with a test.
 <ol>
 	<li>Add a new file <em>LineToWordsClassTest.cpp</em> in the <em>test</em> folder</li>
 	<li>Add the following code:
-<pre>#include "gmock/gmock.h"
+<pre>
+#include "gmock/gmock.h"
 #include "LineToWordsClass.h"
 
+//Empty test fixture class LineToWordsClassTest
 class LineToWordsClassTest : public ::testing::Test
 {
 
@@ -461,7 +463,8 @@ TEST_F(LineToWordsClassTest, CanSplitLineWithTwoWords)
   ASSERT_EQ(2, words.size());
   ASSERT_EQ("street", words[0]);
   ASSERT_EQ("sky", words[1]);
-}</pre>
+}
+</pre>
 About the <em>vector</em> type from <em>www.cplusplus.com</em>:
 <blockquote style="font-size: medium">Vectors are sequence containers representing arrays that can change in size.
 
@@ -473,7 +476,8 @@ Now let's implement the class <em>LineToWordsClass</em> with method <em>splitLin
 <ol>
 	<li>Add file LineToWordsClass.h in the <em>src</em> folder</li>
 	<li>Add the following code:
-<pre>#ifndef LINETOWORDSCLASS_H_
+<pre>
+#ifndef LINETOWORDSCLASS_H_
 #define LINETOWORDSCLASS_H_
 
 #include &lt;string&gt;
@@ -481,177 +485,41 @@ Now let's implement the class <em>LineToWordsClass</em> with method <em>splitLin
 
 class LineToWordsClass {
 public:
-  std::vector&lt;std::string&gt; splitLine(std::string textLine);
+  std::vector&lt;std::string&gt; splitLine(std::string& textLine);
 };
 
 #endif /* LINETOWORDSCLASS_H_ */</pre>
 </li>
 	<li>Add file <em>LineToWordsClass.cpp</em> in the <em>src</em> folder</li>
 	<li>Add the following code
-<pre>#include "LineToWordsClass.h"
-
-std::vector&lt;std::string&gt; LineToWordsClass::splitLine(std::string textLine) {
-
-  std::vector&lt;std::string&gt; words;
-  std::string word("");
-  unsigned int i;
-
-  //Add characters from the line onto a word until a space
-  //is found. Add the word to the vector of words. Start adding
-  //characters to a new word.
-  for(i = 0; i &lt; textLine.size(); i++)
-  {
-    if(textLine[i] == ' ')
-    {
-      words.push_back(word);
-      word = "";
-    }
-    else
-    {
-      word.push_back(textLine[i]);
-    }
-  }
-
-  return words;
-}</pre>
-<li>Build and run the test.</li>
-</ol>
-
-Hmm, the test fails with the following output:
-
-<pre>
-[ RUN      ] LineToWordsClassTest.CanSplitLineWithTwoWords
-../test/LineToWordsClassTest.cpp:19: Failure
-Value of: words.size()
-  Actual: 1
-Expected: 2
-[  FAILED  ] LineToWordsClassTest.CanSplitLineWithTwoWords (0 ms)
-</pre>
-
-The test expects <em>splitLine</em> to return two words but it gets only one. We have forgotten something in our code.
-
-What do we need to do more in <em>splitLine</em>?
-
-The code below has been corrected.
-
-<pre>#include "LineToWordsClass.h"
-
-std::vector&lt;std::string&gt; LineToWordsClass::splitLine(std::string textLine) {
-
-  std::vector&lt;std::string&gt; words;
-  std::string word("");
-  unsigned int i;
-
-  //Add characters from the line onto a word until a space
-  //is found. Add the word to the vector of words. Start adding
-  //characters to a new word.
-  for(i = 0; i &lt; textLine.size(); i++)
-  {
-    if(textLine[i] == ' ')
-    {
-      words.push_back(word);
-      word = "";
-    }
-    else
-    {
-      word.push_back(textLine[i]);
-    }
-  }
-
-  if(word.size() &gt; 0)
-  {
-    words.push_back(word);
-  }
-
-  return words;
-}</pre>
-
-We did not add the word after the last space to the vector. We added a new if statement after the for loop to fix this.
-
-Build and run the test again. Now it should pass.
-
-We can refactor <em>splitLine</em> in steps while running the <em>CanSplitLineWithTwoWords</em> test continiously to make sure we don't break it. One possible outcome is shown below.
-
-LineToWordsClass.h
-
-<pre>
-#ifndef LINETOWORDSCLASS_H_
-#define LINETOWORDSCLASS_H_
-
-#include &lt;string>
-#include &lt;vector>
-
-class LineToWordsClass {
-public:
-  std::vector&lt;std::string> splitLine(std::string textLine);
-
-private:
-  bool isNotSpace(char character);
-  void addWord();
-  void addCharacterToWord(char character);
-  void resetInternalListOfWords();
-  void addLastWordOnLine();
-
-  std::vector&lt;std::string> words;
-  std::string newWord;
-};
-
-#endif /* LINETOWORDSCLASS_H_ */
-</pre>
-
-LineToWordsClass.cpp
-
 <pre>
 #include "LineToWordsClass.h"
+#include &lt;sstream&gt;
 
-std::vector&lt;std::string> LineToWordsClass::splitLine(std::string textLine) {
+std::vector<std::string> LineToWordsClass::splitLine(const std::string& textLine) {
+  const int MAX_WORD_LENGTH { 20 };
+  char tempbuff[50];
 
   resetInternalListOfWords();
 
-  std::string::iterator currentCharacter;
-  for(currentCharacter = textLine.begin(); currentCharacter != textLine.end(); currentCharacter++)
-  {
-    if(isNotSpace(*currentCharacter))
-    {
-      addCharacterToWord(*currentCharacter);
-    }
-    else
-    {
-      addWord();
-    }
-  }
+  std::stringstream ss;
 
-  addLastWordOnLine();
+  //Copy string to stringstream
+  ss << textLine;
+
+  //Loop through stringstream looking for delimiter character
+  while(ss.getline(tempbuff, MAX_WORD_LENGTH, wordDelimiter))
+  {
+    words.push_back(tempbuff);
+  }
 
   return words;
 }
-
-bool LineToWordsClass::isNotSpace(char character) {
-	return  ' ' != character;
-}
-
-void LineToWordsClass::addWord() {
-	if(newWord.size() > 0)
-	{
-	  words.push_back(newWord);
-	}
-    newWord = "";
-}
-
-void LineToWordsClass::addCharacterToWord(char character) {
-    newWord.push_back(character);
-}
-
-void LineToWordsClass::resetInternalListOfWords() {
-	words.resize(0);
-	newWord = "";
-}
-
-void LineToWordsClass::addLastWordOnLine() {
-	addWord();
-}
 </pre>
+<li>Build and run the test.</li>
+</ol>
 
+TODO: Show implementation of resetInternalListOfWords()
 
 <h3>Concatenate words into line of text</h3>
 We have implemented two tests on the test list.
