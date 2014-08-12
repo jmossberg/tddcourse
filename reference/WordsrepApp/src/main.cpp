@@ -8,7 +8,7 @@ int main(int argc, const char * argv[])
   FileWriterClass fileWriterClass;
   WordsrepClass wordsrepClass;
 
-  wordsrepClass.processInputFile(argc, argv, &fileReaderClass, &fileWriterClass);
+  wordsrepClass.processInputFile(argc, argv, fileReaderClass, fileWriterClass);
 
   return 0;
 }
