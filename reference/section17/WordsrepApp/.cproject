@@ -77,4 +77,5 @@
 			<resource resourceType="PROJECT" workspacePath="/WordsRepAppProj"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
