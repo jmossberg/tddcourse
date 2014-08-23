@@ -79,20 +79,16 @@ You can open this project in Eclipse if you get stuck while doing the exercises 
 <h3>Create a new C++ project in Eclipse CDT and connect to Git repository</h3>
 We will create a C++ project in Eclipse CDT to develop our WordsRep application.
 <ol>
-<ol>
 	<li>Start Eclipse CDT</li>
 	<li>Select workspace "/home/tdd1/workspace"</li>
 	<li>Close the Welcome screen</li>
 	<li>Select "File - New - Other..."</li>
 	<li>Select "C/C++ - C++ Project"</li>
 	<li>Enter Project Name: ''WordsrepApp''</li>
-	<li>Select Project Type ''Executable - Empty Project'' and toolchain ''Linux GCC''</li>
-</ol>
-</ol>
-<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_cdt_new_cpp_project.png" /></center>
-<ol>
-	<li>Select Yes if asked to open the C/C++ perspective</li>
+	<li>Select Project Type ''Makefile project - Empty Project'' and toolchain ''Linux GCC''</li>
+<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section5_Eclipse_New_Project.png" /></center>
 	<li>Click "Finish"</li>
+	<li>Select Yes if asked to open the C/C++ perspective</li>
 	<li>Now let's connect the project to a Git repository by right clicking on it and selecting "Team - Share Project...<br>
 <center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_team_share_project.png" /></center></li>
 	<li>Select Git and click Next</li>
