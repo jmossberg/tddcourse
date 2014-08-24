@@ -13,5 +13,3 @@ add_executable(wordsrepapptest main.cpp ArgumentParserClassTest.cpp LineToWordsC
 
 target_link_libraries(wordsrepapptest gmock_main)
 target_link_libraries(wordsrepapptest src)
-
-add_test(wordsrepapptest wordsrepapptest)

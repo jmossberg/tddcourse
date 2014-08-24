@@ -104,54 +104,94 @@ We will create a C++ project in Eclipse CDT to develop our WordsRep application.
 Now we will import Google test and Google mock into our Eclipse project and build them with a minimalistic main file.
 <ol>
 	<li>Right click on the <em>WordsrepApp</em> project in Project Explorer and select New - Folder</li>
-	<li>Enter folder name <em>external</em> and click Finish</li>
-	<li>Open a shell by clicking on Start menu - Accessories - LXTerminal</li>
-	<li>Copy the google test and mock files into the project by running:
-<pre>/home/tdd1/google/gmock-1.7.0/scripts/fuse_gmock_files.py \
-/home/tdd1/git/WordsrepAppGit/WordsrepApp/external</pre>
-</li>
-	<li>Go back to Eclipse and right click on the project and choose "Refresh"</li>
-	<li>Your <em>external</em> folder should now contain the files <em>gmock-gtest-all.cc</em>, <em>gmock.h</em> (in sub-folder <em>gmock</em>) and <em>gtest.h</em> (in sub-folder <em>gtest</em>).
-<img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_external_folder.png" /></li>
-	<li>Right click on the project and choose "Team - Add to Index"</li>
-	<li>Right click on the project and choose "Team - Commit..."</li>
-	<li>Enter message "Added Google Mock" and click "Commit"</li>
+	<li>Enter folder name <em>google</em> and click Finish</li>
+	<li>Right click on the <em>google</em> folder and select Import...</li>
+	<li>Select General - File system and click Next</li>
+	<li>Click Browse...</li>
+	<li>Select folder /home/tdd1/google/gmock-1.7.0 and click OK</li>
+	<li>Check the gmock-1.7.0 and click Finish</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Add to Index"</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Commit"</li>
+	<li>Enter message "Add Google Mock" and click "Commit"</li>
 	<li>We have now added the Google Mock files to the git repository</li>
-	<li>We must tell <em>gmock-gtest-all.cc</em> where to find gmock/gmock.h and gtest/gtest.h. Right click on the <em>external</em> folder and select Properties.</li>
-	<li>Select C/C++ Build - Settings</li>
-	<li>Select GCC C++ Compiler - Includes in tab Tool Settings</li>
-	<li>Click on Add... in Include paths (-I)</li>
-	<li>Click on Workspace...</li>
-	<li>Select <em>external</em> folder in WordsrepApp and click OK multiple times to close all windows</li>
 	<li>Create a new folder <em>test</em> by right clicking on WordsrepApp and selecting New - Folder</li>
 	<li>Right click on the <em>test</em> folder and select New - Source File</li>
 	<li>Enter name <em>main.cpp</em> and click on Finish</li>
 	<li>Add the following code to <em>main.cpp</em> and save:
-<pre>#include "gmock/gmock.h"
+<pre>
+#include "gmock/gmock.h"
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleMock(&amp;argc, argv);
   return RUN_ALL_TESTS();
-}</pre>
+}
+</pre>
 </li>
-	<li>We must tell main.cpp where to find gmock.h. Right click on <em>test</em> folder and select Properties.</li>
-	<li>Select C/C++ Build - Settings</li>
-	<li>Select GCC C++ Compiler - Includes in tab Tool Settings</li>
-	<li>Click on Add... in Include paths (-I)</li>
-	<li>Click on Workspace...</li>
-	<li>Select <em>external</em> folder in WordsrepApp and click OK multiple times to close all windows</li>
-	<li>Google Test/Google Mock makes us of <strong>pthread </strong>so we must include this in the build. Right click on WordrepApp and select Properties.</li>
-	<li>Select C/C++ Build - Settings</li>
-	<li>Select GCC C++ Linker - Libraries</li>
-	<li>Click on Add... in Libraries</li>
-	<li>Enter ''pthread'' and click OK twice</li>
-	<li>Click on WordsrepApp in Project Explorer to make sure it is selected</li>
-	<li>Select Project - Build Project</li>
-	<li>Click on Run
-<img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_run_project.png" /></li>
-	<li>The console output now shows that we have run all test cases. Currently 0.
-<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshoot_eclipse_run_output_console.png" /></center></li>
+	<li>Right click on the WordsrepApp project and select New - File</li>
+	<li>Select WordsrepApp root folder as Parent Directory, enter name "CMakeLists.txt" and click Finish</li>
+	<li>Add the following to the <em>CMakeLists.txt</em> and save:
+<pre>
+cmake_minimum_required(VERSION 2.8)
+
+project("WordsRepAppProj")
+
+add_definitions(-Wall -g3 -std=c++11)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_subdirectory(test)
+</pre>	
+</li>
+	<li>Create another CMakeLists.txt file inside the test folder</li>
+	<li>Add the following to the CMakeLists.txt file inside the test folder
+<pre>
+set(GMOCK_DIR "../google/gmock-1.7.0"
+    CACHE PATH "The path to the GoogleMock test framework.")
+
+add_subdirectory(${GMOCK_DIR} {CMAKE_BINARY_DIR}/gmock)
+
+include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
+                           ${GMOCK_DIR}/include)
+
+include_directories(${CMAKE_SOURCE_DIR}/test)
+
+add_executable(wordsrepapptest main.cpp)
+
+target_link_libraries(wordsrepapptest gmock_main)
+</pre>
+</li>
+	<li>Create a new folder <em>build</em> by right clicking on WordsrepApp and selecting New - Folder</li>
+	<li>Now we will create a Make Target to generate the Makefiles from the CMakeLists.txt files.</li>
+	<li>Select the <em>Make Target</em> tab on the right side of Eclipse</li>
+	<li>Expand the <em>WordsrepApp</em> project and right click on the <em>build</em> folder</li>
+	<li>Click on New...</li>
+	<li>Enter <em>Target name</em>: cmake</li>
+	<li>Uncheck <em>Same as the target name</em></li>
+	<li>Enter <em>Build command</em>: cmake ..
+	<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section6_Modify_Make_Target.png" /></center></li>
+	<li>Click on OK</li>
+	<li>Double-click on the new Make Target cmake. Some files and folders shall be generated in the build folder. You can verify this in the Project Explorer on the left side of Eclipse.</li>
+	<li>Select menu Project - Build Project</li>
+	<li>Select menu Run - Run Configurations...</li>
+	<li>Select <em>C/C++ Application</em> on the left and click on the <em>New</em> button</li>
+	<li>Enter Name: WordsrepAppConsole</li>
+	<li>Click on button <em>Search Project...</em> and select <em>wordsrepapptest</em></li>
+	<li>You should now have <em>build/test/wordsrepapptest</em> in the <em>C/C++ Application</em> field
+	<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section6_Run_Configurations.png" /></center></li>
+	<li>Click on Apply and then on Run</li>
+	<li>You should get the following in the Console tab:
+<pre>
+[==========] Running 0 tests from 0 test cases.
+[==========] 0 tests from 0 test cases ran. (0 ms total)
+[  PASSED  ] 0 tests.
+</pre>
+</li>
+	<li>Right click on the build folder and choose "Team - Ignore"</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Add to Index"</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Commit"</li>
+	<li>Enter message "Import Google Mock and configure build with CMake"</li>
 </ol>
+
 <h3>Add dummy test</h3>
 We will add a dummy test to show the basic structure of a test.
 <ol>
