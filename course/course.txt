@@ -100,7 +100,7 @@ We will create a C++ project in Eclipse CDT to develop our WordsRep application.
 	<li>Click Finish</li>
 	<li>Click Finish again</li>
 </ol>
-<h3>Import Google test and Google Mock to Eclipse project</h3>
+<h3>Build Google Test and Google Mock in Eclipse using CMake</h3>
 Now we will import Google test and Google mock into our Eclipse project and build them with a minimalistic main file.
 <ol>
 	<li>Right click on the <em>WordsrepApp</em> project in Project Explorer and select New - Folder</li>
@@ -108,8 +108,9 @@ Now we will import Google test and Google mock into our Eclipse project and buil
 	<li>Right click on the <em>google</em> folder and select Import...</li>
 	<li>Select General - File system and click Next</li>
 	<li>Click Browse...</li>
-	<li>Select folder /home/tdd1/google/gmock-1.7.0 and click OK</li>
-	<li>Check the gmock-1.7.0 and click Finish</li>
+	<li>Select folder /home/tdd1/google and click OK</li>
+	<li>Check the google folder and click Finish</li>
+        <li>You should now have a gmock-1.7.0 inside the google folder in the Project Explorer</li>
 	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Add to Index"</li>
 	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Commit"</li>
 	<li>Enter message "Add Google Mock" and click "Commit"</li>
@@ -161,6 +162,10 @@ target_link_libraries(wordsrepapptest gmock_main)
 </pre>
 </li>
 	<li>Create a new folder <em>build</em> by right clicking on WordsrepApp and selecting New - Folder</li>
+	<li>Right click on the build folder and choose "Team - Ignore"</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Add to Index"</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Commit"</li>
+	<li>Enter message "Import Google Mock and configure build with CMake". Click Commit.</li>
 	<li>Now we will create a Make Target to generate the Makefiles from the CMakeLists.txt files.</li>
 	<li>Select the <em>Make Target</em> tab on the right side of Eclipse</li>
 	<li>Expand the <em>WordsrepApp</em> project and right click on the <em>build</em> folder</li>
@@ -171,11 +176,17 @@ target_link_libraries(wordsrepapptest gmock_main)
 	<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section6_Modify_Make_Target.png" /></center></li>
 	<li>Click on OK</li>
 	<li>Double-click on the new Make Target cmake. Some files and folders shall be generated in the build folder. You can verify this in the Project Explorer on the left side of Eclipse.</li>
+	<li>Now we will configure some WordsrepApp project settings so that we can build</li>
+	<li>Right click on the WordsrepApp project in the Project Explorer and select Properties</li> 
+	<li>Go to "C/C++ Build", select tab "Builder Settings" and click on Workspace... button</li>
+	<li>Expand the folder tree and select the build folder. Click OK</li>
+	<li>Click on Apply</li>
+	<li>Click on OK to exit the project properties for WordsrepApp</li>
 	<li>Select menu Project - Build Project</li>
 	<li>Select menu Run - Run Configurations...</li>
 	<li>Select <em>C/C++ Application</em> on the left and click on the <em>New</em> button</li>
 	<li>Enter Name: WordsrepAppConsole</li>
-	<li>Click on button <em>Search Project...</em> and select <em>wordsrepapptest</em></li>
+	<li>Click on button <em>Search Project...</em> and select <em>wordsrepapptest</em>. Click OK.</li>
 	<li>You should now have <em>build/test/wordsrepapptest</em> in the <em>C/C++ Application</em> field
 	<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section6_Run_Configurations.png" /></center></li>
 	<li>Click on Apply and then on Run</li>
@@ -186,10 +197,9 @@ target_link_libraries(wordsrepapptest gmock_main)
 [  PASSED  ] 0 tests.
 </pre>
 </li>
-	<li>Right click on the build folder and choose "Team - Ignore"</li>
 	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Add to Index"</li>
 	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Commit"</li>
-	<li>Enter message "Import Google Mock and configure build with CMake"</li>
+	<li>Enter message "Update Eclipse project settings to build WordsrepApp with CMake". Click Commit.</li>
 </ol>
 
 <h3>Add dummy test</h3>
