@@ -1,11 +1,7 @@
 #include "gmock/gmock.h"
 #include "WordsToLineClass.h"
 
-class WordsToLineClassTest : public ::testing::Test {
-
-};
-
-TEST_F(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
+TEST(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
 {
   //Setup
   WordsToLineClass wordsToLineClass;
@@ -24,7 +20,7 @@ TEST_F(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
   ASSERT_EQ("table rocket moon", line);
 }
 
-TEST_F(WordsToLineClassTest, ConcatenateWordsUsingDynamicWordDelimiter)
+TEST(WordsToLineClassTest, ConcatenateWordsUsingDynamicWordDelimiter)
 {
 	  //Setup
 	  char wordDelimiter = ';';

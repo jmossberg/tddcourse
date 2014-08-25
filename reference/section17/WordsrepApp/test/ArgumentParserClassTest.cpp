@@ -1,11 +1,7 @@
 #include "gmock/gmock.h"
 #include "ArgumentParserClass.h"
 
-class ArgumentParserClassTest : public ::testing::Test {
-
-};
-
-TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+TEST(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
   int argc { 3 };

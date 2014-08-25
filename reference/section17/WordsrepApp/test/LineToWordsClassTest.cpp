@@ -1,12 +1,7 @@
 #include "gmock/gmock.h"
 #include "LineToWordsClass.h"
 
-class LineToWordsClassTest : public ::testing::Test
-{
-
-};
-
-TEST_F(LineToWordsClassTest, CanSplitLineWithTwoWords)
+TEST(LineToWordsClassTest, CanSplitLineWithTwoWords)
 {
   //Setup
   LineToWordsClass lineToWordsClass;
@@ -21,7 +16,7 @@ TEST_F(LineToWordsClassTest, CanSplitLineWithTwoWords)
   ASSERT_EQ("sky", words[1]);
 }
 
-TEST_F(LineToWordsClassTest, CanSplitLineUsingDynamicWordDelimiter)
+TEST(LineToWordsClassTest, CanSplitLineUsingDynamicWordDelimiter)
 {
 	//Setup
 	char wordDelimiter = '#';
