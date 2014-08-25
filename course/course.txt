@@ -206,52 +206,57 @@ target_link_libraries(wordsrepapptest gmock_main)
 We will add a dummy test to show the basic structure of a test.
 <ol>
 	<li>Right click on the test folder and select "New - Source File"</li>
-	<li>Enter source file name <em>WordsrepClassTest.cpp</em> and click "Finish"</li>
+	<li>Enter source file name <em>DummyTest.cpp</em> and click "Finish"</li>
 	<li>Each test class has to include Google Test and Google Mock.</li>
-	<li>Add the following at the top of <em>WordsrepClassTest.cpp</em>
+	<li>Add the following at the top of <em>DummyTest.cpp</em>
 <pre>#include "gmock/gmock.h"</pre>
 </li>
-	<li>Now we define an empty test fixture class. It must inherit from the Test class in Google Test.</li>
-	<li>Add the following:
-<pre>class WordsrepClassTest : public ::testing::Test {
-
-};</pre>
-</li>
 	<li>Now we add the code for the dummy test.
-<pre>TEST_F(WordsrepClassTest, APassingTest) {
+<pre>TEST(DummyTest, APassingTest) {
   ASSERT_TRUE(true);
 }</pre>
 </li>
-	<li><em>WordsrepClassTest.cpp</em> shall now look like this:
-<pre>#include "gmock/gmock.h"
+	<li><em>DummyTest.cpp</em> shall now look like this:
+<pre>
+#include "gmock/gmock.h"
 
-class WordsrepClassTest : public ::testing::Test {
-
-};
-
-TEST_F(WordsrepClassTest, APassingTest) {
+TEST(DummyTest, APassingTest) {
   ASSERT_TRUE(true);
-}</pre>
+}
+</pre>
 <center><img alt="" src="http://localhost/wordpress/wp-content/uploads/dummy_test.png" /></center></li>
 	<li>Save</li>
+	<li>Add the new source file to the following line in the CMakeLists.txt file in the test folder:
+<pre>
+add_executable(wordsrepapptest main.cpp)
+</pre>
+so that it looks like this
+<pre>
+add_executable(wordsrepapptest main.cpp DummyTest.cpp)
+</pre>
+</li>
+	<li>Save the CMakeLists.txt file</li>
+	<li>Double click on the cmake target in the Make Target tab on the right side of Eclipse. The purpose is to update the Makefiles with the new source file.
 	<li>Select Project - Build Project</li>
 	<li>Click on Run</li>
 	<li>The console output shall now show our first test passing:
-<pre>[==========] Running 1 test from 1 test case.
+<pre>
+[==========] Running 1 test from 1 test case.
 [----------] Global test environment set-up.
-[----------] 1 test from WordsrepClassTest
-[ RUN      ] WordsrepClassTest.APassingTest
-[       OK ] WordsrepClassTest.APassingTest (0 ms)
-[----------] 1 test from WordsrepClassTest (0 ms total)
+[----------] 1 test from DummyTest
+[ RUN      ] DummyTest.APassingTest
+[       OK ] DummyTest.APassingTest (0 ms)
+[----------] 1 test from DummyTest (0 ms total)
 
 [----------] Global test environment tear-down
 [==========] 1 test from 1 test case ran. (2 ms total)
-[  PASSED  ] 1 test.</pre>
+[  PASSED  ] 1 test.
+</pre>
 </li>
 	<li>Right click on the project and choose "Team - Add to Index"</li>
 	<li>Right click on the project and choose "Team - Commit..."</li>
-	<li>Enter message "Added dummy test in WordsrepClassTest" and click "Commit"</li>
-	<li>You can continue to do git commit like this when you fell appropriate</li>
+	<li>Enter message "Add dummy test" and click "Commit"</li>
+	<li>You can continue to do git commit like this when you feel appropriate</li>
 </ol>
 <h3>A test list</h3>
 We can compose an initial list of the tests we want to write based on what we know about <strong>WordsRep</strong>.
