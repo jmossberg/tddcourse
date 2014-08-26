@@ -263,10 +263,10 @@ We can compose an initial list of the tests we want to write based on what we kn
 <ul>
 	<li>retrieve the value of an argument switch</li>
 	<li>split a line of text into words</li>
-	<li>concatenate words into line of text</li>
+	<li>concatenate words into a line of text</li>
 	<li>replace all matching words with replacement word</li>
 </ul>
-We don't spend too much time on thinking about this list. The purpose is to get us going.
+We should not spend too much time thinking about this list. The purpose is to get us going.
 <h3>Retrieve the value of an argument switch</h3>
 WordsRep is a command line tool which means all arguments will be supplied through the main function:
 <pre>int main(int argc, char* argv[]) {</pre>
@@ -282,44 +282,72 @@ Let's test drive an <em>ArgumentParserClass</em> which will let us parse command
 <ol>
 	<li>Create a new file, ArgumentParserClassTest.cpp, in the test folder.</li>
 	<li>Add the following to the new file:
-<pre>#include "gmock/gmock.h"
+<pre>
+#include "gmock/gmock.h"
 #include "ArgumentParserClass.h"
 
-class ArgumentParserClassTest : public ::testing::Test {
-
-};
-
-TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+TEST(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
   ArgumentParserClass argumentParserClass;
 
-}</pre>
+}
+</pre>
+The test is not finished but we can stop writing here and try to build.
 </li>
-</ol>
-The test is not finished but we can stop writing here and try to build. The build is failing since we have not implemented ArgumentParserClass. So let's implement an empty ArgumentParserClass.
-<ol>
-	<li>Add a <em>src</em> folder in the WordsrepApp project by right clicking on the project in the Project Explorer and selecting New - Folder</li>
-	<li>Create a new file, ArgumentParserClass.h, in the src folder.</li>
-	<li>The new header file shall contain:
-<pre>#ifndef ARGUMENTPARSERCLASS_H_
+<li>Add <em>ArgumentParserClassTest.cpp to the following line in test/CMakeLists.txt:
+<pre>
+add_executable(wordsrepapptest main.cpp DummyTest.cpp)
+</pre>
+<li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
+<li>Build project via menu Project - Build Project</li>
+<li>The build is failing since we have not implemented ArgumentParserClass. So let's implement an empty ArgumentParserClass.
+<li>Add a <em>src</em> folder in the WordsrepApp project by right clicking on the project in the Project Explorer and selecting New - Folder</li>
+<li>Create a new file, ArgumentParserClass.h, in the src folder.</li>
+<li>The new header file shall contain:
+<pre>
+#ifndef ARGUMENTPARSERCLASS_H_
 #define ARGUMENTPARSERCLASS_H_
 
 class ArgumentParserClass {
 
 };
 
-#endif /* ARGUMENTPARSERCLASS_H_ */</pre>
+#endif /* ARGUMENTPARSERCLASS_H_ */
+</pre>
 </li>
-	<li>Now we have to add a reference to the <em>src</em> folder when compiling the files in the <em>test</em> folder:
-<ol>
+<li>Now we include the <em>src</em> folder when building.</li>
+<li>Add the following line in the CMakeLists.txt file in the project root folder:
+<pre>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+</pre>
+so that the CMakeLists.txt file looks like this:
+<pre>
+cmake_minimum_required(VERSION 2.8)
+
+project("WordsRepAppProj")
+
+add_definitions(-Wall -g3 -std=c++11)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+add_subdirectory(test)
+</pre>
+<li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
+<li>Build project via menu Project - Build Project</li>
+<li>Now the project shall build but with a warning about unused variable</li>
+
+----------- I stopped working here on 2014-08-26 21:56 ------------
+
+
+
 	<li>Right click on the <em>test</em> folder and select Properties</li>
 	<li>Select C/C++ Build - Settings</li>
 	<li>Goto Tool Settings - GCC C++ Compiler - Includes</li>
 	<li>Click on Add.. in Include paths</li>
 	<li>Click on Workspace...</li>
 	<li>Select the <em>src</em> folder and click OK multiple times to close all windows</li>
-</ol>
 </li>
 	<li>Build the project again. Now it should work.</li>
 </ol>
