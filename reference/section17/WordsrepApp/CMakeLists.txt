@@ -8,8 +8,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/interface)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_subdirectory(src)
 add_subdirectory(test)
+add_subdirectory(src)
 
 add_executable(wordsrepapp ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 target_link_libraries(wordsrepapp src)

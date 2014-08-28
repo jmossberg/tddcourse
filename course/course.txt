@@ -295,7 +295,7 @@ TEST(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 </pre>
 The test is not finished but we can stop writing here and try to build.
 </li>
-<li>Add <em>ArgumentParserClassTest.cpp to the following line in test/CMakeLists.txt:
+<li>Add <em>ArgumentParserClassTest.cpp</em> to the following line in test/CMakeLists.txt:
 <pre>
 add_executable(wordsrepapptest main.cpp DummyTest.cpp)
 </pre>
@@ -337,36 +337,25 @@ add_subdirectory(test)
 <li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
 <li>Build project via menu Project - Build Project</li>
 <li>Now the project shall build but with a warning about unused variable</li>
-
------------ I stopped working here on 2014-08-26 21:56 ------------
-
-
-
-	<li>Right click on the <em>test</em> folder and select Properties</li>
-	<li>Select C/C++ Build - Settings</li>
-	<li>Goto Tool Settings - GCC C++ Compiler - Includes</li>
-	<li>Click on Add.. in Include paths</li>
-	<li>Click on Workspace...</li>
-	<li>Select the <em>src</em> folder and click OK multiple times to close all windows</li>
-</li>
-	<li>Build the project again. Now it should work.</li>
 </ol>
-You can adjust your coding "speed" based on your experience and the difficulty of the problem at hand. It is not necessary to always halt the writing of a test like this, but I wanted to show that you can go very slow when you are on unfamiliar territory.
+You can adjust your coding "speed" based on your experience and the difficulty of the problem at hand. It is not necessary to always halt the writing of a test like this, but I wanted to show that you can go very slowly when you are on unfamiliar territory.
 
 Let's finish the test:
-<pre>TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+<pre>
+TEST(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
   int argc { 3 };
-  const char * argv[] = {"wordsrep", "--oldWord", "car"};
+  const char * argv1[] = {"wordsrep", "--oldWord", "car"};
   ArgumentParserClass argumentParserClass;
 
   //Exercise
-  std::string argumentSwitchValue = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
+  auto argumentSwitchValue1 = argumentParserClass.getSwitchValue(argc, argv1, "--oldWord");
 
   //Verify
-  ASSERT_EQ("car", argumentSwitchValue);
-}</pre>
+  ASSERT_EQ("car", argumentSwitchValue1);
+}
+</pre>
 So what we do here is to setup a scenario where we have 3 arguments (the name of the program, in this case <em>wordsrep</em>, is the first argument). The second argument is a switch, marked with <code>--</code>. We want the <em>getSwitchValue</em> method to return the value after the switch, in this case <em>car</em>.
 
 Build. It should fail because of the missing <em>getSwitchValue</em> method.
@@ -381,7 +370,6 @@ Now we implement it.
 #include &lt;string&gt;
 
 class ArgumentParserClass {
-
 public:
   std::string getSwitchValue(const int& argc, const char* argv[], const std::string& switchName);
 };
@@ -391,23 +379,41 @@ public:
 </li>
 	<li>Add a new file ArgumentParserClass.cpp in src folder.</li>
 	<li>Add the following:
-<pre>#include "ArgumentParserClass.h"
+<pre>
+#include "ArgumentParserClass.h"
 
 std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* argv[], const std::string& switchName)
 {
   return "car";
-}</pre>
+}
+</pre>
+</li>
+<li>We have to add a CMakeLists.txt file in the src folder with the following content:
+<pre>
+add_library(src ArgumentParserClass)
+</pre>
+</li>
+<li>We also add the src directory to the end of the CMakeLists.txt file in the project root folder:
+<pre>
+add_subdirectory(src)
+</pre>
+</li>
+<li>Finally we must make the new src library known to the test application by adding the following line at the end of test/CMakeLists.txt:
+<pre>
+target_link_libraries(wordsrepapptest src)
+</pre>
 </li>
 </ol>
 Build and run test to make sure the test pass:
-<pre>[----------] 1 test from ArgumentParserClassTest
-[ RUN      ] ArgumentParserClassTest.
-             ValueOfArgumentSwitchCanBeRetrieved
-[       OK ] ArgumentParserClassTest.
-             ValueOfArgumentSwitchCanBeRetrieved (0 ms)
-[----------] 1 test from ArgumentParserClassTest (0 ms total)</pre>
+<pre>
+[----------] 1 test from ArgumentParserClassTest
+[ RUN      ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved
+[       OK ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)
+[----------] 1 test from ArgumentParserClassTest (0 ms total)
+</pre>
 But the response of getSwitchValue is hardcoded. Let's extend the test to force some logic into the implementation:
-<pre>TEST_F(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
+<pre>
+TEST(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
 
   //Setup
   int argc { 3 };
@@ -416,21 +422,26 @@ But the response of getSwitchValue is hardcoded. Let's extend the test to force 
   ArgumentParserClass argumentParserClass;
 
   //Exercise
-  std::string argumentSwitchValue1 =   argumentParserClass.getSwitchValue(argc, argv1, "--oldWord");
-  std::string argumentSwitchValue2 = argumentParserClass.getSwitchValue(argc, argv2, "--oldWord");
+  auto argumentSwitchValue1 = argumentParserClass.getSwitchValue(argc, argv1, "--oldWord");
+  auto argumentSwitchValue2 = argumentParserClass.getSwitchValue(argc, argv2, "--oldWord");
 
   //Verify
   ASSERT_EQ("car", argumentSwitchValue1);
   ASSERT_EQ("space", argumentSwitchValue2);
-}</pre>
+}
+</pre>
 Make sure the test fails. You should get this in the Console output:
-<pre>[ RUN      ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved
-../test/ArgumentParserClassTest.cpp:22: Failure
+<pre>
+[----------] 1 test from ArgumentParserClassTest
+[ RUN      ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved
+/home/tdd1/git/WordsrepAppGit/WordsrepApp/test/ArgumentParserClassTest.cpp:18: Failure
 Value of: argumentSwitchValue2
   Actual: "car"
 Expected: "space"
-[  FAILED  ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)</pre>
-So the test expected <em>space</em> to be returned but got <em>car</em>.
+[  FAILED  ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)
+[----------] 1 test from ArgumentParserClassTest (0 ms total)
+</pre>
+So the test expected <em>space</em> to be returned the second time the test called getSwitchValue but got <em>car</em>.
 Now we put some logic into ''getSwitchValue'':
 <pre>
 #include "ArgumentParserClass.h"
@@ -439,7 +450,7 @@ std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* arg
 {
   int i;
 
-  for(i = 0; i &lt; argc; i++)
+  for(i = 0; i &lt argc; i++)
   {
     if(0 == switchName.compare(argv[i]))
     {
@@ -456,16 +467,14 @@ Build and run the test.
 Hmm, the test still fails with the following output.
 
 <pre>
-[==========] Running 1 test from 1 test case.
-[----------] Global test environment set-up.
 [----------] 1 test from ArgumentParserClassTest
 [ RUN      ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved
-../test/ArgumentParserClassTest.cpp:21: Failure
+/home/tdd1/git/WordsrepAppGit/WordsrepApp/test/ArgumentParserClassTest.cpp:17: Failure
 Value of: argumentSwitchValue1
   Actual: "--oldWord"
 Expected: "car"
 [  FAILED  ] ArgumentParserClassTest.ValueOfArgumentSwitchCanBeRetrieved (0 ms)
-[----------] 1 test from ArgumentParserClassTest (0 ms total)
+[----------] 1 test from ArgumentParserClassTest (3 ms total)
 </pre>
 
 The <em>getSwitchValue</em> returned the value <em>--oldWord</em>, but the test expects <em>car</em> to be returned.
@@ -479,9 +488,9 @@ The code below has been corrected.
 
 std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* argv[], const std::string& switchName)
 {
-int i;
+  int i;
 
-  for(i = 0; i &lt; argc; i++)
+  for(i = 0; i &lt argc; i++)
   {
     if(0 == switchName.compare(argv[i]))
     {

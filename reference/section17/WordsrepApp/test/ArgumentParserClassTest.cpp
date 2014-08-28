@@ -16,5 +16,4 @@ TEST(ArgumentParserClassTest, ValueOfArgumentSwitchCanBeRetrieved) {
   //Verify
   ASSERT_EQ("car", argumentSwitchValue1);
   ASSERT_EQ("space", argumentSwitchValue2);
-
 }
