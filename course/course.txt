@@ -403,6 +403,7 @@ add_subdirectory(src)
 target_link_libraries(wordsrepapptest src)
 </pre>
 </li>
+<li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
 </ol>
 Build and run test to make sure the test pass:
 <pre>
@@ -450,7 +451,7 @@ std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* arg
 {
   int i;
 
-  for(i = 0; i &lt argc; i++)
+  for(i = 0; i &lt; argc; i++)
   {
     if(0 == switchName.compare(argv[i]))
     {
@@ -490,7 +491,7 @@ std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* arg
 {
   int i;
 
-  for(i = 0; i &lt argc; i++)
+  for(i = 0; i &lt; argc; i++)
   {
     if(0 == switchName.compare(argv[i]))
     {
