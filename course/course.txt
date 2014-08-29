@@ -587,13 +587,13 @@ public:
 #include "LineToWordsClass.h"
 #include &lt;sstream&gt;
 
-std::vector<std::string> LineToWordsClass::splitLine(
+std::vector&lt;std::string&gt; LineToWordsClass::splitLine(
 		const std::string& textLine) {
 
   const int MAX_WORD_LENGTH { 20 };
   char tempbuff[50];
   
-  std::vector<std::string> words;
+  std::vector&lt;std::string&gt; words;
   
   std::stringstream ss;
   
