@@ -1,1 +1,1 @@
-add_library(src ArgumentParserClass)
+add_library(src ArgumentParserClass.cpp LineToWordsClass.cpp)

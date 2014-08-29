@@ -8,7 +8,7 @@ include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
 
 include_directories(${CMAKE_SOURCE_DIR}/test)
 
-add_executable(wordsrepapptest main.cpp DummyTest.cpp ArgumentParserClassTest.cpp)
+add_executable(wordsrepapptest main.cpp DummyTest.cpp ArgumentParserClassTest.cpp LineToWordsClassTest.cpp)
 
 target_link_libraries(wordsrepapptest gmock_main)
 target_link_libraries(wordsrepapptest src)
