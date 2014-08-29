@@ -11,10 +11,7 @@ public:
   void setWordDelimiter(const char& newWordDelimiter);
 
 private:
-  void resetInternalListOfWords();
 
-  std::vector<std::string> words;
-  std::string newWord;
   char wordDelimiter;
 };
 

@@ -533,13 +533,7 @@ We start with a test.
 #include "gmock/gmock.h"
 #include "LineToWordsClass.h"
 
-//Empty test fixture class LineToWordsClassTest
-class LineToWordsClassTest : public ::testing::Test
-{
-
-};
-
-TEST_F(LineToWordsClassTest, CanSplitLineWithTwoWords)
+TEST(LineToWordsClassTest, CanSplitLineWithTwoWords)
 {
   //Setup
   LineToWordsClass lineToWordsClass;
@@ -559,7 +553,14 @@ About the <em>vector</em> type from <em>www.cplusplus.com</em>:
 
 Just like arrays, vectors use contiguous storage locations for their elements, which means that their elements can also be accessed using offsets on regular pointers to its elements, and just as efficiently as in arrays. But unlike arrays, their size can change dynamically, with their storage being handled automatically by the container.</blockquote>
 </li>
-	<li>Build to make sure it fails.</li>
+<li>
+Add LineToWordsClassTest to the test/CMakeLists.txt file so that the add_executable command looks like this:
+<pre>
+add_executable(wordsrepapptest main.cpp DummyTest.cpp ArgumentParserClassTest.cpp LineToWordsClassTest.cpp)
+</pre>
+</li>
+<li>Double-click on the cmake target on the right to update the Makefiles</li>
+<li>Build. It should fail due to our missing LineToWordsClass implementation.</li>
 </ol>
 Now let's implement the class <em>LineToWordsClass</em> with method <em>splitLine</em>
 <ol>
@@ -574,10 +575,11 @@ Now let's implement the class <em>LineToWordsClass</em> with method <em>splitLin
 
 class LineToWordsClass {
 public:
-  std::vector&lt;std::string&gt; splitLine(std::string& textLine);
+  std::vector&lt;std::string&gt; splitLine(const std::string& textLine);
 };
 
-#endif /* LINETOWORDSCLASS_H_ */</pre>
+#endif /* LINETOWORDSCLASS_H_ */
+</pre>
 </li>
 	<li>Add file <em>LineToWordsClass.cpp</em> in the <em>src</em> folder</li>
 	<li>Add the following code
@@ -585,30 +587,32 @@ public:
 #include "LineToWordsClass.h"
 #include &lt;sstream&gt;
 
-std::vector<std::string> LineToWordsClass::splitLine(const std::string& textLine) {
+std::vector<std::string> LineToWordsClass::splitLine(
+		const std::string& textLine) {
+
   const int MAX_WORD_LENGTH { 20 };
   char tempbuff[50];
-
-  resetInternalListOfWords();
-
+  
+  std::vector<std::string> words;
+  
   std::stringstream ss;
-
+  
   //Copy string to stringstream
   ss << textLine;
-
-  //Loop through stringstream looking for delimiter character
-  while(ss.getline(tempbuff, MAX_WORD_LENGTH, wordDelimiter))
+  
+  //Loop through stringstream looking for space delimiters
+  while(ss.getline(tempbuff, MAX_WORD_LENGTH, ' '))
   {
-    words.push_back(tempbuff);
+  	words.push_back(tempbuff);
   }
-
+  
   return words;
 }
 </pre>
+</li>
+<li>Add LineToWordsClass.cpp to src/CMakeLists.txt. Double-click cmake target to regenerat Makefiles.
 <li>Build and run the test.</li>
 </ol>
-
-TODO: Show implementation of resetInternalListOfWords()
 
 <h3>Concatenate words into line of text</h3>
 We have implemented two tests on the test list.

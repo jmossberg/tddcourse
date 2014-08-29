@@ -1,11 +1,6 @@
 #include "LineToWordsClass.h"
 #include <sstream>
 
-void LineToWordsClass::resetInternalListOfWords() {
-	words.resize(0);
-	newWord = "";
-}
-
 LineToWordsClass::LineToWordsClass() {
 	this->wordDelimiter = ' ';
 }
@@ -20,7 +15,7 @@ std::vector<std::string> LineToWordsClass::splitLine(
 	const int MAX_WORD_LENGTH { 20 };
 	char tempbuff[50];
 
-	resetInternalListOfWords();
+	std::vector<std::string> words;
 
 	std::stringstream ss;
 
