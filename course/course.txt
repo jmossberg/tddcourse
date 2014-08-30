@@ -633,11 +633,7 @@ We start with a test.
 #include "gmock/gmock.h"
 #include "WordsToLineClass.h"
 
-class WordsToLineClassTest : public ::testing::Test {
-
-};
-
-TEST_F(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
+TEST(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
 {
   //Setup
   WordsToLineClass wordsToLineClass;
@@ -654,31 +650,34 @@ TEST_F(WordsToLineClassTest, ConcatenateThreeWordsIntoLine)
 
   //Verify
   ASSERT_EQ("table rocket moon", line);
-}</pre>
+}
+</pre>
 
 The test verifies whether we can concatenate <em>table</em>, <em>rocket</em> and <em>moon</em> into the line:
 <pre>
 "table rocket moon"
 </pre>
-	<li>Build to make sure it fails.</li>
+<li>Add WordsToLineClassTest.cpp to test/CMakeLists.txt.</li>
+<li>Double-click on cmake target to regenerate Makefiles.
+<li>Build to make sure it fails because of our missing WordsToLineClass.</li>
 </ol>
 
-Now we implement <em>WordsToLineClass</em> and method <em>concatenateWords</em>.
+Now we implement <em>WordsToLineClass</em> and the method <em>concatenateWords</em>.
 
 <ol>
   <li>Add new file <em>WordsToLineClass.h</em> in the <em>src</em> folder and add declaration of class <em>WordsToLineClass</em> with public method:
 <pre>
-std::string concatenateWords(std::vector&lt;std::string> words);
+std::string concatenateWords(std::vector&lt;std::string&gt; words);
 </pre>
- Remember to include &lt;string> and &lt;vector>.</li>
-  <li>Implement the <em>concatenateWords</em> method in the corresponding .cpp class.</li>
+ Remember to include &lt;string&gt; and &lt;vector&gt;.</li>
+  <li>Implement the <em>concatenateWords</em> method in the corresponding .cpp class.
 
 <pre>
 #include "WordsToLineClass.h"
 
-std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string> words)
+std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string&gt; words)
 {
-  std::vector&lt;std::string>::iterator it;
+  std::vector&lt;std::string&gt;::iterator it;
   std::string line("");
 
   for(it = words.begin(); it != words.end(); it++)
@@ -697,7 +696,9 @@ std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string> words
 </pre>
 
 We loop through all words and add them to the line. We also add a space as delimiter between words. We remove the space after the last word before returning.
-
+</li>
+<li>Add WordsToLineClass.cpp to src/CMakeLists.txt</li>
+<li>Double-click on cmake target to regenerate Makefiles.
 <li>Build and run the test to make sure it passes:
 <pre>
 [----------] 1 test from WordsToLineClassTest
@@ -713,17 +714,16 @@ WordsToLineClass.h
 #ifndef WORDSTOLINECLASS_H_
 #define WORDSTOLINECLASS_H_
 
-#include &lt;string>
-#include &lt;vector>
+#include &lt;string&gt;
+#include &lt;vector&gt;
 
 class WordsToLineClass {
 public:
-  std::string concatenateWords(std::vector&lt;std::string> words);
+  std::string concatenateWords(std::vector&lt;std::string&gt;& words);
 
 private:
-  std::string addWordToLine(std::string line, std::string word);
-  std::string removeLastSpaceFromLine(std::string line);
-
+  std::string addWordToLine(std::string& line, std::string& word);
+  std::string removeLastSpaceFromLine(std::string& line);
 };
 
 #endif /* WORDSTOLINECLASS_H_ */
@@ -733,14 +733,13 @@ WordsToLineClass.cpp
 <pre>
 #include "WordsToLineClass.h"
 
-std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string> words)
+std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string&gt;& words)
 {
-  std::vector&lt;std::string>::iterator it;
   std::string line("");
 
-  for(it = words.begin(); it != words.end(); it++)
+  for(auto& word: words)
   {
-    line = addWordToLine(line, *it);
+    line = addWordToLine(line, word);
   }
 
   line = removeLastSpaceFromLine(line);
@@ -748,14 +747,14 @@ std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string> words
   return line;
 }
 
-std::string WordsToLineClass::addWordToLine(std::string line, std::string word) {
+std::string WordsToLineClass::addWordToLine(std::string& line, std::string& word) {
   line.append(word);
-  line.append(" ");
+  line.push_back(' ');
   return line;
 }
 
-std::string WordsToLineClass::removeLastSpaceFromLine(std::string line) {
-  if(line.size() > 0)
+std::string WordsToLineClass::removeLastSpaceFromLine(std::string& line) {
+  if(line.size() &gt; 0)
   {
     line.resize(line.size() - 1);
   }
