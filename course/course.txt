@@ -775,26 +775,17 @@ We have implemented three tests on the test list.
 Now we want to test drive how to replace all words matching an <em>oldWord</em> with a <em>newWord</em>.
 
 <ol>
-<li>Edit <em>WordsrepClassTest.cpp</em> to look like this:
-
+<li>Add a new file WordsrepClassTest.cpp in the test folder with the following lines:
 <pre>
 #include "gmock/gmock.h"
 #include "WordsrepClass.h"
 
-class WordsrepClassTest : public ::testing::Test {
-
-};
-
-TEST_F(WordsrepClassTest, APassingTest) {
-  ASSERT_TRUE(true);
-}
-
-TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
+TEST(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
 {
   //Setup
   WordsrepClass wordsrepClass;
 
-  std::vector&lt;std::string> words;
+  std::vector&lt;std::string&gt; words;
   words.push_back("table");
   words.push_back("rocket");
   words.push_back("moon");
@@ -802,7 +793,7 @@ TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
   std::string oldWord("table");
   std::string newWord("sun");
 
-  std::vector&lt;std::string> newWords;
+  std::vector&lt;std::string&gt; newWords;
 
   //Exercise
   newWords = wordsrepClass.replaceMatchingWords(oldWord, newWord, words);
@@ -811,35 +802,37 @@ TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
   ASSERT_EQ("sun",    newWords[0]);
   ASSERT_EQ("rocket", newWords[1]);
   ASSERT_EQ("moon",   newWords[2]);
-}</pre>
+}
+</pre>
 
 The test verifies that method <em>replaceMatchingWords</em> can find the <em>oldWord</em>, replace it with the <em>newWord</em> and the leave the other words as they are.
-
-<li>Build to make sure it fails.</li>
+</li>
+<li>Add WordsrepClassTest.cpp to test/CMakeLists.txt and update Makefiles by double-clicking on the cmake target.
+<li>Build to make sure it fails because of the missing WordsrepClass.</li>
 </ol>
-
 
 Now we implement method <em>replaceMatchingWords</em> in class <em>WordsrepClass</em>.
 
 <ol>
 	<li>Add file <em>WordsrepClass.h</em> in <em>src</em> folder with a declaration of <em>WordsrepClass</em> including public method:
 <pre>
-  std::vector&lt;std::string> replaceMatchingWords(
+  std::vector&lt;std::string&gt; replaceMatchingWords(
     std::string oldWord, std::string newWord,
-    std::vector&lt;std::string> words);
+    std::vector&lt;std::string&gt; words);
 </pre>
+Remember to include &lt;string&gt; and &lt;vector&gt;.
 </li>
 	<li>Implement the new method <em>replaceMatchingWords</em> in corresponding .cpp file.</li>
 
 <pre>
 #include "WordsrepClass.h"
 
-std::vector&lt;std::string> WordsrepClass::replaceMatchingWords(
+std::vector&lt;std::string&gt; WordsrepClass::replaceMatchingWords(
 std::string oldWord, std::string newWord,
-std::vector&lt;std::string> words) {
+std::vector&lt;std::string&gt; words) {
 
-  std::vector&lt;std::string>::iterator it;
-  std::vector&lt;std::string> newWords;
+  std::vector&lt;std::string&gt;::iterator it;
+  std::vector&lt;std::string&gt; newWords;
 
   for(it = words.begin(); it != words.end(); it++)
   {
@@ -856,17 +849,15 @@ std::vector&lt;std::string> words) {
   return newWords;
 }
 </pre>
+</li>
+<li>Add WordsrepClass.cpp to src/CMakeLists.txt and regenerate Makefiles.</li>
 
 <li>Build and run test to make sure it passes:
 <pre>
-[----------] 2 tests from WordsrepClassTest
-[ RUN      ] WordsrepClassTest.APassingTest
-[       OK ] WordsrepClassTest.APassingTest (0 ms)
-[ RUN      ] WordsrepClassTest.
-             ReplaceMatchingWordsWithNewWord
-[       OK ] WordsrepClassTest.
-             ReplaceMatchingWordsWithNewWord (0 ms)
-[----------] 2 tests from WordsrepClassTest (0 ms total)
+[----------] 1 test from WordsrepClassTest
+[ RUN      ] WordsrepClassTest.ReplaceMatchingWordsWithNewWord
+[       OK ] WordsrepClassTest.ReplaceMatchingWordsWithNewWord (0 ms)
+[----------] 1 test from WordsrepClassTest (0 ms total)
 </pre>
 
 <h3>Use mock objects to abstract the file system dependency</h3>

@@ -75,10 +75,6 @@ void WordsrepClassTest::setMockExpectations(std::string line1In, std::string lin
 	.WillOnce(Return(0));
 }
 
-TEST_F(WordsrepClassTest, APassingTest) {
-  ASSERT_TRUE(true);
-}
-
 TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
 {
   //Setup
