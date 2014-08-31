@@ -911,18 +911,19 @@ Now we define the <em>AbstractFileReaderInterface</em> and <em>AbstractFileWrite
 #ifndef ABSTRACTFILEREADERINTERFACE_H_
 #define ABSTRACTFILEREADERINTERFACE_H_
 
-#include &lt;string> 
+#include &lt;string&gt;
 
 class AbstractFileReaderInterface {
 public:
   virtual ~AbstractFileReaderInterface() {}
-  virtual int openFile(std::string fileName) = 0;
+  virtual int openFile(const std::string& fileName) = 0;
   virtual int closeFile() = 0;
   virtual std::string readLine() = 0;
   virtual bool endOfData() = 0;
 };
 
-#endif /* ABSTRACTFILEREADERINTERFACE_H_ */</pre>
+#endif /* ABSTRACTFILEREADERINTERFACE_H_ */
+</pre>
 </li>
 	<li>Add a new file <em>AbstractFileWriterInterface.h</em> in the <em>interface</em> folder</li>
 	<li>Add the following code:
@@ -935,15 +936,14 @@ public:
 class AbstractFileWriterInterface {
 public:
   virtual ~AbstractFileWriterInterface() {}
-  virtual int openFile(std::string fileName) = 0;
+  virtual int openFile(const std::string& fileName) = 0;
   virtual int closeFile() = 0;
-  virtual void writeLine(std::string newLine) = 0;
+  virtual void writeLine(const std::string& newLine) = 0;
   virtual void lineFeed() = 0;
   virtual void setEndOfData() = 0;
 };
 
 #endif /* ABSTRACTFILEWRITERINTERFACE_H_ */
-
 </pre>
 </li>
 </ul>
@@ -958,8 +958,8 @@ n is the number of arguments. We write one MOCK_METHOD per pure virtual method i
 
 We start with the <em>FileReaderMock</em>.
 <ul>
-	<li>Add a new folder <em>mock</em> in the WordsrepApp project</li>
-	<li>Add a new file <em>FileReaderMock.h</em></li>
+	<li>Add a new folder <em>mock</em> in the test folder</li>
+	<li>Add a new file <em>FileReaderMock.h</em> inside the mock folder</li>
 	<li>Add the following code:
 <pre>
 #ifndef FILEREADERMOCK_H_
@@ -970,13 +970,14 @@ We start with the <em>FileReaderMock</em>.
 
 class FileReaderMock : public AbstractFileReaderInterface {
 public:
-  MOCK_METHOD1(openFile, int(std::string fileName));
+  MOCK_METHOD1(openFile, int(const std::string& fileName));
   MOCK_METHOD0(closeFile, int());
   MOCK_METHOD0(readLine, std::string());
   MOCK_METHOD0(endOfData, bool());
 };
 
-#endif /* FILEREADERMOCK_H_ */</pre>
+#endif /* FILEREADERMOCK_H_ */
+</pre>
 </li>
 </ul>
 
@@ -993,9 +994,9 @@ Now we create the <em>FileWriterMock</em>.
 
 class FileWriterMock : public AbstractFileWriterInterface {
 public:
-  MOCK_METHOD1(openFile, int(std::string fileName));
+  MOCK_METHOD1(openFile, int(const std::string& fileName));
   MOCK_METHOD0(closeFile, int());
-  MOCK_METHOD1(writeLine, void(std::string newLine));
+  MOCK_METHOD1(writeLine, void(const std::string& newLine));
   MOCK_METHOD0(lineFeed, void());
   MOCK_METHOD0(setEndOfData, void());
 };
@@ -1049,7 +1050,7 @@ using ::testing::InSequence;
 </li>
 	<li>Add the following test to <em>WordsrepClassTest.cpp</em>
 <pre>
-TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
+TEST(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
 {
   //Setup
   FileReaderMock fileReaderMock;
@@ -1089,7 +1090,7 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
     .Times(Exactly(1))
     .WillOnce(Return("space blue cow"));
 
-    EXPECT_CALL(myFileWriterMock, lineFeed())
+    EXPECT_CALL(fileWriterMock, lineFeed())
     .Times(Exactly(1));
 
     EXPECT_CALL(fileWriterMock, writeLine("space blue cow"))
@@ -1121,12 +1122,22 @@ TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
 We must make the interfaces and mock objects available when building
 
 <ul>
-	<li>Edit Properties for the <em>mock</em> folder and add <em>interface</em> folder to the Include paths for GCC C++ Compiler</li>
-	<li>Now edit Properties for the <em>test</em> folder and add <em>mock</em> and <em>interface</em> folders to Include paths</li>
-</ul>
-Build and run to make sure it fails. The build should fail because of missing member <em>processInputFile</em>.
+<li>Include the new interface folder into the build by adding the following line to the CMakeLists.txt in the project root folder:
+<pre>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/interface)
+</pre>
+Add the line directly after the other include_directories.
+</li>
+<li>Add the new mock folder to the test build by adding the following line to test/CMakeLists.txt:
+<pre>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mock)
+</pre>
+Add the line together with the existing include_directories.
+</li>
+:
+Build and run to make sure it fails (remember to update Makefiles). The build should fail because of missing member <em>processInputFile</em>.
 
-Now we add the <em>processInputFile</em> method to the <em>WordsrepClass</em>.
+Now we create method <em>processInputFile</em> in the WordsrepClass.
 <ul>
 	<li>Add the following includes to <em>WordsrepClass.h</em>:
 <pre>
@@ -1136,9 +1147,13 @@ Now we add the <em>processInputFile</em> method to the <em>WordsrepClass</em>.
 </li>
 	<li>Now add the prototype for the new method:
 <pre>
-void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
+void processInputFile(int&amp; argc, const char* argv[], AbstractFileReaderInterface&amp; fileReader, AbstractFileWriterInterface&amp; fileWriter);
 </pre>
 </li>
+
+------ CONTINUE HERE -----
+
+
 	<li>Add the folowing includes in <em>WordsrepClass.cpp</em>:
 <pre>
 #include "ArgumentParserClass.h"
