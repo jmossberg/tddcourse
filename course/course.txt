@@ -1150,94 +1150,76 @@ Now we create method <em>processInputFile</em> in the WordsrepClass.
 void processInputFile(int&amp; argc, const char* argv[], AbstractFileReaderInterface&amp; fileReader, AbstractFileWriterInterface&amp; fileWriter);
 </pre>
 </li>
-
------- CONTINUE HERE -----
-
-
-	<li>Add the folowing includes in <em>WordsrepClass.cpp</em>:
+<li>Add the following includes in <em>WordsrepClass.cpp</em>:
 <pre>
 #include "ArgumentParserClass.h"
 #include "LineToWordsClass.h"
-#include "WordsToLineClass.h"</pre>
+#include "WordsToLineClass.h"
+</pre>
 </li>
-	<li>The implementation of <em>processInputFile</em> looks like this:
+<li>The implementation of <em>processInputFile</em> looks like this:
 <pre>
-void WordsrepClass::processInputFile(int argc, const char* argv[],
-AbstractFileReaderInterface* fileReader_p,
-AbstractFileWriterInterface* fileWriter_p) {
+void WordsrepClass::processInputFile(int&amp; argc, const char* argv[],
+		AbstractFileReaderInterface&amp; fileReader,
+		AbstractFileWriterInterface&amp; fileWriter) {
 
   ArgumentParserClass argumentParserClass;
-  WordsToLineClass wordsToLineClass;
   LineToWordsClass lineToWordsClass;
+  WordsToLineClass wordsToLineClass;
 
-  std::string oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
-  std::string newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
-  std::string inputFile = argumentParserClass.getSwitchValue(argc, argv, "--inputFile");
-  std::string outputFile = argumentParserClass.getSwitchValue(argc, argv, "--outputFile");
+  auto oldWord = argumentParserClass.getSwitchValue(argc, argv, "--oldWord");
+  auto newWord = argumentParserClass.getSwitchValue(argc, argv, "--newWord");
+  auto inputFile = argumentParserClass.getSwitchValue(argc, argv, "--inputFile");
+  auto outputFile = argumentParserClass.getSwitchValue(argc, argv, "--outputFile");
 
-  fileReader_p-&gt;openFile(inputFile);
-  fileWriter_p-&gt;openFile(outputFile);
+
+  fileReader.openFile(inputFile);
+  fileWriter.openFile(outputFile);
 
   isFirstLine = true;
-  while(false == fileReader_p-&gt;endOfData())
+  while(false == fileReader.endOfData())
   {
-    std::string tempLine = fileReader_p-&gt;readLine();
+    auto tempLine = fileReader.readLine();
 
-    std::vector&lt;std::string> words = lineToWordsClass.splitLine(tempLine);
-    std::vector&lt;std::string> newWords = this-&gt;replaceMatchingWords(oldWord, newWord, words);
+    auto words = lineToWordsClass.splitLine(tempLine);
+    auto newWords = this-&gt;replaceMatchingWords(oldWord, newWord, words);
     tempLine = wordsToLineClass.concatenateWords(newWords);
 
-    insertLineFeed(fileWriter_p);
-    fileWriter_p-&gt;writeLine(tempLine);
+    insertLineFeed(fileWriter);
+    fileWriter.writeLine(tempLine);
   }
 
-  fileWriter_p-&gt;closeFile();
-  fileReader_p-&gt;closeFile();
+  fileWriter.closeFile();
+  fileReader.closeFile();
 
 }
 </pre>
 </li>
-<li> We must also implement the helper method <em>insertLineFeed</em>. We add it to the class definition in <em>WordsrepClass.h</em> first:
+<li> We must also implement the helper method <em>insertLineFeed</em>. We add a private section to the class definition in <em>WordsrepClass.h</em> first:
 <pre>
-class WordsrepClass {
-public:
-  std::vector<lt;std::string>gt; replaceMatchingWords(
-	std::string oldWord, std::string newWord,
-	std::vector<lt;std::string>gt; words);
-  void processInputFile(int argc, const char* argv[], AbstractFileReaderInterface  * fileReader_p, AbstractFileWriterInterface * fileWriter_p);
-
-<strong>private:</strong>
-  <strong>void insertLineFeed(AbstractFileWriterInterface* fileWriter_p);</strong>
-  <strong>bool isFirstLine;</strong>
-
-};
+private:
+  void insertLineFeed(AbstractFileWriterInterface&amp; fileWriter);
+  bool isFirstLine;
 </pre>
 </li>
 <li>The method implementation in <em>WordsrepClass.cpp</em> looks like this:
 <pre>
-void WordsrepClass::insertLineFeed(AbstractFileWriterInterface* fileWriter_p) {
+void WordsrepClass::insertLineFeed(AbstractFileWriterInterface&amp; fileWriter) {
   if(!isFirstLine) {
-    fileWriter_p-&gt;lineFeed();
+    fileWriter.lineFeed();
   }
   isFirstLine  = false;
 }
 </pre>
 </li>
-	<li>Edit the properties of the <em>src</em> folder and add the <em>interface</em> folder to the Include paths</li>
-	<li>Build and run to make sure the <em>InteractsCorrectlyWithFileInterfaces</em> test passes:
+<li>Build and run to make sure the <em>InteractsCorrectlyWithFileInterfaces</em> test passes:
 <pre>
-[----------] 3 tests from WordsrepClassTest
-[ RUN      ] WordsrepClassTest.APassingTest
-[       OK ] WordsrepClassTest.APassingTest (0 ms)
-[ RUN      ] WordsrepClassTest.
-             ReplaceMatchingWordsWithNewWord
-[       OK ] WordsrepClassTest.
-             ReplaceMatchingWordsWithNewWord (0 ms)
-[ RUN      ] WordsrepClassTest.
-             InteractsCorrectlyWithFileInterfaces
-[       OK ] WordsrepClassTest.
-             InteractsCorrectlyWithFileInterfaces (1 ms)
-[----------] 3 tests from WordsrepClassTest (1 ms total)
+[----------] 2 tests from WordsrepClassTest
+[ RUN      ] WordsrepClassTest.ReplaceMatchingWordsWithNewWord
+[       OK ] WordsrepClassTest.ReplaceMatchingWordsWithNewWord (0 ms)
+[ RUN      ] WordsrepClassTest.InteractsCorrectlyWithFileInterfaces
+[       OK ] WordsrepClassTest.InteractsCorrectlyWithFileInterfaces (1 ms)
+[----------] 2 tests from WordsrepClassTest (1 ms total)
 </pre>
 
 </li>
