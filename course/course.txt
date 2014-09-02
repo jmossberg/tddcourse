@@ -1113,7 +1113,7 @@ TEST(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
   const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
 
   //Exercise &amp; Verify
-  wordsrepClass.processInputFile(argc, argv, &amp;fileReaderMock, &amp;fileWriterMock);
+  wordsrepClass.processInputFile(argc, argv, fileReaderMock, fileWriterMock);
 }
 </pre>
 </li>
@@ -1134,7 +1134,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mock)
 </pre>
 Add the line together with the existing include_directories.
 </li>
-:
 Build and run to make sure it fails (remember to update Makefiles). The build should fail because of missing member <em>processInputFile</em>.
 
 Now we create method <em>processInputFile</em> in the WordsrepClass.
@@ -1145,7 +1144,7 @@ Now we create method <em>processInputFile</em> in the WordsrepClass.
 #include "AbstractFileWriterInterface.h"
 </pre>
 </li>
-	<li>Now add the prototype for the new method:
+	<li>Now add the prototype for the new public method:
 <pre>
 void processInputFile(int&amp; argc, const char* argv[], AbstractFileReaderInterface&amp; fileReader, AbstractFileWriterInterface&amp; fileWriter);
 </pre>
@@ -1195,7 +1194,7 @@ void WordsrepClass::processInputFile(int&amp; argc, const char* argv[],
 }
 </pre>
 </li>
-<li> We must also implement the helper method <em>insertLineFeed</em>. We add a private section to the class definition in <em>WordsrepClass.h</em> first:
+<li> We must also implement the helper method <em>insertLineFeed</em>. We add a private section to the class declaration in <em>WordsrepClass.h</em> first:
 <pre>
 private:
   void insertLineFeed(AbstractFileWriterInterface&amp; fileWriter);
