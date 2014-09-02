@@ -1241,22 +1241,22 @@ Ok, we have implemented all our tests needed to test drive the basic functionali
 
 We don't unit test this part of the code. But by moving all the <em>glue</em> code between the WordsrepApp core functionality and the actual file system we are allowed to test as much as possible of the code.
 <ol>
-	<li>Create a new file <em>FileReaderClass.h</em> in the <em>src</em> folder</li>
-	<li>Add the following code:
+<li>Create a new file <em>FileReaderClass.h</em> in the <em>src</em> folder</li>
+<li>Add the following code:
 <pre>
 #ifndef FILEREADERCLASS_H_
 #define FILEREADERCLASS_H_
 
 #include "AbstractFileReaderInterface.h"
-#include &lt;iostream>
-#include &lt;fstream>
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
 
 class FileReaderClass : public AbstractFileReaderInterface {
 private:
 std::ifstream myFile;
 
 public:
-  int openFile(std::string fileName);
+  int openFile(const std::string& fileName);
   int closeFile();
   std::string readLine();
   bool endOfData();
@@ -1266,13 +1266,13 @@ public:
 #endif /* FILEREADERCLASS_H_ */
 </pre>
 </li>
-	<li>Create a new file <em>FileReaderClass.cpp</em> in the <em>src</em> folder</li>
-	<li>Add the following code:
+<li>Create a new file <em>FileReaderClass.cpp</em> in the <em>src</em> folder</li>
+<li>Add the following code:
 <pre>
 #include "FileReaderClass.h"
 
-int FileReaderClass::openFile(std::string fileName) {
-  const char * fileNameChar_p = fileName.c_str();
+int FileReaderClass::openFile(const std::string& fileName) {
+  auto fileNameChar_p = fileName.c_str();
   this-&gt;myFile.open(fileNameChar_p, std::fstream::in);
   return 0;
 }
@@ -1295,24 +1295,24 @@ int FileReaderClass::closeFile()
 }
 </pre>
 </li>
-	<li>Create a new file <em>FileWriterClass.h</em> in the <em>src</em> folder</li>
-	<li>Add the following code:
+<li>Create a new file <em>FileWriterClass.h</em> in the <em>src</em> folder</li>
+<li>Add the following code:
 <pre>
 #ifndef FILEWRITERCLASS_H_
 #define FILEWRITERCLASS_H_
 
 #include "AbstractFileWriterInterface.h"
-#include &lt;iostream>
-#include &lt;fstream>
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
 
 class FileWriterClass : public AbstractFileWriterInterface {
 private:
   std::ofstream myFile;
 
 public:
-  int openFile(std::string fileName);
+  int openFile(const std::string&amp; fileName);
   int closeFile();
-  void writeLine(std::string line);
+  void writeLine(const std::string&amp; line);
   void lineFeed();
   void setEndOfData();
 
@@ -1321,13 +1321,13 @@ public:
 #endif /* FILEWRITERCLASS_H_ */
 </pre>
 </li>
-	<li>Create a new file <em>FileWriterClass.cpp</em> in the <em>src</em> folder</li>
-	<li>Add the following code:
+<li>Create a new file <em>FileWriterClass.cpp</em> in the <em>src</em> folder</li>
+<li>Add the following code:
 <pre>
 #include "FileWriterClass.h"
 
-int FileWriterClass::openFile(std::string fileName) {
-  const char * fileNameChar_p = fileName.c_str();
+int FileWriterClass::openFile(const std::string&amp; fileName) {
+  auto fileNameChar_p = fileName.c_str();
   this-&gt;myFile.open(fileNameChar_p);
   return 0;
 }
@@ -1337,14 +1337,13 @@ int FileWriterClass::closeFile() {
   return 0;
 }
 
-void FileWriterClass::writeLine(std::string line) {
-  this-&gt;myFile &lt;&lt; line;
+void FileWriterClass::writeLine(const std::string&amp; line) {
+  this-&gt;myFile << line;
 }
 
 void FileWriterClass::lineFeed() {
-  this-&gt;myFile &lt;&lt; '\n';
+	this-&gt;myFile << '\n';
 }
-
 
 void FileWriterClass::setEndOfData() {
   this-&gt;closeFile();
@@ -1353,10 +1352,10 @@ void FileWriterClass::setEndOfData() {
 </li>
 </ol>
 <h3>Compile command line application</h3>
-We must add a new <em>main.cpp</em> to run the <em>WordsrepApp</em> from the command line. We must also configure the Eclipse project to build either with the <em>main.cpp</em> used with Google Tests or the <em>main.cpp</em> to use for the actual command line application.
+We must add a new <em>main.cpp</em> to run the <em>WordsrepApp</em> from the command line. We must also configure the cmake to create a separate build with the new <em>main.cpp</em>.
 <ol>
-	<li>Add a new file <em>main.cpp</em> in the <em>src</em> folder</li>
-	<li>Add the following code
+<li>Add a new file <em>main.cpp</em> in the <em>src</em> folder</li>
+<li>Add the following code
 <pre>
 #include "WordsrepClass.h"
 #include "FileReaderClass.h"
@@ -1368,31 +1367,26 @@ int main(int argc, const char * argv[])
   FileWriterClass fileWriterClass;
   WordsrepClass wordsrepClass;
 
-  wordsrepClass.processInputFile(argc, argv, &amp;fileReaderClass, &amp;fileWriterClass);
+  wordsrepClass.processInputFile(argc, argv, fileReaderClass, fileWriterClass);
 
   return 0;
 }
 </pre>
 </li>
-	<li>Right click on the new <em>main.cpp</em> file and select Propterties</li>
-	<li>Click on C/C++ Build</li>
-	<li>Make sure Configuration is set to <em>Debug</em></li>
-	<li>Set box <em>Exclude resource from build</em></li>
-	<li>Click OK</li>
-</ol>
-We have created the new <em>main.cpp</em> file but excluded it from build when we are running Google Tests. You can try this by ensuring that you can still build the project and run the tests.
-
-Now we switch to the release build configuration and build the command line tool.
-<ol>
-	<li>Select Project - Build Configurations - Set Active - Release</li>
-	<li>Right-click on the <em>test</em> folder and activate <em>Exclude resource from build</em> under C/C++ Build</li>
-	<li>Click OK</li>
-	<li>Right-click on the <em>mock</em> folder and activate <em>Exclude resource from build</em> under C/C++ Build</li>
-	<li>Click OK</li>
-	<li>Right-click on the <em>external</em> folder and activate <em>Exclude resource from build</em> under C/C++ Build</li>
-	<li>Click OK</li>
-	<li>Edit Properties of the <em>src</em> folder and add the <em>interface</em> folder to the Include paths</li>
-	<li>Build the project</li>
+<li>Add the following two lines to the end of the CMakeLists.txt in the project root folder:
+<pre>
+add_executable(wordsrepapp ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+target_link_libraries(wordsrepapp src)
+</pre>
+</li>
+<li>
+Edit the add_library command in src/CMakeLists.txt so it looks like this:
+<pre>
+add_library(src ArgumentParserClass.cpp LineToWordsClass.cpp WordsToLineClass.cpp WordsrepClass.cpp FileReaderClass.cpp FileWriterClass.cpp)
+</pre>
+</li>
+<li>Double-click on the cmake target to update the Makefiles
+<li>Build the project</li>
 </ol>
 Now we want test our command line utlity!
 <ol>
@@ -1402,26 +1396,30 @@ Now we want test our command line utlity!
 cd /home/tdd1/git/WordsrepAppGit/WordsrepApp/
 </pre>
 </li>
-	<li>Go into the <em>Release</em> folder
+<li>Go into the <em>build</em> folder
 <pre>
-cd Release
+cd build 
 </pre>
 </li>
-	<li>You should have the <em>WordsrepApp</em> binary in the <em>Release</em> folder</li>
-	<li>Create a text file <em>a.txt</em> containing the following lines:
+<li>You should have the <em>wordsrepapp</em> binary in the <em>build</em> folder</li>
+<li>Create a text file <em>a.txt</em> containing the following lines:
 <pre>
 house car space
 cycle table chair
 </pre>
-</li>
-	<li>Execute the WordsrepApp:
+By running:
 <pre>
-./WordsrepApp --oldWord car --newWord black --inputFile a.txt --outputFile b.txt</pre>
+echo "house car space" >> a.txt
+echo "cycle table chair" >> a.txt
+</pre>
+<li>Execute the WordsrepApp:
+<pre>
+./wordsrepapp --oldWord car --newWord black --inputFile a.txt --outputFile b.txt</pre>
 </li>
-	<li>Check the output by executing:
+<li>Check the output by executing:
 <pre>cat b.txt</pre>
 </li>
-	<li>You should get:
+<li>You should get:
 <pre>
 house black space
 cycle table chair
