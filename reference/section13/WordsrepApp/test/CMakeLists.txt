@@ -7,6 +7,7 @@ include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
                            ${GMOCK_DIR}/include)
 
 include_directories(${CMAKE_SOURCE_DIR}/test)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mock)
 
 add_executable(wordsrepapptest main.cpp DummyTest.cpp ArgumentParserClassTest.cpp LineToWordsClassTest.cpp WordsToLineClassTest.cpp WordsrepClassTest.cpp)
 
