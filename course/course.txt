@@ -1429,7 +1429,7 @@ cycle table chair
 <h3>Connect Google Tests to a Continuous Integration Server</h3>
 Finally we will connect our tests to a continuous integration server, in this case Jenkins.
 
-There is a reference project, <a href="http://localhost/jenkins/job/WordsrepAppReferenceTests/" title="WordsrepAppReferenceTests" target="_blank">WordsrepAppReferenceTests</a>, setup in Jenkins which you can look at it if you run into problems when performing the steps below.
+There is a reference project, <a href="http://localhost/jenkins/job/WordsrepAppReferenceTestsCmake/" title="WordsrepAppReferenceTestsCmake" target="_blank">WordsrepAppReferenceTestsCmake</a>, setup in Jenkins which you can look at it if you run into problems when performing the steps below.
 
 <ol>
 	<li>Make sure you have commited all your files to git</li>
@@ -1446,14 +1446,18 @@ There is a reference project, <a href="http://localhost/jenkins/job/WordsrepAppR
 	<li>Click on <em>Add build step</em> in section <em>Build</em> and select <em>Execute shell</em></li>
 	<li>Paste the following in the Command box:
 <pre>
-eclipse -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild -data . -import WordsrepApp -cleanBuild WordsrepApp/Debug
-./WordsrepApp/Debug/WordsrepApp --gtest_output="xml:WordsRepApp_TestResults.xml"
+cd WordsrepApp/
+mkdir -p build
+cd build
+cmake ..
+make
+./test/wordsrepapptest --gtest_output="xml:WordsRepApp_TestResults.xml"
 </pre>
 </li>
-	<li>Click on <em>Add post-build action</em> in section <em>Post-build Actions</em> and select <em>Publish JUnit test result report</em></li>
+<li>Click on <em>Add post-build action</em> in section <em>Post-build Actions</em> and select <em>Publish JUnit test result report</em></li>
 	<li>Enter the following in box <em>Test report XMLs</em>: 
 <pre>
-WordsRepApp_TestResults.xml
+WordsrepApp/build/WordsRepApp_TestResults.xml
 </pre>
 </li>
         <li>Click on Apply
@@ -1466,9 +1470,9 @@ WordsRepApp_TestResults.xml
 	<li>Click on <em>Test result</em></li>
 	<li>Click on <em>(root)</em></li>
 	<li>You should now get a list of all test classes with corresponding test results
-<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_jenkins_test_classes.png" /></center></li>
+<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section16_Jenkins_Test_Classes.png" /></center></li>
 	<li>Click on <em>WordsrepClassTest</em> to get the results of each test in that test class
-<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_jenkins_test_results.png" /></center></li>
+<center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Section16_Jenkins_Test_Results.png" /></center></li>
 </ol>
 The Jenkins job we have created is now setup to run when manually triggered. It is also possible to setup the job to be triggered automatically.
 
