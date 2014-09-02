@@ -1239,7 +1239,7 @@ We want some of the function calls to occur in a specific sequence. We use the f
 <h3>Implement the real file line reader and writer</h3>
 Ok, we have implemented all our tests needed to test drive the basic functionality of the WordsrepApp. However we also want to test the actual command line tool. We must create a second main.cpp file to use when building the command line tool and not the unit tests. But we must start with implementing the FileReaderClass and FileWriterClass to interact with the actual file system.
 
-We don't unit test this part of the code. But by moving all the <em>glue</em> code between the WordsrepApp core functionality and the actual file system we are allowed to test as much as possible of the code.
+We don't unit test this part of the code. But by minimizing the <em>glue</em> code between the WordsrepApp core functionality and the actual file system we are allowed to unit test as much as possible of the code.
 <ol>
 <li>Create a new file <em>FileReaderClass.h</em> in the <em>src</em> folder</li>
 <li>Add the following code:
@@ -1256,7 +1256,7 @@ private:
 std::ifstream myFile;
 
 public:
-  int openFile(const std::string& fileName);
+  int openFile(const std::string&amp; fileName);
   int closeFile();
   std::string readLine();
   bool endOfData();
@@ -1271,7 +1271,7 @@ public:
 <pre>
 #include "FileReaderClass.h"
 
-int FileReaderClass::openFile(const std::string& fileName) {
+int FileReaderClass::openFile(const std::string&amp; fileName) {
   auto fileNameChar_p = fileName.c_str();
   this-&gt;myFile.open(fileNameChar_p, std::fstream::in);
   return 0;
