@@ -1,1 +1,1 @@
-add_library(src ArgumentParserClass.cpp LineToWordsClass.cpp WordsToLineClass.cpp WordsrepClass.cpp)
+add_library(src ArgumentParserClass.cpp LineToWordsClass.cpp WordsToLineClass.cpp WordsrepClass.cpp FileReaderClass.cpp FileWriterClass.cpp)
