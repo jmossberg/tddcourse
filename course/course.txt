@@ -72,10 +72,18 @@ a.txt
 
 b.txt
 <em>house</em> car2 street
-<h3>The WordsRep reference project</h3>
-A WordsRep reference project is available in:
-<pre>/home/tdd1/workspace_reference</pre>
-You can open this project in Eclipse if you get stuck while doing the exercises below. The reference project contains the full WordsRep application after the excercise below have been completed. Take a look at the reference project to get <em>unstuck</em> and continue with your own workspace again.
+<h3>The WordsRep reference projects</h3>
+A WordsRep reference project is available for each section of this course. Each reference project has its own Eclipse workspace. The reference projects shows the status of the WordsrepApp project after completing the corresponding section. 
+
+The workspaces are available in folder:
+<pre>/home/tdd1/workspaces/tddcourse</pre>
+
+Example:
+Reference project showing status after completing section 5 is available in workspace:
+<pre>/home/tdd1/workspaces/tddcourse/section5</pre>
+
+You can open the corresponding reference project if you get stuck in one of the sections below. Take a look at the reference project to get <em>unstuck</em> and continue with your own workspace again.
+
 <h3>Create a new C++ project in Eclipse CDT and connect to Git repository</h3>
 We will create a C++ project in Eclipse CDT to develop our WordsRep application.
 <ol>
