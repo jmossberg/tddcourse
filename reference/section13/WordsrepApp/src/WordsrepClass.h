@@ -9,9 +9,9 @@
 
 class WordsrepClass {
 public:
-	std::vector<std::string> replaceMatchingWords(
-	    std::string oldWord, std::string newWord,
-	    std::vector<std::string> words);
+	  std::vector<std::string> replaceMatchingWords(
+		std::string& oldWord, std::string& newWord,
+		std::vector<std::string>& words);
 	void processInputFile(int& argc, const char* argv[],
 			AbstractFileReaderInterface& fileReader,
 			AbstractFileWriterInterface& fileWriter);
