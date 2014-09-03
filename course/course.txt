@@ -1244,7 +1244,7 @@ We want some of the function calls to occur in a specific sequence. We use the f
 }
 </code>
 
-The test case <em>InteractsCorrectlyWithFileInterfaces</em> is quite long and hard to read. We can refactor the test case while under protection from the passing test case. One possible outcome is shown below. We make use of a fixture class WordsrepClassTest which inherits from Google Test class <em>Test<em>. We put a helper function called <em>setMockExpectations</em> in the fixture class. We also let the fixture class instantiate the mock objects and the WordsrepClass.
+The test case <em>InteractsCorrectlyWithFileInterfaces</em> is quite long and hard to read. We can refactor the test case while under protection from the passing test case. One possible outcome is shown below. We make use of a fixture class WordsrepClassTest which inherits from Google Test class <em>Test</em>. We put a helper function called <em>setMockExpectations</em> in the fixture class. We also let the fixture class instantiate the mock objects and the WordsrepClass.
 
 WordsrepClassTest.cpp
 <pre>
