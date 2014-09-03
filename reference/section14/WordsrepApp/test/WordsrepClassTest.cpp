@@ -7,7 +7,71 @@ using ::testing::Exactly;
 using ::testing::Return;
 using ::testing::InSequence;
 
-TEST(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
+class WordsrepClassTest : public ::testing::Test {
+public:
+	  FileReaderMock myFileReaderMock;
+	  FileWriterMock myFileWriterMock;
+	  WordsrepClass myWordsrepClass;
+
+	  void setMockExpectations(std::string line1In, std::string line1Out, std::string line2In, std::string line2Out);
+};
+
+void WordsrepClassTest::setMockExpectations(std::string line1In, std::string line1Out, std::string line2In, std::string line2Out)
+{
+	//Set expectations on mock objects
+	EXPECT_CALL(myFileReaderMock, openFile("a.txt"))
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+
+	EXPECT_CALL(myFileWriterMock, openFile("b.txt"))
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+
+	{
+	InSequence s;
+
+	EXPECT_CALL(myFileReaderMock, endOfData())
+	.Times(Exactly(1))
+	.WillOnce(Return(false));
+
+	//Line 1
+	EXPECT_CALL(myFileReaderMock, readLine())
+	.Times(Exactly(1))
+	.WillOnce(Return(line1In));
+
+	EXPECT_CALL(myFileWriterMock, writeLine(line1Out))
+	.Times(Exactly(1));
+
+	EXPECT_CALL(myFileReaderMock, endOfData())
+	.Times(Exactly(1))
+	.WillOnce(Return(false));
+
+	//Line 2
+	EXPECT_CALL(myFileReaderMock, readLine())
+	.Times(Exactly(1))
+	.WillOnce(Return(line2In));
+
+	EXPECT_CALL(myFileWriterMock, lineFeed())
+	.Times(Exactly(1));
+
+	EXPECT_CALL(myFileWriterMock, writeLine(line2Out))
+	.Times(Exactly(1));
+
+	EXPECT_CALL(myFileReaderMock, endOfData())
+	.Times(Exactly(1))
+	.WillOnce(Return(true));
+	}
+
+	EXPECT_CALL(myFileReaderMock, closeFile())
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+
+	EXPECT_CALL(myFileWriterMock, closeFile())
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+}
+
+TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
 {
   //Setup
   WordsrepClass wordsrepClass;
@@ -31,68 +95,19 @@ TEST(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
   ASSERT_EQ("moon",   newWords[2]);
 }
 
-TEST(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
+TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
 {
-  //Setup
-  FileReaderMock fileReaderMock;
-  FileWriterMock fileWriterMock;
-  WordsrepClass wordsrepClass;
-
   //Set expectations on mock objects
-  EXPECT_CALL(fileReaderMock, openFile("a.txt"))
-  .Times(Exactly(1))
-  .WillOnce(Return(0));
+  std::string line1In("car house street");
+  std::string line1Out("house house street");
+  std::string line2In("space blue cow");
+  std::string line2Out("space blue cow");
 
-  EXPECT_CALL(fileWriterMock, openFile("b.txt"))
-  .Times(Exactly(1))
-  .WillOnce(Return(0));
-
-  {
-    InSequence s;
-
-    EXPECT_CALL(fileReaderMock, endOfData())
-    .Times(Exactly(1))
-    .WillOnce(Return(false));
-
-    //Line 1
-    EXPECT_CALL(fileReaderMock, readLine())
-    .Times(Exactly(1))
-    .WillOnce(Return("car house street"));
-
-    EXPECT_CALL(fileWriterMock, writeLine("house house street"))
-    .Times(Exactly(1));
-
-    EXPECT_CALL(fileReaderMock, endOfData())
-    .Times(Exactly(1))
-    .WillOnce(Return(false));
-
-    //Line 2
-    EXPECT_CALL(fileReaderMock, readLine())
-    .Times(Exactly(1))
-    .WillOnce(Return("space blue cow"));
-
-    EXPECT_CALL(fileWriterMock, lineFeed())
-    .Times(Exactly(1));
-
-    EXPECT_CALL(fileWriterMock, writeLine("space blue cow"))
-    .Times(Exactly(1));
-
-    EXPECT_CALL(fileReaderMock, endOfData())
-    .Times(Exactly(1))
-    .WillOnce(Return(true));
-  }
-
-  EXPECT_CALL(fileReaderMock, closeFile())
-  .Times(Exactly(1))
-  .WillOnce(Return(0));
-
-  EXPECT_CALL(fileWriterMock, closeFile())
-  .Times(Exactly(1))
-  .WillOnce(Return(0));
+  setMockExpectations(line1In, line1Out, line2In, line2Out);
 
   int argc = 9;
   const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
 
   //Exercise & Verify
-  wordsrepClass.processInputFile(argc, argv, fileReaderMock, fileWriterMock);
+  myWordsrepClass.processInputFile(argc, argv, myFileReaderMock, myFileWriterMock);
 }
