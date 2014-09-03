@@ -824,9 +824,9 @@ Now we implement method <em>replaceMatchingWords</em> in class <em>WordsrepClass
 <ol>
 	<li>Add file <em>WordsrepClass.h</em> in <em>src</em> folder with a declaration of <em>WordsrepClass</em> including public method:
 <pre>
-  std::vector&lt;std::string&gt; replaceMatchingWords(
-    std::string oldWord, std::string newWord,
-    std::vector&lt;std::string&gt; words);
+std::vector<std::string> replaceMatchingWords(
+  std::string&amp; oldWord, std::string&amp; newWord,
+  std::vector&lt;std::string&gt;&amp; words);
 </pre>
 Remember to include &lt;string&gt; and &lt;vector&gt;.
 </li>
@@ -836,21 +836,20 @@ Remember to include &lt;string&gt; and &lt;vector&gt;.
 #include "WordsrepClass.h"
 
 std::vector&lt;std::string&gt; WordsrepClass::replaceMatchingWords(
-std::string oldWord, std::string newWord,
-std::vector&lt;std::string&gt; words) {
+std::string&amp; oldWord, std::string&amp; newWord,
+std::vector&lt;std::string&gt;&amp; words) {
 
-  std::vector&lt;std::string&gt;::iterator it;
   std::vector&lt;std::string&gt; newWords;
 
-  for(it = words.begin(); it != words.end(); it++)
+  for(auto&amp; word: words)
   {
-    if((*it) == oldWord)
+    if(word == oldWord)
     {
       newWords.push_back(newWord);
     }
     else
     {
-      newWords.push_back(*it);
+      newWords.push_back(word);
     }
   }
 
