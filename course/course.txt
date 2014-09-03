@@ -1244,6 +1244,125 @@ We want some of the function calls to occur in a specific sequence. We use the f
 }
 </code>
 
+The test case <em>InteractsCorrectlyWithFileInterfaces</em> is quite long and hard to read. We can refactor the test case while under protection form the passing test case. One possible outcome is shown below. We make use of a fixture class WordsrepClassTest which inherits from Google Test class <em>Test<em>. We put a helper function called <em>setMockExpectations</em> in the fixture class. We also let the fixture class instantiate the mock objects and the WordsrepClass.
+
+WordsrepClassTest.cpp
+<pre>
+#include "gmock/gmock.h"
+#include "WordsrepClass.h"
+#include "FileReaderMock.h"
+#include "FileWriterMock.h"
+
+using ::testing::Exactly;
+using ::testing::Return;
+using ::testing::InSequence;
+
+class WordsrepClassTest : public ::testing::Test {
+public:
+	  FileReaderMock myFileReaderMock;
+	  FileWriterMock myFileWriterMock;
+	  WordsrepClass myWordsrepClass;
+
+	  void setMockExpectations(std::string line1In, std::string line1Out, std::string line2In, std::string line2Out);
+};
+
+void WordsrepClassTest::setMockExpectations(std::string line1In, std::string line1Out, std::string line2In, std::string line2Out)
+{
+	//Set expectations on mock objects
+	EXPECT_CALL(myFileReaderMock, openFile("a.txt"))
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+
+	EXPECT_CALL(myFileWriterMock, openFile("b.txt"))
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+
+	{
+	InSequence s;
+
+	EXPECT_CALL(myFileReaderMock, endOfData())
+	.Times(Exactly(1))
+	.WillOnce(Return(false));
+
+	//Line 1
+	EXPECT_CALL(myFileReaderMock, readLine())
+	.Times(Exactly(1))
+	.WillOnce(Return(line1In));
+
+	EXPECT_CALL(myFileWriterMock, writeLine(line1Out))
+	.Times(Exactly(1));
+
+	EXPECT_CALL(myFileReaderMock, endOfData())
+	.Times(Exactly(1))
+	.WillOnce(Return(false));
+
+	//Line 2
+	EXPECT_CALL(myFileReaderMock, readLine())
+	.Times(Exactly(1))
+	.WillOnce(Return(line2In));
+
+	EXPECT_CALL(myFileWriterMock, lineFeed())
+	.Times(Exactly(1));
+
+	EXPECT_CALL(myFileWriterMock, writeLine(line2Out))
+	.Times(Exactly(1));
+
+	EXPECT_CALL(myFileReaderMock, endOfData())
+	.Times(Exactly(1))
+	.WillOnce(Return(true));
+	}
+
+	EXPECT_CALL(myFileReaderMock, closeFile())
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+
+	EXPECT_CALL(myFileWriterMock, closeFile())
+	.Times(Exactly(1))
+	.WillOnce(Return(0));
+}
+
+TEST_F(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
+{
+  //Setup
+  WordsrepClass wordsrepClass;
+
+  std::vector&lt;std::string&gt; words;
+  words.push_back("table");
+  words.push_back("rocket");
+  words.push_back("moon");
+
+  std::string oldWord("table");
+  std::string newWord("sun");
+
+  std::vector&lt;std::string&gt; newWords;
+
+  //Exercise
+  newWords = wordsrepClass.replaceMatchingWords(oldWord, newWord, words);
+
+  //Verify
+  ASSERT_EQ("sun",    newWords[0]);
+  ASSERT_EQ("rocket", newWords[1]);
+  ASSERT_EQ("moon",   newWords[2]);
+}
+
+TEST_F(WordsrepClassTest, InteractsCorrectlyWithFileInterfaces)
+{
+  //Set expectations on mock objects
+  std::string line1In("car house street");
+  std::string line1Out("house house street");
+  std::string line2In("space blue cow");
+  std::string line2Out("space blue cow");
+
+  setMockExpectations(line1In, line1Out, line2In, line2Out);
+
+  int argc = 9;
+  const char * argv[] = {"wordsrep", "--oldWord", "car", "--newWord", "house", "--inputFile", "a.txt", "--outputFile", "b.txt"};
+
+  //Exercise &amp; Verify
+  myWordsrepClass.processInputFile(argc, argv, myFileReaderMock, myFileWriterMock);
+}
+</pre>
+
 <h3>Implement the real file line reader and writer</h3>
 Ok, we have implemented all our tests needed to test drive the basic functionality of the WordsrepApp. However we also want to test the actual command line tool. We must create a second main.cpp file to use when building the command line tool and not the unit tests. But we must start with implementing the FileReaderClass and FileWriterClass to interact with the actual file system.
 
