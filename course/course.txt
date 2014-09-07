@@ -826,7 +826,7 @@ Now we implement method <em>replaceMatchingWords</em> in class <em>WordsrepClass
 <ol>
 	<li>Add file <em>WordsrepClass.h</em> in <em>src</em> folder with a declaration of <em>WordsrepClass</em> including public method:
 <pre>
-std::vector<std::string> replaceMatchingWords(
+std::vector&lt;std::string&gt; replaceMatchingWords(
   std::string&amp; oldWord, std::string&amp; newWord,
   std::vector&lt;std::string&gt;&amp; words);
 </pre>
