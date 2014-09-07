@@ -959,7 +959,7 @@ Next step is to create mock objects using Google Mock. We must tell Google Mock 
 MOCK_METHODn(<em>&lt;function name></em>, <em>&lt;type of function></em>);
 </code>
 
-n is the number of arguments. We write one MOCK_METHOD per pure virtual method in the abstract class. The examples below will make it more clear. You can also have a look at https://code.google.com/p/googlemock/wiki/V1_7_ForDummies#Writing_the_Mock_Class.
+n is the number of arguments. We write one MOCK_METHOD per pure virtual method in the abstract class. The examples below will make it more clear. You can also have a look at https://code.google.com/p/googlemock/wiki/V1_7_ForDummies#Writing_the_Mock_Class. Or look in <code>/home/tdd1/Documents</code> if you are offline. The Documents folder contains downloaded Google Test and Google Mock documentation.
 
 We start with the <em>FileReaderMock</em>.
 <ul>
