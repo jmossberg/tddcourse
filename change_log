@@ -1,5 +1,16 @@
 TDD Mosssberg Change Log
 
+Version 1.07
+============
+- Comes bundled with VirtualBox 4.3.12 instead of 4.3.14. The reason is that 4.3.14 can cause conflicts with Symantec Endpoint Protection.
+
+Version 1.06
+============
+- Refactored LineToWordsClass to use stringstream
+- Building with CMake instead of using Eclipse built in build system
+- Using C++11 features in code
+- Comes bundled with VirtualBox 4.3.14
+
 Version 1.05
 ============
 - Added a new method lineFeed to the AbstractFileWriterInterface. Updated tests in WordsrepClassTest which uses the FileWriterMock to reflect this. Also updated the mock. The purpose of this change was to fix a bug in the command line version of wordsrep. The bug was that an extra line was added to the end of the new file created by wordsrep. The line feed used to be included in the writeLine method. I have now put line feed in a separate method. By doing this I can make sure that WordsrepClass uses the lineFeed method correctly by adding expectations to the mock class. I have updated the course material accordingly.
