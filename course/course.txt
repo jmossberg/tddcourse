@@ -34,6 +34,9 @@ Below is an example of a test written for Google Test/Google Mock.
 
 <center><img alt="" src="http://localhost/wordpress/wp-content/uploads/GoogleTestStructure.png" /></center>We verify that the method <em>getNameLength()</em> returns the correct length of the name that has been stored in the class Person. The test is part of test fixture class <em>PersonTest</em>. A fixture class can be used to initialize objects needed by several tests belonging to the same fixture class.
 
+It is not mandatory to have a fixture class. We could remove it from the example above. But, in that case we must use macro <pre>TEST</pre> instead of <pre>TEST_F</pre>:
+<pre>TEST(PersonTest, LengthOfNameCanBeRetrieved)</pre>
+
 We use a four phase pattern when writing the test:
 <ul>
 	<li>Setup phase - prepare all objects needed</li>
