@@ -244,7 +244,6 @@ add_executable(wordsrepapptest main.cpp DummyTest.cpp)
 </pre>
 </li>
 	<li>Save the CMakeLists.txt file</li>
-	<li>Double click on the cmake target in the Make Target tab on the right side of Eclipse. The purpose is to update the Makefiles with the new source file.
 	<li>Select Project - Build Project</li>
 	<li>Click on Run</li>
 	<li>The console output shall now show our first test passing:
@@ -307,7 +306,6 @@ The test is not finished but we can stop writing here and try to build.
 <pre>
 add_executable(wordsrepapptest main.cpp DummyTest.cpp)
 </pre>
-<li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
 <li>Build project via menu Project - Build Project</li>
 <li>The build is failing since we have not implemented ArgumentParserClass. So let's implement an empty ArgumentParserClass.
 <li>Add a <em>src</em> folder in the WordsrepApp project by right clicking on the project in the Project Explorer and selecting New - Folder</li>
@@ -342,7 +340,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_subdirectory(test)
 </pre>
-<li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
 <li>Build project via menu Project - Build Project</li>
 <li>Now the project shall build but with a warning about unused variable</li>
 </ol>
@@ -411,7 +408,6 @@ add_subdirectory(src)
 target_link_libraries(wordsrepapptest src)
 </pre>
 </li>
-<li>Double-click on the cmake target in the Make Target tab to update Makefiles</li>
 </ol>
 Build and run test to make sure the test pass:
 <pre>
@@ -567,7 +563,6 @@ Add LineToWordsClassTest to the test/CMakeLists.txt file so that the add_executa
 add_executable(wordsrepapptest main.cpp DummyTest.cpp ArgumentParserClassTest.cpp LineToWordsClassTest.cpp)
 </pre>
 </li>
-<li>Double-click on the cmake target on the right to update the Makefiles</li>
 <li>Build. It should fail due to our missing LineToWordsClass implementation.</li>
 </ol>
 Now let's implement the class <em>LineToWordsClass</em> with method <em>splitLine</em>
@@ -618,7 +613,7 @@ std::vector&lt;std::string&gt; LineToWordsClass::splitLine(
 }
 </pre>
 </li>
-<li>Add LineToWordsClass.cpp to src/CMakeLists.txt. Double-click cmake target to regenerat Makefiles.
+<li>Add LineToWordsClass.cpp to src/CMakeLists.txt.
 <li>Build and run the test.</li>
 </ol>
 
@@ -666,7 +661,6 @@ The test verifies whether we can concatenate <em>table</em>, <em>rocket</em> and
 "table rocket moon"
 </pre>
 <li>Add WordsToLineClassTest.cpp to test/CMakeLists.txt.</li>
-<li>Double-click on cmake target to regenerate Makefiles.
 <li>Build to make sure it fails because of our missing WordsToLineClass.</li>
 </ol>
 
@@ -706,7 +700,6 @@ std::string WordsToLineClass::concatenateWords(std::vector&lt;std::string&gt; wo
 We loop through all words and add them to the line. We also add a space as delimiter between words. We remove the space after the last word before returning.
 </li>
 <li>Add WordsToLineClass.cpp to src/CMakeLists.txt</li>
-<li>Double-click on cmake target to regenerate Makefiles.
 <li>Build and run the test to make sure it passes:
 <pre>
 [----------] 1 test from WordsToLineClassTest
@@ -817,7 +810,7 @@ TEST(WordsrepClassTest, ReplaceMatchingWordsWithNewWord)
 
 The test verifies that method <em>replaceMatchingWords</em> can find the <em>oldWord</em>, replace it with the <em>newWord</em> and the leave the other words as they are.
 </li>
-<li>Add WordsrepClassTest.cpp to test/CMakeLists.txt and update Makefiles by double-clicking on the cmake target.
+<li>Add WordsrepClassTest.cpp to test/CMakeLists.txt.
 <li>Build to make sure it fails because of the missing WordsrepClass.</li>
 </ol>
 
@@ -859,7 +852,7 @@ std::vector&lt;std::string&gt;&amp; words) {
 }
 </pre>
 </li>
-<li>Add WordsrepClass.cpp to src/CMakeLists.txt and regenerate Makefiles.</li>
+<li>Add WordsrepClass.cpp to src/CMakeLists.txt.</li>
 
 <li>Build and run test to make sure it passes:
 <pre>
@@ -1143,7 +1136,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/mock)
 </pre>
 Add the line together with the existing include_directories.
 </li>
-Build and run to make sure it fails (remember to update Makefiles). The build should fail because of missing member <em>processInputFile</em>.
+Build and run to make sure it fails. The build should fail because of missing member <em>processInputFile</em>.
 
 Now we create method <em>processInputFile</em> in the WordsrepClass.
 <ul>
@@ -1513,7 +1506,6 @@ Edit the add_library command in src/CMakeLists.txt so it looks like this:
 add_library(src ArgumentParserClass.cpp LineToWordsClass.cpp WordsToLineClass.cpp WordsrepClass.cpp FileReaderClass.cpp FileWriterClass.cpp)
 </pre>
 </li>
-<li>Double-click on the cmake target to update the Makefiles
 <li>Build the project</li>
 </ol>
 Now we want test our command line utlity!
