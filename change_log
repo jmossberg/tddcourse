@@ -1,5 +1,10 @@
 TDD Mosssberg Change Log
 
+Version 1.08
+============
+- Small fixes in course text
+- Download Google Test/Mock documentation to make it available offline
+
 Version 1.07
 ============
 - Comes bundled with VirtualBox 4.3.12 instead of 4.3.14. The reason is that 4.3.14 can cause conflicts with Symantec Endpoint Protection.
