@@ -771,6 +771,8 @@ std::string WordsToLineClass::removeLastSpaceFromLine(std::string& line) {
 }
 </pre>
 
+Do a Project - Clean... in Eclipse after refactoring the code but before building. This is necessary to avoid build error.
+
 <h3>Replace all matching words with replacement word</h3>
 We have implemented three tests on the test list.
 <ul>
