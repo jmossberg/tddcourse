@@ -1607,7 +1607,7 @@ You have fulfilled all the original requirements on the <strong>wordsrep</strong
 
 <strong>Example</strong>
 To set the delimiter to # we run wordsrep like this:
-<pre>wordsrep --oldWord car --newWord house --inputFile a.txt --outputFile b.txt --wordDelimiter \#</pre>
+<pre>./wordsrepapp --oldWord car --newWord house --inputFile a.txt --outputFile b.txt --wordDelimiter \#</pre>
 The backslash is needed to tell the Bash to not interpret # as the start of a comment.
 
 a.txt
