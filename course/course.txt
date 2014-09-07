@@ -398,7 +398,7 @@ std::string ArgumentParserClass::getSwitchValue(const int& argc, const char* arg
 </li>
 <li>We have to add a CMakeLists.txt file in the src folder with the following content:
 <pre>
-add_library(src ArgumentParserClass)
+add_library(src ArgumentParserClass.cpp)
 </pre>
 </li>
 <li>We also add the src directory to the end of the CMakeLists.txt file in the project root folder:
