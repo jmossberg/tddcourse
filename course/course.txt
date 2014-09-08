@@ -712,7 +712,7 @@ The test verifies whether we can concatenate <em>table</em>, <em>rocket</em> and
 Now we implement <em>WordsToLineClass</em> and the method <em>concatenateWords</em>.
 
 <ol>
-  <li>Add new file <em>WordsToLineClass.h</em> in the <em>src</em> folder and add declaration of class <em>WordsToLineClass</em> with public method:
+  <li>Add new file <em>WordsToLineClass.h</em> in the <em>src</em> folder and add a definition of class <em>WordsToLineClass</em> with public method:
 <pre>
 std::string concatenateWords(std::vector&lt;std::string&gt; words);
 </pre>
@@ -862,7 +862,7 @@ The test verifies that method <em>replaceMatchingWords</em> can find the <em>old
 Now we implement method <em>replaceMatchingWords</em> in class <em>WordsrepClass</em>.
 
 <ol>
-	<li>Add file <em>WordsrepClass.h</em> in <em>src</em> folder with a declaration of <em>WordsrepClass</em> including public method:
+	<li>Add file <em>WordsrepClass.h</em> in <em>src</em> folder with a definition of <em>WordsrepClass</em> including public method:
 <pre>
 std::vector&lt;std::string&gt; replaceMatchingWords(
   std::string&amp; oldWord, std::string&amp; newWord,
@@ -1252,7 +1252,7 @@ void WordsrepClass::processInputFile(int&amp; argc, const char* argv[],
 }
 </pre>
 </li>
-<li> We must also implement the helper method <em>insertLineFeed</em>. We add a private section to the class declaration in <em>WordsrepClass.h</em> first:
+<li> We must also implement the helper method <em>insertLineFeed</em>. We add a private section to the class definition in <em>WordsrepClass.h</em> first:
 <pre>
 private:
   void insertLineFeed(AbstractFileWriterInterface&amp; fileWriter);
