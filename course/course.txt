@@ -217,6 +217,7 @@ target_link_libraries(wordsrepapptest gmock_main)
 	<li>Click on Apply</li>
 	<li>Click on OK to exit the project properties for WordsrepApp</li>
 	<li>Select menu Project - Build Project</li>
+	<li>Open the Console tab and check that the build went fine</li>
 	<li>Select menu Run - Run Configurations...</li>
 	<li>Select <em>C/C++ Application</em> on the left and click on the <em>New</em> button</li>
 	<li>Enter Name: WordsrepAppConsole</li>
@@ -230,6 +231,7 @@ target_link_libraries(wordsrepapptest gmock_main)
 [==========] 0 tests from 0 test cases ran. (0 ms total)
 [  PASSED  ] 0 tests.
 </pre>
+This means that we have run all our Google Tests. However currently we have 0 tests in our project.
 </li>
 	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Add to Index"</li>
 	<li>Right click on the WordsrepApp project in the Project Explorer and choose "Team - Commit"</li>
