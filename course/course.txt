@@ -620,17 +620,24 @@ public:
 std::vector&lt;std::string&gt; LineToWordsClass::splitLine(
 		const std::string& textLine) {
 
-  const int MAX_WORD_LENGTH { 20 };
+  const int MAX_WORD_LENGTH { 2 };
   char tempbuff[50];
   
   std::vector&lt;std::string&gt; words;
-  
+ 
+  //The stringstream class is good at parsing text. We will use
+  //it to split up the line into words.
   std::stringstream ss;
   
   //Copy string to stringstream
   ss << textLine;
   
-  //Loop through stringstream looking for space delimiters
+  //Loop through the ss stringstream looking for space delimiters
+  //Extract characters from ss into tempbuff until either
+  //the next character equals space or we have reached
+  //MAX_WORD_LENGTH number of characters
+  //The while loop will finish when there are no more words
+  //found by getline
   while(ss.getline(tempbuff, MAX_WORD_LENGTH, ' '))
   {
   	words.push_back(tempbuff);
@@ -642,6 +649,17 @@ std::vector&lt;std::string&gt; LineToWordsClass::splitLine(
 </li>
 <li>Add LineToWordsClass.cpp to src/CMakeLists.txt.
 <li>Build and run the test.</li>
+<li>Hmm, we get the following error:
+<pre>
+[ RUN      ] LineToWordsClassTest.CanSplitLineWithTwoWords
+/home/tdd1/repos/tddcourse/reference/section10/WordsrepApp/test/LineToWordsClassTest.cpp:14: Failure
+Value of: words.size()
+  Actual: 0
+Expected: 2
+[  FAILED  ] LineToWordsClassTest.CanSplitLineWithTwoWords (0 ms)
+</pre>
+The error message does not point us directly to the faulty code. All it says is that the words vector contains 0 words. Can you spot the error in the splitLine method?
+<li>We have set MAX_WORD_LENGTH way too low, only 2. Increase it to 20 and try again. Now the test should pass. 
 </ol>
 
 <h3>Concatenate words into line of text</h3>
