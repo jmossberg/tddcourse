@@ -1589,6 +1589,7 @@ add_library(src ArgumentParserClass.cpp LineToWordsClass.cpp WordsToLineClass.cp
 </pre>
 </li>
 <li>Build the project</li>
+<li>Check that you have the wordsrepapp binary in the build folder after building</li>
 </ol>
 Now we want test our command line utlity!
 <ol>
@@ -1634,7 +1635,7 @@ Finally we will connect our tests to a continuous integration server, in this ca
 There is a reference project, <a href="http://localhost/jenkins/job/WordsrepAppReferenceTestsCmake/" title="WordsrepAppReferenceTestsCmake" target="_blank">WordsrepAppReferenceTestsCmake</a>, setup in Jenkins which you can look at it if you run into problems when performing the steps below.
 
 <ol>
-	<li>Make sure you have commited all your files to git</li>
+	<li>Make sure you have added and commited all your files to git</li>
 	<li>Go to <code>localhost/jenkins</code> in the webbrowser</li>
 	<li>Click on New Job</li>
 	<li>Enter job name <code>WordsrepAppTests</code><center><img alt="" src="http://localhost/wordpress/wp-content/uploads/Screenshot_jenkins_job_name.png" /></center></li>
