@@ -1728,3 +1728,5 @@ jacob.mossberg@cybercom.com
 twitter.com/jcmossberg
 
 <a href="http://localhost/wordpress/wp-content/uploads/jacobmossberg.jpg"><img class="alignnone size-medium wp-image-21" src="http://localhost/wordpress/wp-content/uploads/jacobmossberg.jpg" width="150" /></a>
+
+Any comments entered below will not be sent to me since this WordPress installation is local to this virtual machine. Use e-mail, Twitter or face to face for feedback.
