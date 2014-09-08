@@ -1715,9 +1715,10 @@ The <em>WordsToLineClass</em> must also implement a new method <code>setWordDeli
 
 The <em>processInputFile</em> method in <em>WordsrepClass</em> must now check whether the <em>wordDelimiter</em> argument has been specified at the command line. It must then pass the new word delimiter onto the other classes via the <code>setWordDelimiter</code> methods. The new test <em>CanUseNonSpaceWordDelimiter</em> shall verify that we can now make use of the new argument <em>wordDelimiter</em>.
 
+You should add the new tests and modify the implementation accordinlgy without breaking existing tests.
+
 Remember that you can check the reference project if you get stuck while test driving the new functionality:
-<pre>/home/tdd1/workspace_reference</pre>
-The <em>WordsrepClassTest</em> has been cleaned up in the reference project and makes use of the fixture class to avoid duplication when settting mock expectations.
+<pre>/home/tdd1/workspaces/tddcourse/section17</pre>
 
 <h3>About this course</h3>
 
