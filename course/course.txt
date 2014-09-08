@@ -1064,6 +1064,18 @@ EXPECT_CALL(fileReaderMock, openFile("a.txt"))
 .WillOnce(Return(0));
 </code>
 
+We want some of the function calls to occur in a specific sequence. We use the following Google Mock syntax in the test to achieve this:
+
+<code>
+{
+    InSequence s;
+
+    EXPECT_CALL(...
+    EXPECT_CALL(...
+    EXPECT_CALL(...
+}
+</code>
+
 <ul>
 	<li>Add the following includes to <em>WordsrepClassTest.cpp</em>
 <pre>
@@ -1277,17 +1289,6 @@ Correct the code.
 </li>
 </ul>
 
-We want some of the function calls to occur in a specific sequence. We use the following Google Mock syntax in the test to achieve this:
-
-<code>
-{
-    InSequence s;
-
-    EXPECT_CALL(...
-    EXPECT_CALL(...
-    EXPECT_CALL(...
-}
-</code>
 
 The test case <em>InteractsCorrectlyWithFileInterfaces</em> is quite long and hard to read. We can refactor the test case while under protection from the passing test case. One possible outcome is shown below. We make use of a fixture class WordsrepClassTest which inherits from Google Test class <em>Test</em>. We put a helper function called <em>setMockExpectations</em> in the fixture class. We also let the fixture class instantiate the mock objects and the WordsrepClass.
 
