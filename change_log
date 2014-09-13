@@ -1,5 +1,23 @@
 TDD Mosssberg Change Log
 
+Version 1.10
+============
+- Removed unused program on Lubuntu image to save diskspace
+- Compressed size of Lubuntu virtual machine: 
+  a)  sudo dd if=/dev/zero of=/bigemptyfile bs=4096k
+  b)  sudo rm -rf /bigemptyfile
+  c)  Power Off virtual machine
+  d)  Clone virtual machine
+
+Version 1.09
+============
+- Add comments to explain cmake commands
+- Add error in section 13 about mock objects so that student has to inspect code
+- Add error in section 10, method splitLine
+- Add code comments to explain stringstream
+- Correct usage of "class declaration" and "class definition"
+- Various small fixes in course text
+
 Version 1.08
 ============
 - Small fixes in course text
