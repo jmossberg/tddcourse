@@ -1,5 +1,14 @@
 TDD Mosssberg Change Log
 
+Version 1.11
+============
+- Update course text:
+  a) Modify 10, 11, 12 & 13 to encourage the reader to implement the
+     production code herself.
+  b) Add some white space before the solutions are presented. So that
+     the proposed solutions are not visible for the reader while she
+     is working on her own solution.
+
 Version 1.10
 ============
 - Removed unused program on Lubuntu image to save diskspace
