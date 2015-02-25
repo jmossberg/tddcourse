@@ -1,0 +1,12 @@
+Added the following to /usr/share/wordpress/wp-content/themes/twentythirteen/style.css:
+
+#pre_white { background: white; }
+
+This style sheet tag is used by the <pre> tag in the course text to get white space, e.g:
+
+<pre id="pre_white">
+
+
+
+
+</pre>

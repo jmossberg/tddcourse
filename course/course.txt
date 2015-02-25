@@ -614,6 +614,32 @@ public:
 </pre>
 </li>
 	<li>Add file <em>LineToWordsClass.cpp</em> in the <em>src</em> folder</li>
+	<li>You can now try to implement the <em>splitLine</em> method in order to make the CanSplitLineWithTwoWords test pass. You can for example use C++ style stringstream or C-style strchr. Use method push_back to add elements to a vector. Feel free to Google for more information. You can scroll down to find a solution using stringstream.
+<pre id="pre_white">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
 	<li>Add the following code
 <pre>
 #include "LineToWordsClass.h"
@@ -719,8 +745,32 @@ Now we implement <em>WordsToLineClass</em> and the method <em>concatenateWords</
 std::string concatenateWords(std::vector&lt;std::string&gt; words);
 </pre>
  Remember to include &lt;string&gt; and &lt;vector&gt;.</li>
-  <li>Implement the <em>concatenateWords</em> method in the corresponding .cpp class.
+  <li>Implement the <em>concatenateWords</em> method in the corresponding .cpp file in order to make the ConcatenateThreeWordsIntoLine test pass . You can scroll down to see one possible solution.
+<pre id="pre_white">
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
 <pre>
 #include "WordsToLineClass.h"
 
@@ -872,8 +922,32 @@ std::vector&lt;std::string&gt; replaceMatchingWords(
 </pre>
 Remember to include &lt;string&gt; and &lt;vector&gt;.
 </li>
-	<li>Implement the new method <em>replaceMatchingWords</em> in corresponding .cpp file.</li>
+	<li>Implement the new method <em>replaceMatchingWords</em> in corresponding .cpp file in order to make the  ReplaceMatchingWordsWithNewWord test pass. You can scroll down to find one possible solution.</li>
+<pre id="pre_white">
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
 <pre>
 #include "WordsrepClass.h"
 
@@ -1210,7 +1284,33 @@ Now we create method <em>processInputFile</em> in the WordsrepClass.
 void processInputFile(int&amp; argc, const char* argv[], AbstractFileReaderInterface&amp; fileReader, AbstractFileWriterInterface&amp; fileWriter);
 </pre>
 </li>
-<li>Add the following includes in <em>WordsrepClass.cpp</em>:
+<li>You can now try to implement the <em>processInputFile</em> method in <em>WordsrepClass.cpp</em> in order to make the  InteractsCorrectlyWithFileInterfaces test pass. Scroll down to find one possible solution:
+<pre id="pre_white">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+<li>Add the following includes at the top of WordsrepClass.cpp.
 <pre>
 #include "ArgumentParserClass.h"
 #include "LineToWordsClass.h"
